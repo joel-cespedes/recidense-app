@@ -1,0 +1,71 @@
+:host {
+  display: block;
+  height: calc(100vh - 50px);
+  --ion-text-color: var(--ion-text-color-home);
+  background-image: url('../../assets/lines-header.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top;
+}
+ion-button[color='outlined']::part(native) {
+  background: transparent !important;
+  color: var(--text-color-secondaray) !important;
+  border-radius: 6px;
+  color: var(--ion-text-color-home) !important;
+}
+ion-card {
+  background: #6460ed !important;
+  box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.2) !important;
+  margin: 0;
+  padding: 16px;
+}
+
+ion-content {
+  --padding-bottom: 28px;
+  --padding-top: 28px;
+  --padding-start: 28px;
+  --padding-end: 28px;
+}
+
+.greet {
+  margin-bottom: 2em;
+  &__title-name {
+    font-size: 34px;
+    font-weight: 700;
+  }
+  &__title-date {
+    margin-top: 8px;
+    font-size: 18px;
+  }
+}
+
+.list-cards {
+  margin-top: 2em;
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+.icon-card {
+  color: var(--ion-text-color-home);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  .mat-icon {
+    font-size: 40px;
+  }
+}
+.icon-card-title {
+  color: var(--ion-text-color-home);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}

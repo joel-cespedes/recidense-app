@@ -1,0 +1,10 @@
+:host {
+  --color-selected: var(--color-glitter);
+}
+.btn-outlined {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

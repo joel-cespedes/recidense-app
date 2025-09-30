@@ -1,27 +1,66 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Inbox
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button color="outlined">
+        <span class="mat-icon">clear_all</span>
+      </ion-button>
+    </ion-buttons>
+    <!-- <ion-title>Start / End Buttons</ion-title> -->
+    <ion-buttons slot="end">
+      <ion-button color="outlined">
+        <span class="mat-icon">account_circle</span>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">
-        Inbox
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-list>
-    @for (message of getMessages(); track message) {
-      <app-message [message]="message"></app-message>
-    }
-  </ion-list>
+<ion-content>
+  <div class="greet">
+    <div class="greet__title-name">Hola Joel</div>
+    <div class="greet__title-date">2025-09-30</div>
+  </div>
+  <ion-card>
+    <div class="icon-card">
+      <span class="mat-icon">maps_home_work</span>
+    </div>
+    <div class="icon-card-title">Residencias</div>
+  </ion-card>
+  <div class="list-cards">
+    <div class="list-cards__title">Acciones</div>
+    <div class="list-cards__content">
+      <ion-card>
+        <div class="icon-card">
+          <span class="mat-icon">view_day</span>
+        </div>
+        <div class="icon-card-title">Medidas diarias</div>
+      </ion-card>
+      <ion-card>
+        <div class="icon-card">
+          <span class="mat-icon">diversity_1</span>
+        </div>
+        <div class="icon-card-title">Residentes</div>
+      </ion-card>
+      <ion-card>
+        <div class="icon-card">
+          <span class="mat-icon">fact_check</span>
+        </div>
+        <div class="icon-card-title">Tareas</div>
+      </ion-card>
+      <ion-card>
+        <div class="icon-card">
+          <span class="mat-icon">stacked_line_chart</span>
+        </div>
+        <div class="icon-card-title">Toma de datos</div>
+      </ion-card>
+    </div>
+  </div>
+  <div class="list-cards">
+    <div class="list-cards__title">Equipos</div>
+  </div>
+  <ion-card class="m-b-16">
+    <div class="icon-card">
+      <span class="mat-icon">connect_without_contact</span>
+    </div>
+    <div class="icon-card-title">Dispositivos</div>
+  </ion-card>
 </ion-content>

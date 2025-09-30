@@ -1,0 +1,133 @@
+ion-app {
+  background: radial-gradient(
+    ellipse at top left,
+    #ffffff 0%,
+    var(--gradient-mid) 40%,
+    var(--gradient-end) 100%
+  );
+  //letter-spacing: -1px;
+}
+
+// Transparencias
+ion-content,
+ion-header,
+ion-toolbar {
+  --background: transparent;
+}
+
+ion-header {
+  ion-toolbar {
+    --background: transparent !important;
+  }
+
+  .header-background {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: transparent !important;
+  }
+}
+
+.header-ios ion-toolbar:last-of-type {
+  --border-width: 0 !important;
+}
+
+ion-tab-bar {
+  padding-bottom: 12px;
+}
+
+ion-tab-bar {
+  --ion-tab-bar-background: #dee9f6;
+  --border: 0 !important;
+}
+
+ion-content:has(ion-tabs ion-tab-bar.home-tab) {
+  background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%) !important;
+}
+
+ion-tab-bar.home-tab {
+  --ion-tab-bar-background: transparent !important;
+  --ion-tab-bar-color-selected: var(--color-glitter);
+  --ion-tab-bar-color: var(--ion-text-color-home);
+}
+ion-item {
+  --background: transparent;
+  --background-activated: rgba(255, 255, 255, 0.1);
+  --background-focused: rgba(255, 255, 255, 0.1);
+  --background-hover: rgba(255, 255, 255, 0.05);
+}
+
+ion-card {
+  border-radius: 20px !important;
+}
+
+// Cards
+ion-card.intense {
+  background: var(--card-intense-background);
+  color: var(--card-intense-text-color);
+  border-radius: var(--card-intense-border-radius);
+  box-shadow: var(--card-intense-shadow);
+  padding: var(--card-intense-padding);
+  margin: 16px;
+}
+
+ion-card.intense ion-card-header {
+  color: var(--card-intense-text-color);
+  padding: 0 0 12px 0;
+}
+
+ion-card.intense ion-card-title {
+  color: var(--card-intense-text-color);
+  font-weight: 600;
+  font-size: 30px;
+}
+
+ion-card.intense ion-card-subtitle {
+  color: var(--card-intense-text-color);
+  font-weight: 600;
+}
+
+ion-card.intense ion-card-content {
+  color: var(--card-intense-text-color);
+  padding: 0;
+  line-height: 1.2;
+  font-size: 16px;
+}
+
+// Botones
+ion-button[color='primary']::part(native) {
+  background: var(--gradient-primary) !important;
+  color: var(--text-color-primary) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+ion-button[color='secondary']::part(native) {
+  background: var(--gradient-secondary) !important;
+  color: var(--text-color-secondaray) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+ion-button[color='outlined']::part(native) {
+  background: transparent !important;
+  color: var(--text-color-secondaray) !important;
+  border-radius: 6px;
+}
+
+// Material Icons
+.mat-icon {
+  font-family: 'Material Icons Sharp', monospace;
+  font-size: 26px;
+  font-weight: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+}
+
+.container {
+  padding: 24px;
+}
