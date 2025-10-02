@@ -10,6 +10,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { provideApiConfiguration } from './openapi/api-config.provider';
+import { pageTransition } from './app/helpers/page-transition';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -17,7 +18,7 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular({
       mode: 'ios',
       animated: true,
-      navAnimation: undefined // Usa la animación por defecto de Ionic
+      navAnimation: pageTransition
     }),
     provideApiConfiguration(),
     provideRouter(routes, withPreloading(PreloadAllModules))

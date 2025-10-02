@@ -8,14 +8,14 @@ ion-app {
   //letter-spacing: -1px;
 }
 
-// Transparencias
-ion-content,
-ion-header,
+// Transparencias (excepto en home y residences que tienen su propio background)
+ion-content:not(.home-content):not(.residences-content),
+ion-header:not(.home-header):not(.residences-header),
 ion-toolbar {
   --background: transparent;
 }
 
-ion-header {
+ion-header:not(.home-header):not(.residences-header) {
   ion-toolbar {
     --background: transparent !important;
   }

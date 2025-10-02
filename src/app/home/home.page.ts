@@ -63,7 +63,6 @@ export class HomePage {
 
   navigateToResidences(event: Event) {
     event.preventDefault();
-    (event.target as HTMLElement).blur();
     this.navCtrl.navigateForward('/wrap/select-residences', {
       animated: true
     });

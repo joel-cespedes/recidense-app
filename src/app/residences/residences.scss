@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
   --ion-text-color: var(--ion-text-color-home);
+  background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
 }
 
 ion-header {
@@ -34,7 +35,7 @@ ion-header {
 }
 
 ion-content {
-  --background: transparent;
+  --background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
   flex: 1;
 }
 
