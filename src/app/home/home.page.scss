@@ -1,11 +1,19 @@
 :host {
-  display: block;
-  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   --ion-text-color: var(--ion-text-color-home);
+}
+
+ion-header {
   background-image: url('../../assets/lines-header.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: top;
+}
+
+ion-content {
+  flex: 1;
 }
 ion-button[color='outlined']::part(native) {
   background: transparent !important;
@@ -78,28 +86,4 @@ ion-content {
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-}
-
-ion-modal#residences-modal {
-  --width: fit-content;
-  --min-width: 250px;
-  --height: fit-content;
-  --border-radius: 6px;
-  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-}
-
-ion-modal#residences-modal ion-icon {
-  margin-right: 6px;
-
-  width: 48px;
-  height: 48px;
-
-  padding: 4px 0;
-
-  color: #aaaaaa;
-}
-
-ion-modal#residences-modal .wrapper {
-  margin-bottom: 10px;
-  background: #6460ed;
 }

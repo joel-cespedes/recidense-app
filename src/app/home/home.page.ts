@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { IonViewWillEnter, IonViewDidEnter, IonViewWillLeave, IonViewDidLeave } from '@ionic/angular';
+import { Component, inject } from '@angular/core';
+import { NavController } from '@ionic/angular/standalone';
+
 import {
   IonButton,
   IonButtons,
@@ -12,19 +12,18 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
+  IonLabel,
   IonList,
+  IonModal,
   IonRefresher,
   IonRefresherContent,
   IonTab,
   IonTabBar,
-  IonItem,
-  IonLabel,
   IonTabButton,
   IonTabs,
   IonTitle,
-  IonToolbar,
-  RefresherCustomEvent,
-  IonModal
+  IonToolbar
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -56,38 +55,17 @@ import {
     IonTabs,
     IonItem,
     IonLabel,
-    IonList,
-    RouterLink
+    IonList
   ]
 })
-export class HomePage implements IonViewWillEnter, IonViewDidEnter, IonViewWillLeave, IonViewDidLeave {
-  isPageVisible: boolean = false;
+export class HomePage {
+  private navCtrl = inject(NavController);
 
-  ionViewWillEnter() {
-    console.log('ionViewWillEnter - La página está a punto de entrar');
-  }
-
-  ionViewDidEnter() {
-    console.log('ionViewDidEnter - La página ha terminado de entrar');
-    this.isPageVisible = true;
-  }
-
-  ionViewWillLeave() {
-    console.log('ionViewWillLeave - La página está a punto de salir');
-    this.isPageVisible = false;
-  }
-
-  ionViewDidLeave() {
-    console.log('ionViewDidLeave - La página ha terminado de salir');
-  }
-
-  refresh(ev: any) {
-    setTimeout(() => {
-      (ev as RefresherCustomEvent).detail.complete();
-    }, 2000);
-  }
-
-  toToSelectResidences() {
-    console.log('showModalResidents');
+  navigateToResidences(event: Event) {
+    event.preventDefault();
+    (event.target as HTMLElement).blur();
+    this.navCtrl.navigateForward('/wrap/select-residences', {
+      animated: true
+    });
   }
 }

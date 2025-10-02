@@ -13,7 +13,11 @@ import { AppComponent } from './app/app.component';
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular({ mode: 'ios' }),
+    provideIonicAngular({
+      mode: 'ios',
+      animated: true,
+      navAnimation: undefined // Usa la animación por defecto de Ionic
+    }),
     provideRouter(routes, withPreloading(PreloadAllModules))
   ]
 });

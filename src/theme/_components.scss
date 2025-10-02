@@ -40,7 +40,13 @@ ion-tab-bar {
   --border: 0 !important;
 }
 
-ion-content:has(ion-tabs ion-tab-bar.home-tab) {
+// Background del tab home
+ion-tab.home-tab-page {
+  background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%) !important;
+}
+
+// Cuando el tab home está activo
+ion-tabs:has(ion-tab-bar.home-tab) {
   background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%) !important;
 }
 

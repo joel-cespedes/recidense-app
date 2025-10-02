@@ -1,14 +1,7 @@
-<ion-content [fullscreen]="true">
-  <!-- <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher> -->
-
-  <ion-tabs (ionTabsDidChange)="onTabChange($any($event))">
-    <ion-tab tab="home" class="home-tab-page">
-      <div id="home-page">
-        <app-home />
-      </div>
-    </ion-tab>
+<ion-tabs (ionTabsDidChange)="onTabChange($any($event))">
+  <ion-tab tab="home" class="home-tab-page">
+    <ion-router-outlet></ion-router-outlet>
+  </ion-tab>
     <ion-tab tab="residents">
       <div id="residents-page">
         <ion-header>
@@ -72,5 +65,4 @@
         <span class="mat-icon">stacked_line_chart</span>
       </ion-tab-button>
     </ion-tab-bar>
-  </ion-tabs>
-</ion-content>
+</ion-tabs>

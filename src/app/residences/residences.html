@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Seleccionar Residencia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <span class="mat-icon">add</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Buscar residencia..."></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @for (residence of residences; track residence.id) {
+      <ion-item button (click)="selectResidence(residence)" [detail]="true">
+        <ion-avatar slot="start">
+          <img [src]="residence.image" [alt]="residence.name" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ residence.name }}</h2>
+          <p>{{ residence.address }}</p>
+          <p>{{ residence.residents }} residentes</p>
+        </ion-label>
+        <ion-label slot="end" class="ion-text-end">
+          @if (residence.status === 'active') {
+            <span class="status-badge active">Activa</span>
+          } @else {
+            <span class="status-badge inactive">Inactiva</span>
+          }
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

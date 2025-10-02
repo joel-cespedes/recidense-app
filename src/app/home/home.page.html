@@ -19,7 +19,7 @@
     <div class="greet__title-date">2025-09-30</div>
   </div>
   <ion-card>
-    <button class="icon-card" [routerLink]="'/select-residences'">
+    <button class="icon-card" (click)="navigateToResidences($event)">
       <span class="mat-icon">maps_home_work</span>
       <div class="icon-card-title">Residencias</div>
     </button>

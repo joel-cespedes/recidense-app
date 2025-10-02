@@ -13,6 +13,7 @@ import {
   IonList,
   IonRefresher,
   IonRefresherContent,
+  IonRouterOutlet,
   IonTab,
   IonTabBar,
   IonTabButton,
@@ -21,13 +22,13 @@ import {
   IonToolbar,
   RefresherCustomEvent
 } from '@ionic/angular/standalone';
-import { HomePage } from '../home/home.page';
 import { Residents } from '../residents/residents';
 @Component({
   selector: 'app-wrap',
   templateUrl: './wrap.component.html',
   styleUrls: ['./wrap.component.scss'],
   imports: [
+    IonRouterOutlet,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -49,7 +50,6 @@ import { Residents } from '../residents/residents';
     IonTabBar,
     IonTabButton,
     IonTabs,
-    HomePage,
     Residents
   ]
 })

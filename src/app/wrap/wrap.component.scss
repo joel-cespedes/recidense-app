@@ -1,6 +1,17 @@
 :host {
   --color-selected: var(--color-glitter);
+  display: block;
+  height: 100%;
 }
+
+ion-tabs {
+  height: 100%;
+}
+
+ion-tab {
+  height: 100%;
+}
+
 .btn-outlined {
   width: 38px;
   height: 38px;
