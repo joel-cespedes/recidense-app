@@ -4,41 +4,19 @@
   height: 100%;
   --ion-text-color: var(--ion-text-color-home);
   background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
-}
-
-// Forzar que todo permanezca visible durante transiciones
-:host {
-  will-change: transform;
-}
-
-:host::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
-  z-index: -1;
-}
-
-ion-header,
-ion-content,
-ion-header *,
-ion-content * {
-  will-change: auto;
-}
-
-ion-header {
-  background-image: url('../../assets/lines-header.png');
+  background-image: url('../../../assets/lines-header.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: top;
 }
 
+ion-header {
+  --background: transparent;
+}
+
 ion-content {
   flex: 1;
-  --background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
+  --background: transparent;
 }
 ion-button[color='outlined']::part(native) {
   background: transparent !important;

@@ -7,7 +7,9 @@
 }
 
 ion-header {
+  --background: transparent;
   --color: var(--ion-text-color-home);
+
   ion-toolbar {
     --background: transparent;
     --color: var(--ion-text-color-home);
@@ -35,7 +37,7 @@ ion-header {
 }
 
 ion-content {
-  --background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
+  --background: transparent;
   flex: 1;
 }
 

@@ -7,11 +7,11 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadComponent: () => import('./home/home.page').then(m => m.HomePage)
+        loadComponent: () => import('./wrap/home/home.page').then(m => m.HomePage)
       },
       {
         path: 'select-residences',
-        loadComponent: () => import('./residences/residences').then(m => m.Residences)
+        loadComponent: () => import('./wrap/residences/residences').then(m => m.Residences)
       },
       {
         path: '',
@@ -21,8 +21,8 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'message/:id',
-    loadComponent: () => import('./view-message/view-message.page').then(m => m.ViewMessagePage)
+    path: 'login',
+    loadComponent: () => import('./login/login').then(m => m.LoginComponent)
   },
   {
     path: '',
