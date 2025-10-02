@@ -1,0 +1,120 @@
+// Login - BEM Methodology
+
+.login {
+  --background: linear-gradient(-40deg, #4334af 0%, #4334af 60%, #7366de 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__container {
+    width: 100%;
+    max-width: 450px;
+    padding: 24px;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 8px 0;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+
+  &__card {
+    --background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  &__card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__item {
+    --background: #f5f5f5;
+    --border-radius: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --inner-padding-end: 0;
+    margin-bottom: 16px;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  &__input {
+    font-size: 16px;
+  }
+
+  &__toggle-password {
+    --color: #666;
+    margin: 0;
+
+    .mat-icon {
+      font-size: 22px;
+    }
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #ffebee;
+    border-radius: 12px;
+    margin-top: -8px;
+
+    .mat-icon {
+      color: #d32f2f;
+      font-size: 20px;
+    }
+  }
+
+  &__error-text {
+    margin: 0;
+    font-size: 14px;
+    color: #d32f2f;
+    font-weight: 500;
+  }
+
+  &__submit {
+    --background: linear-gradient(135deg, #6460ed 0%, #4334af 100%);
+    --border-radius: 12px;
+    margin-top: 8px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: none;
+
+    &::part(native) {
+      box-shadow: 0 4px 15px rgba(100, 96, 237, 0.3);
+    }
+
+    ion-spinner {
+      --color: white;
+    }
+  }
+}

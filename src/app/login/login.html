@@ -1,1 +1,70 @@
-<p>login works!</p>
+<ion-content class="login">
+  <div class="login__container">
+    <div class="login__header">
+      <h1 class="login__title">Bienvenido</h1>
+      <p class="login__subtitle">Inicia sesión para continuar</p>
+    </div>
+
+    <ion-card class="login__card">
+      <ion-card-header>
+        <ion-card-title class="login__card-title">Iniciar Sesión</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login__form">
+          <!-- Usuario -->
+          <ion-item class="login__item" lines="none">
+            <ion-label position="stacked" class="login__label">Usuario</ion-label>
+            <ion-input
+              formControlName="alias"
+              type="text"
+              placeholder="Ingresa tu usuario"
+              class="login__input"
+            ></ion-input>
+          </ion-item>
+
+          <!-- Contraseña -->
+          <ion-item class="login__item" lines="none">
+            <ion-label position="stacked" class="login__label">Contraseña</ion-label>
+            <ion-input
+              formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Ingresa tu contraseña"
+              class="login__input"
+            ></ion-input>
+            <ion-button
+              slot="end"
+              fill="clear"
+              class="login__toggle-password"
+              (click)="togglePasswordVisibility()"
+            >
+              <span class="mat-icon">{{ showPassword() ? 'visibility_off' : 'visibility' }}</span>
+            </ion-button>
+          </ion-item>
+
+          <!-- Mensaje de error -->
+          @if (errorMessage()) {
+            <div class="login__error">
+              <span class="mat-icon">error</span>
+              <p class="login__error-text">{{ errorMessage() }}</p>
+            </div>
+          }
+
+          <!-- Botón de login -->
+          <ion-button
+            expand="block"
+            type="submit"
+            class="login__submit"
+            [disabled]="isLoading()"
+          >
+            @if (isLoading()) {
+              <ion-spinner name="crescent"></ion-spinner>
+            } @else {
+              Iniciar Sesión
+            }
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

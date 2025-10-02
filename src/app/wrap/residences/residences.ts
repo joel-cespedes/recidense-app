@@ -1,5 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { NavController } from '@ionic/angular/standalone';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { NavController, IonSpinner } from '@ionic/angular/standalone';
 import {
   IonHeader,
   IonToolbar,
@@ -14,15 +15,7 @@ import {
   IonIcon,
   IonSearchbar
 } from '@ionic/angular/standalone';
-
-interface Residence {
-  id: number;
-  name: string;
-  address: string;
-  residents: number;
-  status: 'active' | 'inactive';
-  image: string;
-}
+import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 
 @Component({
   selector: 'app-residences',
@@ -41,64 +34,53 @@ interface Residence {
     IonButtons,
     IonButton,
     IonIcon,
-    IonSearchbar
+    IonSearchbar,
+    IonSpinner
   ]
 })
 export class Residences implements OnInit {
   private navCtrl = inject(NavController);
+  private router = inject(Router);
+  private residencesService = inject(ResidencesService);
 
-  residences: Residence[] = [
-    {
-      id: 1,
-      name: 'Residencia Los Pinos',
-      address: 'Calle Mayor 123, Madrid',
-      residents: 45,
-      status: 'active',
-      image: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-    },
-    {
-      id: 2,
-      name: 'Residencia San José',
-      address: 'Av. Libertad 456, Barcelona',
-      residents: 32,
-      status: 'active',
-      image: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-    },
-    {
-      id: 3,
-      name: 'Residencia El Roble',
-      address: 'Plaza España 78, Valencia',
-      residents: 28,
-      status: 'active',
-      image: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-    },
-    {
-      id: 4,
-      name: 'Residencia Vista Alegre',
-      address: 'Paseo del Prado 90, Sevilla',
-      residents: 38,
-      status: 'inactive',
-      image: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-    },
-    {
-      id: 5,
-      name: 'Residencia Santa Clara',
-      address: 'Calle Sol 234, Bilbao',
-      residents: 41,
-      status: 'active',
-      image: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-    }
-  ];
+  // Signals
+  residences = signal<any[]>([]);
+  isLoading = signal(true);
+  errorMessage = signal<string | null>(null);
 
   ngOnInit() {
-    console.log('ResidencesComponent');
+    this.loadResidences();
+  }
+
+  loadResidences() {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    this.residencesService.myResidencesResidencesMineGet().subscribe({
+      next: (data) => {
+        this.residences.set(data);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading residences:', error);
+        this.errorMessage.set('Error al cargar las residencias');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   goBack() {
-    this.navCtrl.back();
+    const selectedResidence = localStorage.getItem('selected_residence');
+    if (selectedResidence) {
+      this.navCtrl.back();
+    }
   }
 
-  selectResidence(residence: Residence) {
-    console.log('Selected residence:', residence);
+  selectResidence(residence: any) {
+    // Guardar residencia en localStorage
+    localStorage.setItem('selected_residence', JSON.stringify(residence));
+
+    // Navegar a home
+    this.router.navigate(['/wrap/home']);
   }
 }
