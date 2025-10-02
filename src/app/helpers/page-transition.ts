@@ -1,7 +1,7 @@
 import { Animation, createAnimation } from '@ionic/angular';
 
 export function pageTransition(_: HTMLElement, opts: any): Animation {
-  const DURATION = 300;
+  const DURATION = 500; // Más lento (antes 300ms)
 
   const getIonPageElement = (element: HTMLElement) => {
     if (element.classList.contains('ion-page')) {
@@ -24,11 +24,21 @@ export function pageTransition(_: HTMLElement, opts: any): Animation {
   );
 
   if (opts.direction === 'forward') {
-    enteringPage.fromTo('transform', 'translateX(100%)', 'translateX(0)');
-    leavingPage.fromTo('opacity', '1', '1');
+    // Página entrante: slide desde la derecha + fade in
+    enteringPage
+      .fromTo('transform', 'translateX(100%)', 'translateX(0)')
+      .fromTo('opacity', '0.7', '1');
+
+    // Página saliente: se mantiene visible con ligero fade
+    leavingPage.fromTo('opacity', '1', '0.8');
   } else {
-    leavingPage.fromTo('transform', 'translateX(0)', 'translateX(100%)');
-    enteringPage.fromTo('opacity', '1', '1');
+    // Al regresar: página saliente se desliza a la derecha
+    leavingPage
+      .fromTo('transform', 'translateX(0)', 'translateX(100%)')
+      .fromTo('opacity', '1', '0.7');
+
+    // Página entrante: aparece con fade in
+    enteringPage.fromTo('opacity', '0.8', '1');
   }
 
   rootTransition.addAnimation(enteringPage);
