@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { IonViewWillEnter, IonViewDidEnter, IonViewWillLeave, IonViewDidLeave } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -54,10 +56,31 @@ import {
     IonTabs,
     IonItem,
     IonLabel,
-    IonList
+    IonList,
+    RouterLink
   ]
 })
-export class HomePage {
+export class HomePage implements IonViewWillEnter, IonViewDidEnter, IonViewWillLeave, IonViewDidLeave {
+  isPageVisible: boolean = false;
+
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter - La página está a punto de entrar');
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter - La página ha terminado de entrar');
+    this.isPageVisible = true;
+  }
+
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave - La página está a punto de salir');
+    this.isPageVisible = false;
+  }
+
+  ionViewDidLeave() {
+    console.log('ionViewDidLeave - La página ha terminado de salir');
+  }
+
   refresh(ev: any) {
     setTimeout(() => {
       (ev as RefresherCustomEvent).detail.complete();

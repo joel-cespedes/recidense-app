@@ -6,5 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./residences.scss']
 })
 export class Residences implements OnInit {
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('ResidencesComponent');
+  }
 }
