@@ -1,7 +1,44 @@
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-toolbar>
+    <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente..."></ion-searchbar>
+  </ion-toolbar>
+
+  @if (isLoading() && residents().length === 0) {
+  <div class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando residentes...</p>
+  </div>
+  } @else if (errorMessage()) {
+  <div class="error-container">
+    <span class="mat-icon">error</span>
+    <p>{{ errorMessage() }}</p>
+  </div>
+  } @else if (residents().length === 0) {
+  <div class="empty-container">
+    <span class="mat-icon">diversity_1</span>
+    <p>No hay residentes en esta residencia</p>
+  </div>
+  } @else {
   <ion-list>
-    <!-- @for (message of getMessages(); track message) {
-    <app-message [message]="message"></app-message>
-    } -->
+    @for (resident of residents(); track resident.id) {
+    <ion-item>
+      <ion-avatar slot="start">
+        <span class="mat-icon">person</span>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ resident.first_name }} {{ resident.last_name }}</h2>
+        <p>{{ resident.room_name || 'Sin habitación' }}</p>
+      </ion-label>
+    </ion-item>
+    }
   </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  }
 </ion-content>

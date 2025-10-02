@@ -48,7 +48,8 @@ export class AuthStateService {
           isAuthenticated: true,
           isLoading: false
         }));
-      } catch (error) {
+      } catch (e: any) {
+        console.error('Error loading user profile:', e);
         this.clearAuth();
       }
     } else {

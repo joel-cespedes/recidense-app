@@ -1,4 +1,53 @@
 :host {
   display: block;
   height: calc(100vh - 50px);
+  --background: --ion-text-color-home;
+}
+
+ion-searchbar {
+  --background: --ion-text-color-home;
+  background: var(--ion-text-color-home);
+  border: 1px solid var(--color-primary);
+  padding: 0 12px !important;
+  border-radius: 12px;
+}
+
+.loading-container,
+.error-container,
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  min-height: 300px;
+
+  .mat-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+  }
+
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+}
+
+.error-container {
+  .mat-icon {
+    color: var(--ion-color-danger);
+  }
+}
+
+ion-toolbar {
+  --padding-bottom: 28px;
+  --padding-top: 28px;
+  --padding-start: 28px;
+  --padding-end: 28px;
+  margin: 2em 0;
 }

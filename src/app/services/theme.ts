@@ -21,7 +21,7 @@ export class ThemeService {
 
   private initializeTheme(): void {
     const savedTheme = localStorage.getItem(this.THEME_KEY);
-    
+
     if (savedTheme === 'light' || savedTheme === 'dark') {
       this.theme.set(savedTheme);
     } else {

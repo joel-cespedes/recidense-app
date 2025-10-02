@@ -20,35 +20,35 @@
   </ion-toolbar>
 
   @if (isLoading()) {
-    <div class="loading-container">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>Cargando residencias...</p>
-    </div>
+  <div class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando residencias...</p>
+  </div>
   } @else if (errorMessage()) {
-    <div class="error-container">
-      <span class="mat-icon">error</span>
-      <p>{{ errorMessage() }}</p>
-    </div>
+  <div class="error-container">
+    <span class="mat-icon">error</span>
+    <p>{{ errorMessage() }}</p>
+  </div>
   } @else if (residences().length === 0) {
-    <div class="empty-container">
-      <span class="mat-icon">home_work</span>
-      <p>No tienes residencias asignadas</p>
-    </div>
+  <div class="empty-container">
+    <span class="mat-icon">home_work</span>
+    <p>No tienes residencias asignadas</p>
+  </div>
   } @else {
-    <ion-list>
-      @for (residence of residences(); track residence.id) {
-        <ion-item (click)="selectResidence(residence)">
-          <ion-label>
-            <ion-avatar slot="start">
-              <span class="mat-icon">diversity_1</span>
-            </ion-avatar>
-            <div class="info-residence">
-              <h2>{{ residence.name }}</h2>
-              <p>{{ residence.address || 'Sin dirección' }}</p>
-            </div>
-          </ion-label>
-        </ion-item>
-      }
-    </ion-list>
+  <ion-list>
+    @for (residence of residences(); track residence.id) {
+    <ion-item (click)="selectResidence(residence)">
+      <ion-label>
+        <ion-avatar slot="start">
+          <span class="mat-icon">diversity_1</span>
+        </ion-avatar>
+        <div class="info-residence">
+          <h2>{{ residence.name }}</h2>
+          <p>{{ residence.address || 'Sin dirección' }}</p>
+        </div>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
   }
 </ion-content>
