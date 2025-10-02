@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button color="outlined">
-        <span class="mat-icon">account_circle</span>
+        <span class="mat-icon">exit_to_app</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -15,8 +15,8 @@
 
 <ion-content class="home-content">
   <div class="greet">
-    <div class="greet__title-name">Hola Joel</div>
-    <div class="greet__title-date">2025-09-30</div>
+    <div class="greet__title-name">Hola {{ userName() }}</div>
+    <div class="greet__title-date">Residencia: {{ residenceName() }}</div>
   </div>
   <ion-card>
     <button class="icon-card" (click)="navigateToResidences($event)">

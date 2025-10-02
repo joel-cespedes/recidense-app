@@ -12,7 +12,7 @@ import {
   IonButton,
   RefresherCustomEvent
 } from '@ionic/angular/standalone';
-import { DataService, Message } from '../services/data.service';
+import { DataService, Message } from '../../services/data.service';
 import { MessageComponent } from './message/message.component';
 
 @Component({

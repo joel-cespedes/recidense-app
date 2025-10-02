@@ -15,6 +15,7 @@ import {
   IonSpinner
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../openapi/generated/services/auth.service';
+import { AuthStateService } from '../services/auth-state.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -39,6 +40,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class Login {
   private authService = inject(AuthService);
+  private authStateService = inject(AuthStateService);
   private router = inject(Router);
 
   // Signals
@@ -75,8 +77,8 @@ export class Login {
       })
       .subscribe({
         next: response => {
-          // Guardar token
-          localStorage.setItem('access_token', response.access_token);
+          // Guardar token y decodificar usuario
+          this.authStateService.setToken(response.access_token);
 
           this.isLoading.set(false);
 

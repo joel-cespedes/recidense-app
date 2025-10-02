@@ -1,12 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { ResidenceStateService } from '../services/residence-state.service';
 
 export const residenceGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const selectedResidence = localStorage.getItem('selected_residence');
+  const residenceStateService = inject(ResidenceStateService);
 
   // Si hay residencia seleccionada, permitir acceso
-  if (selectedResidence) {
+  if (residenceStateService.hasSelectedResidence()) {
     return true;
   }
 

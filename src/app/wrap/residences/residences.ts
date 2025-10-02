@@ -16,6 +16,7 @@ import {
   IonSearchbar
 } from '@ionic/angular/standalone';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
+import { ResidenceStateService } from '../../services/residence-state.service';
 
 @Component({
   selector: 'app-residences',
@@ -42,6 +43,7 @@ export class Residences implements OnInit {
   private navCtrl = inject(NavController);
   private router = inject(Router);
   private residencesService = inject(ResidencesService);
+  private residenceStateService = inject(ResidenceStateService);
 
   // Signals
   residences = signal<any[]>([]);
@@ -70,17 +72,16 @@ export class Residences implements OnInit {
   }
 
   goBack() {
-    const selectedResidence = localStorage.getItem('selected_residence');
-    if (selectedResidence) {
+    if (this.residenceStateService.hasSelectedResidence()) {
       this.navCtrl.back();
     }
   }
 
   selectResidence(residence: any) {
-    // Guardar residencia en localStorage
-    localStorage.setItem('selected_residence', JSON.stringify(residence));
+    // Actualizar estado reactivo de residencia
+    this.residenceStateService.selectResidence(residence);
 
-    // Navegar a home
-    this.router.navigate(['/wrap/home']);
+    // Navegar a home con animación de retroceso
+    this.navCtrl.navigateBack(['/wrap/home']);
   }
 }

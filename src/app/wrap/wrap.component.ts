@@ -22,7 +22,7 @@ import {
   IonToolbar,
   RefresherCustomEvent
 } from '@ionic/angular/standalone';
-import { Residents } from '../residents/residents';
+import { Residents } from './residents/residents';
 @Component({
   selector: 'app-wrap',
   templateUrl: './wrap.component.html',
