@@ -6,21 +6,31 @@
 }
 
 ion-header {
+  --color: var(--ion-text-color-home);
   ion-toolbar {
     --background: transparent;
     --color: var(--ion-text-color-home);
 
+    ion-searchbar {
+      --color: var(--ion-text-color-home);
+      --placeholder-color: rgba(255, 255, 255, 0.7);
+      --background: rgba(255, 255, 255, 0.2);
+      --clear-button-color: var(--ion-text-color-home);
+    }
+
     ion-button {
       --color: var(--ion-text-color-home);
     }
-
-    ion-searchbar {
-      --background: rgba(255, 255, 255, 0.2);
-      --color: var(--ion-text-color-home);
-      --placeholder-color: rgba(255, 255, 255, 0.7);
-      --icon-color: var(--ion-text-color-home);
-    }
   }
+}
+
+// Forzar el color del icono usando ::ng-deep para penetrar Shadow DOM
+:host ::ng-deep ion-searchbar .searchbar-search-icon {
+  color: var(--ion-text-color-home) !important;
+}
+
+:host ::ng-deep ion-searchbar ion-icon {
+  color: var(--ion-text-color-home) !important;
 }
 
 ion-content {
@@ -33,12 +43,12 @@ ion-list {
   padding: 8px;
 
   ion-item {
-    --background: rgba(255, 255, 255, 0.95);
     --border-radius: 12px;
-    margin-bottom: 8px;
+
     --padding-start: 16px;
     --padding-end: 16px;
     --inner-padding-end: 0;
+    --color: var(--ion-text-color-home);
 
     ion-avatar {
       width: 48px;
@@ -46,35 +56,27 @@ ion-list {
     }
 
     ion-label {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
       h2 {
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 4px;
+        margin-bottom: 12px;
+        font-weight: 500;
       }
-
       p {
-        font-size: 13px;
-        color: #666;
-        margin: 2px 0;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--ion-text-color-home);
       }
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-
-      &.active {
-        background: #e8f5e9;
-        color: #2e7d32;
-      }
-
-      &.inactive {
-        background: #fce4ec;
-        color: #c2185b;
-      }
+      --color: var(--ion-text-color-home);
     }
   }
+}
+
+ion-content,
+ion-searchbar {
+  --padding-bottom: 28px;
+  --padding-top: 28px;
+  --padding-start: 28px;
+  --padding-end: 28px;
 }
