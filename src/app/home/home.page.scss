@@ -18,6 +18,14 @@ ion-card {
   box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.2) !important;
   margin: 0;
   padding: 16px;
+  button {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    width: 100%;
+  }
 }
 
 ion-content {
@@ -59,8 +67,10 @@ ion-content {
   align-items: center;
   justify-content: center;
   margin-bottom: 12px;
+  flex-direction: column;
   .mat-icon {
     font-size: 40px;
+    margin-bottom: 12px;
   }
 }
 .icon-card-title {
@@ -68,4 +78,28 @@ ion-content {
   font-size: 14px;
   font-weight: 500;
   text-align: center;
+}
+
+ion-modal#residences-modal {
+  --width: fit-content;
+  --min-width: 250px;
+  --height: fit-content;
+  --border-radius: 6px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
+
+ion-modal#residences-modal ion-icon {
+  margin-right: 6px;
+
+  width: 48px;
+  height: 48px;
+
+  padding: 4px 0;
+
+  color: #aaaaaa;
+}
+
+ion-modal#residences-modal .wrapper {
+  margin-bottom: 10px;
+  background: #6460ed;
 }

@@ -15,11 +15,14 @@ import {
   IonRefresherContent,
   IonTab,
   IonTabBar,
+  IonItem,
+  IonLabel,
   IonTabButton,
   IonTabs,
   IonTitle,
   IonToolbar,
-  RefresherCustomEvent
+  RefresherCustomEvent,
+  IonModal
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -34,7 +37,7 @@ import {
     IonRefresher,
     IonRefresherContent,
     IonList,
-
+    IonModal,
     IonButtons,
     IonButton,
     IonIcon,
@@ -48,7 +51,10 @@ import {
     IonTab,
     IonTabBar,
     IonTabButton,
-    IonTabs
+    IonTabs,
+    IonItem,
+    IonLabel,
+    IonList
   ]
 })
 export class HomePage {
@@ -56,5 +62,9 @@ export class HomePage {
     setTimeout(() => {
       (ev as RefresherCustomEvent).detail.complete();
     }, 2000);
+  }
+
+  toToSelectResidences() {
+    console.log('showModalResidents');
   }
 }

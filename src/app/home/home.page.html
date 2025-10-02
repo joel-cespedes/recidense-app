@@ -5,7 +5,6 @@
         <span class="mat-icon">clear_all</span>
       </ion-button>
     </ion-buttons>
-    <!-- <ion-title>Start / End Buttons</ion-title> -->
     <ion-buttons slot="end">
       <ion-button color="outlined">
         <span class="mat-icon">account_circle</span>
@@ -20,37 +19,40 @@
     <div class="greet__title-date">2025-09-30</div>
   </div>
   <ion-card>
-    <div class="icon-card">
+    <button class="icon-card" (click)="toToSelectResidences()">
       <span class="mat-icon">maps_home_work</span>
-    </div>
-    <div class="icon-card-title">Residencias</div>
+      <div class="icon-card-title">Residencias</div>
+    </button>
   </ion-card>
   <div class="list-cards">
     <div class="list-cards__title">Acciones</div>
     <div class="list-cards__content">
       <ion-card>
-        <div class="icon-card">
+        <button class="icon-card">
           <span class="mat-icon">view_day</span>
-        </div>
-        <div class="icon-card-title">Medidas diarias</div>
+
+          <div class="icon-card-title">Medidas diarias</div>
+        </button>
       </ion-card>
       <ion-card>
-        <div class="icon-card">
+        <button class="icon-card">
           <span class="mat-icon">diversity_1</span>
-        </div>
-        <div class="icon-card-title">Residentes</div>
+
+          <div class="icon-card-title">Residentes</div>
+        </button>
       </ion-card>
       <ion-card>
-        <div class="icon-card">
+        <button class="icon-card">
           <span class="mat-icon">fact_check</span>
-        </div>
-        <div class="icon-card-title">Tareas</div>
+
+          <div class="icon-card-title">Tareas</div>
+        </button>
       </ion-card>
       <ion-card>
-        <div class="icon-card">
+        <button class="icon-card">
           <span class="mat-icon">stacked_line_chart</span>
-        </div>
-        <div class="icon-card-title">Toma de datos</div>
+          <div class="icon-card-title">Toma de datos</div>
+        </button>
       </ion-card>
     </div>
   </div>
@@ -58,9 +60,9 @@
     <div class="list-cards__title">Equipos</div>
   </div>
   <ion-card class="m-b-16">
-    <div class="icon-card">
+    <button class="icon-card">
       <span class="mat-icon">connect_without_contact</span>
-    </div>
-    <div class="icon-card-title">Dispositivos</div>
+      <div class="icon-card-title">Dispositivos</div>
+    </button>
   </ion-card>
 </ion-content>
