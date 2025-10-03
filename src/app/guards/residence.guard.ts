@@ -6,17 +6,17 @@ export const residenceGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const residenceStateService = inject(ResidenceStateService);
 
-  // Si la ruta es select-residences, permitir acceso sin validar
-  if (state.url.includes('/select-residences')) {
-    return true;
-  }
-
   // Si hay residencia seleccionada, permitir acceso
   if (residenceStateService.hasSelectedResidence()) {
     return true;
   }
 
-  // Si no hay residencia, redirigir a select-residences
+  // Si no hay residencia y está intentando acceder a select-residences, permitir
+  if (state.url.includes('/select-residences')) {
+    return true;
+  }
+
+  // Si no hay residencia y no está en select-residences, redirigir
   router.navigate(['/wrap/select-residences']);
   return false;
 };

@@ -36,10 +36,13 @@ import {
   RefresherCustomEvent,
   IonCard
 } from '@ionic/angular/standalone';
+import { ModalController } from '@ionic/angular/standalone';
 
 import { ResidentsService } from '../../../openapi/generated/services/residents.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ResidentOut } from '../../../openapi/generated/models/resident-out';
+import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/paginated-response-resident-out';
 
 @Component({
   selector: 'app-residents',
@@ -76,13 +79,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 export class Residents {
   private residentsService = inject(ResidentsService);
   private residenceStateService = inject(ResidenceStateService);
+  private modalController = inject(ModalController);
 
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
-
   isActive = input<boolean>(false);
 
   // Signals
-  residents = signal<any[]>([]);
+  residents = signal<ResidentOut[]>([]);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
   currentPage = signal(1);
@@ -123,6 +126,22 @@ export class Residents {
     });
   }
 
+  async navigateToResidentsDetails(event: Event, resident: ResidentOut) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { ResidentsDetail } = await import('./residents/residents-detail');
+
+    const modal = await this.modalController.create({
+      component: ResidentsDetail,
+      componentProps: {
+        residentId: resident.id
+      }
+    });
+
+    await modal.present();
+  }
+
   private resetFilters() {
     this.searchControl.setValue('', { emitEvent: false });
     this.dateFromControl.setValue(null);
@@ -159,7 +178,6 @@ export class Residents {
   closeCalendarModal() {
     this.showCalendar.set(false);
   }
-
 
   applyCalendar() {
     if (this.datetimeRef) {
@@ -234,7 +252,7 @@ export class Residents {
         date_to: dateTo
       })
       .subscribe({
-        next: response => {
+        next: (response: PaginatedResponseResidentOut) => {
           if (reset) {
             this.residents.set(response.items);
           } else {
@@ -256,10 +274,12 @@ export class Residents {
     if (this.hasMore()) {
       this.currentPage.update(page => page + 1);
       this.loadResidents();
-    }
-    setTimeout(() => {
+      setTimeout(() => {
+        (ev as any).target.complete();
+      }, 500);
+    } else {
       (ev as any).target.complete();
-    }, 500);
+    }
   }
 
   refresh(ev: any) {

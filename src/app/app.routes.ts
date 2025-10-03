@@ -19,6 +19,11 @@ export const routes: Routes = [
         loadComponent: () => import('./wrap/home/home.page').then(m => m.HomePage)
       },
       {
+        path: 'residents-details/:id',
+        loadComponent: () =>
+          import('./wrap/residents/residents/residents-detail').then(m => m.ResidentsDetail)
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full'

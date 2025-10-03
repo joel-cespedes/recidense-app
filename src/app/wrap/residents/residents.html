@@ -52,26 +52,23 @@
       <span class="mat-icon">error</span>
       <p>{{ errorMessage() }}</p>
     </div>
-    } @else {
-
-    @if (residents().length === 0) {
+    } @else { @if (residents().length === 0) {
     <div class="empty-container">
       <span class="mat-icon">diversity_1</span>
       <p>No hay residentes</p>
     </div>
-    } @else {
-    @for (resident of residents(); track resident.id) {
+    } @else { @for (resident of residents(); track resident.id) {
 
     <ion-card>
-      <button class="icon-card">
+      <button class="icon-card" (click)="navigateToResidentsDetails($event, resident)">
         <ion-label>
           <div class="info-resident">
             <div class="info-resident__name">
               {{ resident.full_name }}
             </div>
             <div class="info-resident__bed">
-              Cama: {{ resident.bed_name }}
-              {{ resident.floor_name ? '/ Planta: ' + resident.floor_name : '' }}
+              {{ resident.bed_name ? 'Cama: ' + resident.bed_name : 'Sin cama asignada' }}
+              {{ resident.floor_name ? ' / Planta: ' + resident.floor_name : '' }}
             </div>
             <div class="info-resident__icons">
               <div class="icon-svg">
@@ -91,7 +88,12 @@
               </div>
             </div>
           </div>
-          <div class="date-resident">{{ resident.birth_date | date : 'dd/MM/yyyy' }}</div>
+          <div class="content-right">
+            <div class="content-right__icon">
+              <span class="mat-icon">chevron_right</span>
+            </div>
+            <div class="date-resident">{{ resident.birth_date | date : 'dd/MM/yyyy' }}</div>
+          </div>
         </ion-label>
       </button>
     </ion-card>
@@ -100,8 +102,7 @@
     <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
-    }
-    }
+    } }
 
     <ion-modal [isOpen]="showCalendar()" (didDismiss)="closeCalendarModal()" class="calendar-modal">
       <ng-template>
