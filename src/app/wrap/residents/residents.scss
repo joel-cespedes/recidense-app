@@ -208,3 +208,19 @@ ion-card {
     padding: 0 !important;
   }
 }
+
+::ng-deep .fullscreen-modal {
+  --width: 100%;
+  --height: 100%;
+  --border-radius: 0;
+
+  ion-modal {
+    --width: 100%;
+    --height: 100%;
+  }
+
+  .modal-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+}

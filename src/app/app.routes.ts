@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { residenceGuard } from './guards/residence.guard';
+import { WrapComponent } from './wrap/wrap.component';
 
 export const routes: Routes = [
   {
     path: 'wrap',
-    loadComponent: () => import('./wrap/wrap.component').then(m => m.WrapComponent),
+    component: WrapComponent,
     canActivate: [authGuard],
     canActivateChild: [residenceGuard],
     children: [
@@ -19,13 +20,22 @@ export const routes: Routes = [
         loadComponent: () => import('./wrap/home/home.page').then(m => m.HomePage)
       },
       {
-        path: 'residents-details/:id',
+        path: 'home/select-residences',
+        loadComponent: () => import('./wrap/residences/residences').then(m => m.Residences),
+        canActivate: []
+      },
+      {
+        path: 'residents',
+        loadComponent: () => import('./wrap/residents/residents').then(m => m.Residents)
+      },
+      {
+        path: 'residents/residents-details/:id',
         loadComponent: () =>
           import('./wrap/residents/residents/residents-detail').then(m => m.ResidentsDetail)
       },
       {
         path: '',
-        redirectTo: 'home',
+        redirectTo: '/wrap/home',
         pathMatch: 'full'
       }
     ]

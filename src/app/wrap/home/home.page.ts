@@ -74,7 +74,7 @@ export class HomePage {
 
   navigateToResidences(event: Event) {
     event.preventDefault();
-    this.navCtrl.navigateForward('/wrap/select-residences', {
+    this.navCtrl.navigateForward('/wrap/home/select-residences', {
       animated: true
     });
   }

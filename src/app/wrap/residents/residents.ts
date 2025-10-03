@@ -1,10 +1,9 @@
 import {
   Component,
   computed,
-  effect,
   ElementRef,
   inject,
-  input,
+  OnInit,
   signal,
   ViewChild
 } from '@angular/core';
@@ -34,9 +33,9 @@ import {
   IonTitle,
   IonToolbar,
   RefresherCustomEvent,
-  IonCard
+  IonCard,
+  NavController
 } from '@ionic/angular/standalone';
-import { ModalController } from '@ionic/angular/standalone';
 
 import { ResidentsService } from '../../../openapi/generated/services/residents.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
@@ -76,13 +75,12 @@ import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/
     DatePipe
   ]
 })
-export class Residents {
+export class Residents implements OnInit {
   private residentsService = inject(ResidentsService);
   private residenceStateService = inject(ResidenceStateService);
-  private modalController = inject(ModalController);
+  private navCtrl = inject(NavController);
 
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
-  isActive = input<boolean>(false);
 
   // Signals
   residents = signal<ResidentOut[]>([]);
@@ -103,43 +101,26 @@ export class Residents {
   // Computed residence ID
   residenceId = computed(() => this.residenceStateService.residenceId());
 
-  private previousActiveState = false;
-
   constructor() {
     // Search con debounce
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.currentPage.set(1);
       this.loadResidents(true);
     });
-
-    // Effect para resetear y cargar cuando el tab se activa
-    effect(() => {
-      const isCurrentlyActive = this.isActive();
-
-      // Solo resetear cuando cambia de inactivo a activo
-      if (isCurrentlyActive && !this.previousActiveState) {
-        this.resetFilters();
-        this.loadResidents(true);
-      }
-
-      this.previousActiveState = isCurrentlyActive;
-    });
   }
 
-  async navigateToResidentsDetails(event: Event, resident: ResidentOut) {
+  ngOnInit() {
+    this.resetFilters();
+    this.loadResidents(true);
+  }
+
+  navigateToResidentsDetails(event: Event, resident: ResidentOut) {
     event.preventDefault();
     event.stopPropagation();
 
-    const { ResidentsDetail } = await import('./residents/residents-detail');
-
-    const modal = await this.modalController.create({
-      component: ResidentsDetail,
-      componentProps: {
-        residentId: resident.id
-      }
+    this.navCtrl.navigateForward(`/wrap/residents/residents-details/${resident.id}`, {
+      animated: true
     });
-
-    await modal.present();
   }
 
   private resetFilters() {
