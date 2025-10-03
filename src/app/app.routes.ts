@@ -7,15 +7,16 @@ export const routes: Routes = [
     path: 'wrap',
     loadComponent: () => import('./wrap/wrap.component').then(m => m.WrapComponent),
     canActivate: [authGuard],
+    canActivateChild: [residenceGuard],
     children: [
       {
-        path: 'home',
-        loadComponent: () => import('./wrap/home/home.page').then(m => m.HomePage),
-        canActivate: [residenceGuard]
+        path: 'select-residences',
+        loadComponent: () => import('./wrap/residences/residences').then(m => m.Residences),
+        canActivate: []
       },
       {
-        path: 'select-residences',
-        loadComponent: () => import('./wrap/residences/residences').then(m => m.Residences)
+        path: 'home',
+        loadComponent: () => import('./wrap/home/home.page').then(m => m.HomePage)
       },
       {
         path: '',

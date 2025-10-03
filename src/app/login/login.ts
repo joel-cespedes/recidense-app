@@ -82,8 +82,8 @@ export class Login {
 
           this.isLoading.set(false);
 
-          // Navegar a wrap/home
-          this.router.navigate(['/wrap/home']);
+          // Navegar a select-residences después del login
+          this.router.navigate(['/wrap/select-residences']);
         },
         error: (error: HttpErrorResponse) => {
           this.isLoading.set(false);

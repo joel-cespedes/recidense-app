@@ -170,6 +170,10 @@ ion-card {
 
 .calendar-content {
   padding: 20px;
+
+  ion-datetime {
+    --ion-color-step-300: #000000;
+  }
 }
 
 .section-icons {

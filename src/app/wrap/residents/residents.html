@@ -23,22 +23,7 @@
         <div class="rounded__label">Año</div>
       </button>
     </div>
-    @if (isLoading() && residents().length === 0) {
-    <div class="loading-container">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>Cargando residentes...</p>
-    </div>
-    } @else if (errorMessage()) {
-    <div class="error-container">
-      <span class="mat-icon">error</span>
-      <p>{{ errorMessage() }}</p>
-    </div>
-    } @else if (residents().length === 0) {
-    <div class="empty-container">
-      <span class="mat-icon">diversity_1</span>
-      <p>No hay residentes en esta residencia</p>
-    </div>
-    } @else {
+
     <div class="split-section">
       <div class="title-section">Residentes</div>
       <div class="section-icons">
@@ -57,6 +42,24 @@
         placeholder="Buscar residente..."></ion-searchbar>
     </div>
 
+    @if (isLoading() && residents().length === 0) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando residentes...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else {
+
+    @if (residents().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">diversity_1</span>
+      <p>No hay residentes</p>
+    </div>
+    } @else {
     @for (resident of residents(); track resident.id) {
 
     <ion-card>
@@ -97,6 +100,7 @@
     <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
+    }
     }
 
     <ion-modal [isOpen]="showCalendar()" (didDismiss)="closeCalendarModal()" class="calendar-modal">

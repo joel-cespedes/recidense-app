@@ -77,7 +77,7 @@ export class Residents {
   private residentsService = inject(ResidentsService);
   private residenceStateService = inject(ResidenceStateService);
 
-  @ViewChild('datetime') datetime!: IonDatetime;
+  @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
 
   isActive = input<boolean>(false);
 
@@ -100,6 +100,8 @@ export class Residents {
   // Computed residence ID
   residenceId = computed(() => this.residenceStateService.residenceId());
 
+  private previousActiveState = false;
+
   constructor() {
     // Search con debounce
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
@@ -107,12 +109,31 @@ export class Residents {
       this.loadResidents(true);
     });
 
-    // Effect para cargar cuando el tab se activa
+    // Effect para resetear y cargar cuando el tab se activa
     effect(() => {
-      if (this.isActive()) {
+      const isCurrentlyActive = this.isActive();
+
+      // Solo resetear cuando cambia de inactivo a activo
+      if (isCurrentlyActive && !this.previousActiveState) {
+        this.resetFilters();
         this.loadResidents(true);
       }
+
+      this.previousActiveState = isCurrentlyActive;
     });
+  }
+
+  private resetFilters() {
+    this.searchControl.setValue('', { emitEvent: false });
+    this.dateFromControl.setValue(null);
+    this.dateToControl.setValue(null);
+    if (this.datetimeRef) {
+      this.datetimeRef.nativeElement.value = undefined;
+    }
+    this.selectedPeriod.set(7);
+    this.currentPage.set(1);
+    this.showSearch.set(false);
+    this.showCalendar.set(false);
   }
 
   selectPeriod(days: number) {
@@ -120,8 +141,8 @@ export class Residents {
     // Limpiar filtros de calendario
     this.dateFromControl.setValue(null);
     this.dateToControl.setValue(null);
-    if (this.datetime) {
-      this.datetime.value = undefined;
+    if (this.datetimeRef) {
+      this.datetimeRef.nativeElement.value = undefined;
     }
     this.currentPage.set(1);
     this.loadResidents(true);
@@ -141,18 +162,24 @@ export class Residents {
 
 
   applyCalendar() {
-    if (this.datetime && this.datetime.value) {
-      const dates = Array.isArray(this.datetime.value)
-        ? this.datetime.value
-        : [this.datetime.value];
+    if (this.datetimeRef) {
+      const datetimeEl = this.datetimeRef.nativeElement;
+      const value = datetimeEl.value;
 
-      if (dates.length > 0) {
-        this.dateFromControl.setValue(dates[0].split('T')[0]);
-        this.dateToControl.setValue(dates[dates.length - 1].split('T')[0]);
-        this.selectedPeriod.set(0);
-        this.currentPage.set(1);
-        this.loadResidents(true);
-        this.closeCalendarModal();
+      if (value) {
+        const dates = Array.isArray(value) ? value : [value];
+
+        if (dates.length > 0) {
+          const sortedDates = dates.map(d => d.split('T')[0]).sort();
+          this.dateFromControl.setValue(sortedDates[0]);
+          this.dateToControl.setValue(sortedDates[sortedDates.length - 1]);
+          this.selectedPeriod.set(0);
+          this.currentPage.set(1);
+          this.closeCalendarModal();
+          setTimeout(() => {
+            this.loadResidents(true);
+          }, 0);
+        }
       }
     }
   }
@@ -160,8 +187,8 @@ export class Residents {
   clearCalendar() {
     this.dateFromControl.setValue(null);
     this.dateToControl.setValue(null);
-    if (this.datetime) {
-      this.datetime.value = undefined;
+    if (this.datetimeRef) {
+      this.datetimeRef.nativeElement.value = undefined;
     }
     this.selectedPeriod.set(7);
     this.currentPage.set(1);
