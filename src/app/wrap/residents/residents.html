@@ -6,30 +6,23 @@
   <div class="container">
     <div class="title-section center m-b-32">Últimos</div>
     <div class="btns-raunded">
-      <button class="rounded active">
+      <button class="rounded" [class.active]="selectedPeriod() === 7" (click)="selectPeriod(7)">
         <div class="rounded__number">7</div>
         <div class="rounded__label">Días</div>
       </button>
-      <button class="rounded">
+      <button class="rounded" [class.active]="selectedPeriod() === 15" (click)="selectPeriod(15)">
         <div class="rounded__number">15</div>
         <div class="rounded__label">Días</div>
       </button>
-      <button class="rounded">
+      <button class="rounded" [class.active]="selectedPeriod() === 30" (click)="selectPeriod(30)">
         <div class="rounded__number">30</div>
         <div class="rounded__label">Días</div>
       </button>
-      <button class="rounded">
+      <button class="rounded" [class.active]="selectedPeriod() === 365" (click)="selectPeriod(365)">
         <div class="rounded__number">1</div>
         <div class="rounded__label">Año</div>
       </button>
     </div>
-    <!-- <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente...">
-      <ion-buttons slot="end">
-        <ion-button (click)="openFiltersModal()">
-          <span class="mat-icon">filter_list</span>
-        </ion-button>
-      </ion-buttons>
-    </ion-searchbar> -->
     @if (isLoading() && residents().length === 0) {
     <div class="loading-container">
       <ion-spinner name="crescent"></ion-spinner>
@@ -48,9 +41,18 @@
     } @else {
     <div class="split-section">
       <div class="title-section">Residentes</div>
-      <button class="icon-filter">
-        <span class="mat-icon">filter_list</span>
-      </button>
+      <div class="section-icons">
+        <button class="icon-filter" (click)="openCalendarModal()">
+          <span class="mat-icon">calendar_month</span>
+        </button>
+        <button class="icon-filter" (click)="toggleSearch()">
+          <span class="mat-icon">filter_list</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-section" [class.show]="showSearch()">
+      <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente..."></ion-searchbar>
     </div>
 
     @for (resident of residents(); track resident.id) {
@@ -95,55 +97,40 @@
     </ion-infinite-scroll>
     }
 
-    <ion-modal [isOpen]="showFilters()" (didDismiss)="closeFiltersModal()" class="filters-modal">
+    <ion-modal [isOpen]="showCalendar()" (didDismiss)="closeCalendarModal()" class="calendar-modal">
       <ng-template>
-        <div class="filters-wrapper">
-          <div class="filters-header">
-            <h3>Filtros</h3>
-            <ion-button fill="clear" (click)="closeFiltersModal()">
+        <div class="calendar-wrapper">
+          <div class="calendar-header">
+            <h3>Seleccionar fecha</h3>
+            <ion-button fill="clear" (click)="closeCalendarModal()">
               <span class="mat-icon">close</span>
             </ion-button>
           </div>
 
-          <div class="filters-content">
-            <ion-item>
-              <ion-label position="stacked">Filtro rápido</ion-label>
-              <ion-select
-                [formControl]="quickFilterControl"
-                placeholder="Seleccionar período"
-                interface="action-sheet">
-                <ion-select-option value="week">Última semana</ion-select-option>
-                <ion-select-option value="month">Último mes</ion-select-option>
-                <ion-select-option value="year">Último año</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="stacked">Seleccionar fecha o rango</ion-label>
-              <input
-                #dateInput
-                type="text"
-                class="date-input"
-                placeholder="Seleccionar fecha..."
-                [value]="dateRangeDisplay()" />
-            </ion-item>
+          <div class="calendar-content">
+            <input
+              #dateInput
+              type="text"
+              class="date-input"
+              placeholder="Seleccionar fecha..."
+              [value]="dateRangeDisplay()" />
 
             <ion-button
               expand="block"
               fill="clear"
               size="small"
               class="m-t-32 m-b-16"
-              (click)="clearFilters()">
-              Limpiar filtros
+              (click)="clearCalendar()">
+              Limpiar
             </ion-button>
 
             <ion-button
               expand="block"
               size="small"
               class="m-b-16"
-              (click)="applyFilters()"
+              (click)="applyCalendar()"
               color="primary">
-              Filtrar
+              Aplicar
             </ion-button>
           </div>
         </div>

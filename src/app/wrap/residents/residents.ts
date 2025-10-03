@@ -92,14 +92,15 @@ export class Residents implements OnDestroy {
   currentPage = signal(1);
   totalPages = signal(1);
   hasMore = signal(false);
-  showFilters = signal(false);
+  showCalendar = signal(false);
+  showSearch = signal(false);
   dateRangeDisplay = signal<string>('');
+  selectedPeriod = signal<number>(7);
 
   // Form controls
   searchControl = new FormControl('');
   dateFromControl = new FormControl<string | null>(null);
   dateToControl = new FormControl<string | null>(null);
-  quickFilterControl = new FormControl<string | null>(null);
 
   // Computed residence ID
   residenceId = computed(() => this.residenceStateService.residenceId());
@@ -111,9 +112,6 @@ export class Residents implements OnDestroy {
       this.loadResidents(true);
     });
 
-    // Quick filter - no hace nada más que guardar el valor seleccionado
-    // Los filtros son independientes
-
     // Effect para cargar cuando el tab se activa
     effect(() => {
       if (this.isActive()) {
@@ -122,8 +120,25 @@ export class Residents implements OnDestroy {
     });
   }
 
-  openFiltersModal() {
-    this.showFilters.set(true);
+  selectPeriod(days: number) {
+    this.selectedPeriod.set(days);
+    // Limpiar filtros de calendario
+    this.dateFromControl.setValue(null);
+    this.dateToControl.setValue(null);
+    this.dateRangeDisplay.set('');
+    if (this.flatpickrInstance) {
+      this.flatpickrInstance.clear();
+    }
+    this.currentPage.set(1);
+    this.loadResidents(true);
+  }
+
+  toggleSearch() {
+    this.showSearch.update(value => !value);
+  }
+
+  openCalendarModal() {
+    this.showCalendar.set(true);
     // Inicializar flatpickr cuando se abre el modal
     setTimeout(() => {
       if (this.dateInput) {
@@ -158,8 +173,6 @@ export class Residents implements OnDestroy {
                 this.dateToControl.setValue(selectedDates[1].toISOString().split('T')[0]);
                 this.dateRangeDisplay.set(dateStr);
               }
-              // Limpiar quickFilter cuando se selecciona una fecha manualmente
-              this.quickFilterControl.setValue(null, { emitEvent: false });
             }
           }
         });
@@ -167,8 +180,8 @@ export class Residents implements OnDestroy {
     }, 300);
   }
 
-  closeFiltersModal() {
-    this.showFilters.set(false);
+  closeCalendarModal() {
+    this.showCalendar.set(false);
   }
 
   ngOnDestroy() {
@@ -177,20 +190,23 @@ export class Residents implements OnDestroy {
     }
   }
 
-  applyFilters() {
+  applyCalendar() {
+    // Limpiar periodo seleccionado cuando se usa el calendario
+    this.selectedPeriod.set(0);
     this.currentPage.set(1);
     this.loadResidents(true);
-    this.closeFiltersModal();
+    this.closeCalendarModal();
   }
 
-  clearFilters() {
+  clearCalendar() {
     this.dateFromControl.setValue(null);
     this.dateToControl.setValue(null);
-    this.quickFilterControl.setValue(null);
     this.dateRangeDisplay.set('');
     if (this.flatpickrInstance) {
       this.flatpickrInstance.clear();
     }
+    // Volver al periodo por defecto
+    this.selectedPeriod.set(7);
     this.currentPage.set(1);
     this.loadResidents(true);
   }
@@ -210,32 +226,18 @@ export class Residents implements OnDestroy {
     let dateFrom: string | undefined;
     let dateTo: string | undefined;
 
-    const quickFilter = this.quickFilterControl.value;
-    if (quickFilter) {
-      // Si hay quick filter, calcular fechas automáticamente
+    // Verificar si hay fechas del calendario seleccionadas
+    if (this.dateFromControl.value && this.dateToControl.value) {
+      // Usar las fechas del calendario
+      dateFrom = this.dateFromControl.value;
+      dateTo = this.dateToControl.value;
+    } else if (this.selectedPeriod() > 0) {
+      // Si no hay fechas del calendario, usar el periodo seleccionado
       const today = new Date();
-      let fromDate: Date;
-
-      switch (quickFilter) {
-        case 'week':
-          fromDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case 'month':
-          fromDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-          break;
-        case 'year':
-          fromDate = new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
-          break;
-        default:
-          fromDate = today;
-      }
+      const fromDate = new Date(today.getTime() - this.selectedPeriod() * 24 * 60 * 60 * 1000);
 
       dateFrom = fromDate.toISOString().split('T')[0];
       dateTo = today.toISOString().split('T')[0];
-    } else {
-      // Si no hay quick filter, usar las fechas del calendario
-      dateFrom = this.dateFromControl.value || undefined;
-      dateTo = this.dateToControl.value || undefined;
     }
 
     this.residentsService
