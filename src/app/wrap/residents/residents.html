@@ -48,7 +48,9 @@
     } @else {
     <div class="split-section">
       <div class="title-section">Residentes</div>
-      <div class="icon-filter"><span class="mat-icon">filter_list</span></div>
+      <button class="icon-filter">
+        <span class="mat-icon">filter_list</span>
+      </button>
     </div>
 
     @for (resident of residents(); track resident.id) {

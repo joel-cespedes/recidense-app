@@ -135,7 +135,6 @@ ion-button[color='outlined']::part(native) {
 .title-section {
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 16px;
 }
 .center {
   text-align: center;
@@ -159,14 +158,26 @@ ion-button[color='outlined']::part(native) {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 6px;
+    color: var(--color-primary);
   }
   &__label {
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 300;
+  }
+  &.active {
+    background: #412da8;
+    &__number {
+      color: red !important;
+    }
+    &__label {
+      color: var(--ion-text-color-home) !important;
+    }
   }
 }
+.active .rounded__number {
+  color: var(--ion-text-color-home) !important;
+}
 
-.rounded.active {
-  background: #412da8;
-  color: var(--ion-text-color-home);
+.active .rounded__label {
+  color: var(--ion-text-color-home) !important;
 }
