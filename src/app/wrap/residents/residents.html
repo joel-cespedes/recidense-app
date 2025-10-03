@@ -3,42 +3,149 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-toolbar>
-    <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente..."></ion-searchbar>
-  </ion-toolbar>
+  <div class="container">
+    <div class="title-section center m-b-32">Últimos</div>
+    <div class="btns-raunded">
+      <button class="rounded active">
+        <div class="rounded__number">7</div>
+        <div class="rounded__label">Días</div>
+      </button>
+      <button class="rounded">
+        <div class="rounded__number">15</div>
+        <div class="rounded__label">Días</div>
+      </button>
+      <button class="rounded">
+        <div class="rounded__number">30</div>
+        <div class="rounded__label">Días</div>
+      </button>
+      <button class="rounded">
+        <div class="rounded__number">1</div>
+        <div class="rounded__label">Año</div>
+      </button>
+    </div>
+    <!-- <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente...">
+      <ion-buttons slot="end">
+        <ion-button (click)="openFiltersModal()">
+          <span class="mat-icon">filter_list</span>
+        </ion-button>
+      </ion-buttons>
+    </ion-searchbar> -->
+    @if (isLoading() && residents().length === 0) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando residentes...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else if (residents().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">diversity_1</span>
+      <p>No hay residentes en esta residencia</p>
+    </div>
+    } @else {
+    <div class="split-section">
+      <div class="title-section">Residentes</div>
+      <div class="icon-filter"><span class="mat-icon">filter_list</span></div>
+    </div>
 
-  @if (isLoading() && residents().length === 0) {
-  <div class="loading-container">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando residentes...</p>
-  </div>
-  } @else if (errorMessage()) {
-  <div class="error-container">
-    <span class="mat-icon">error</span>
-    <p>{{ errorMessage() }}</p>
-  </div>
-  } @else if (residents().length === 0) {
-  <div class="empty-container">
-    <span class="mat-icon">diversity_1</span>
-    <p>No hay residentes en esta residencia</p>
-  </div>
-  } @else {
-  <ion-list>
     @for (resident of residents(); track resident.id) {
-    <ion-item>
-      <ion-avatar slot="start">
-        <span class="mat-icon">person</span>
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ resident.first_name }} {{ resident.last_name }}</h2>
-        <p>{{ resident.room_name || 'Sin habitación' }}</p>
-      </ion-label>
-    </ion-item>
-    }
-  </ion-list>
 
-  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-  }
+    <ion-card>
+      <button class="icon-card">
+        <ion-label>
+          <div class="info-resident">
+            <div class="info-resident__name">
+              {{ resident.full_name }}
+            </div>
+            <div class="info-resident__bed">
+              Cama: {{ resident.bed_name }}
+              {{ resident.floor_name ? '/ Planta: ' + resident.floor_name : '' }}
+            </div>
+            <div class="info-resident__icons">
+              <div class="icon-svg">
+                <img src="assets/icon/electro-white.svg" alt="Thermostat" />
+              </div>
+              <div class="icon-svg">
+                <img src="assets/icon/oxygen-white.svg" alt="Graphic EQ" />
+              </div>
+              <div class="icon-svg">
+                <img src="assets/icon/weight-white.svg" alt="Diversity 1" />
+              </div>
+              <div class="icon-svg">
+                <img src="assets/icon/temperature-white.svg" alt="Temperature" />
+              </div>
+              <div class="icon-svg">
+                <img src="assets/icon/heart-white.svg" alt="Heart Rate" />
+              </div>
+            </div>
+          </div>
+          <div class="date-resident">{{ resident.birth_date | date : 'dd/MM/yyyy' }}</div>
+        </ion-label>
+      </button>
+    </ion-card>
+    }
+
+    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    }
+
+    <ion-modal [isOpen]="showFilters()" (didDismiss)="closeFiltersModal()" class="filters-modal">
+      <ng-template>
+        <div class="filters-wrapper">
+          <div class="filters-header">
+            <h3>Filtros</h3>
+            <ion-button fill="clear" (click)="closeFiltersModal()">
+              <span class="mat-icon">close</span>
+            </ion-button>
+          </div>
+
+          <div class="filters-content">
+            <ion-item>
+              <ion-label position="stacked">Filtro rápido</ion-label>
+              <ion-select
+                [formControl]="quickFilterControl"
+                placeholder="Seleccionar período"
+                interface="action-sheet">
+                <ion-select-option value="week">Última semana</ion-select-option>
+                <ion-select-option value="month">Último mes</ion-select-option>
+                <ion-select-option value="year">Último año</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Seleccionar fecha o rango</ion-label>
+              <input
+                #dateInput
+                type="text"
+                class="date-input"
+                placeholder="Seleccionar fecha..."
+                [value]="dateRangeDisplay()" />
+            </ion-item>
+
+            <ion-button
+              expand="block"
+              fill="clear"
+              size="small"
+              class="m-t-32 m-b-16"
+              (click)="clearFilters()">
+              Limpiar filtros
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              size="small"
+              class="m-b-16"
+              (click)="applyFilters()"
+              color="primary">
+              Filtrar
+            </ion-button>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+  </div>
 </ion-content>

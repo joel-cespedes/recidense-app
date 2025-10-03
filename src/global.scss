@@ -15,3 +15,33 @@
 @import '@ionic/angular/css/text-alignment.css';
 @import '@ionic/angular/css/text-transformation.css';
 @import '@ionic/angular/css/flex-utils.css';
+
+/* Flatpickr styles */
+@import 'flatpickr/dist/flatpickr.css';
+
+.flatpickr-calendar {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  z-index: 99999999 !important;
+  position: fixed !important;
+
+  &:not(.open) {
+    display: none !important;
+  }
+
+  &.open {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+ion-modal {
+  --z-index: 10000;
+}
+
+ion-backdrop {
+  --backdrop-opacity: 0.32;
+}

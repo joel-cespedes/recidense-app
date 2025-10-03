@@ -58,7 +58,7 @@ ion-item {
 }
 
 ion-card {
-  border-radius: 20px !important;
+  border-radius: 24px !important;
 }
 
 // Cards
@@ -130,5 +130,43 @@ ion-button[color='outlined']::part(native) {
 }
 
 .container {
-  padding: 24px;
+  padding: 0 24px;
+}
+.title-section {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.center {
+  text-align: center;
+}
+
+.btns-raunded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rounded {
+  background: var(--ion-text-color-home);
+  color: var(--ion-text-color);
+  border-radius: 12px;
+  width: 70px;
+  box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.1) !important;
+  height: 110px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+  &__number {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  &__label {
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+.rounded.active {
+  background: #412da8;
+  color: var(--ion-text-color-home);
 }

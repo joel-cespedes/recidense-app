@@ -2,12 +2,15 @@
   display: block;
   height: calc(100vh - 50px);
   --background: --ion-text-color-home;
+  --ion-color-light: var(--ion-text-color-home);
+  --ion-toolbar-color: var(--text-color-secondaray);
 }
 
 ion-searchbar {
   --background: --ion-text-color-home;
   background: var(--ion-text-color-home);
-  border: 1px solid var(--color-primary);
+  // border: 1px solid var(--color-primary);s
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.1);
   padding: 0 12px !important;
   border-radius: 12px;
 }
@@ -50,4 +53,106 @@ ion-toolbar {
   --padding-start: 28px;
   --padding-end: 28px;
   margin: 2em 0;
+}
+
+.filters-modal {
+  --width: auto;
+  --height: auto;
+  --border-radius: 16px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+
+  align-items: center;
+  justify-content: center;
+}
+
+.filters-wrapper {
+  background: var(--ion-color-light);
+  border-radius: 16px;
+  max-width: 90vw;
+  width: 400px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+ion-item {
+  --background: #5247c9;
+  margin-bottom: 12px;
+}
+ion-card {
+  background: #5247c9 !important;
+  //box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.2) !important;
+  margin: 0 0 16px 0;
+  padding: 14px 16px;
+  button {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+    color: var(--ion-text-color-home) !important;
+    display: flex;
+    align-items: center;
+    ion-label {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .info-resident {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      &__name {
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 20px;
+      }
+      &__bed {
+        font-size: 12px;
+      }
+      &__icons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 24px;
+        .icon-svg {
+          margin-right: 10px;
+          display: flex;
+          width: 16px;
+        }
+      }
+    }
+    .date-resident {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.split-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 10px;
+  .title-section {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+}
+
+.filters-content {
+  padding: 20px;
+
+  .date-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    background: var(--gradient-end);
+    cursor: pointer;
+  }
 }

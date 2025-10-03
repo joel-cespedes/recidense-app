@@ -65,7 +65,14 @@ export class AuthStateService {
 
     const payload = parts[1];
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
-    return JSON.parse(decoded);
+    const user = JSON.parse(decoded);
+
+    // Validar expiración del token
+    if (user.exp && user.exp * 1000 < Date.now()) {
+      throw new Error('Token expired');
+    }
+
+    return user;
   }
 
   setToken(token: string): void {
