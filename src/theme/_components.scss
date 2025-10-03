@@ -165,7 +165,7 @@ ion-button[color='outlined']::part(native) {
     font-weight: 300;
   }
   &.active {
-    background: #412da8;
+    background: var(--gradient-primary) !important;
     &__number {
       color: red !important;
     }

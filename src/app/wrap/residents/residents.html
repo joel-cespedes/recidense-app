@@ -52,7 +52,9 @@
     </div>
 
     <div class="search-section" [class.show]="showSearch()">
-      <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente..."></ion-searchbar>
+      <ion-searchbar
+        [formControl]="searchControl"
+        placeholder="Buscar residente..."></ion-searchbar>
     </div>
 
     @for (resident of residents(); track resident.id) {
@@ -108,12 +110,11 @@
           </div>
 
           <div class="calendar-content">
-            <input
-              #dateInput
-              type="text"
-              class="date-input"
-              placeholder="Seleccionar fecha..."
-              [value]="dateRangeDisplay()" />
+            <ion-datetime
+              #datetime
+              [multiple]="true"
+              presentation="date"
+              locale="es-ES"></ion-datetime>
 
             <ion-button
               expand="block"

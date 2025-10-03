@@ -5,13 +5,10 @@ import {
   ElementRef,
   inject,
   input,
-  OnDestroy,
   signal,
   ViewChild
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import flatpickr from 'flatpickr';
-import { Spanish } from 'flatpickr/dist/l10n/es.js';
 import { debounceTime } from 'rxjs';
 
 import {
@@ -47,7 +44,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 @Component({
   selector: 'app-residents',
   templateUrl: './residents.html',
-  styleUrls: ['./residents.scss', './flatpickr-custom.scss'],
+  styleUrls: ['./residents.scss'],
   imports: [
     ReactiveFormsModule,
     IonHeader,
@@ -76,12 +73,11 @@ import { CommonModule, DatePipe } from '@angular/common';
     DatePipe
   ]
 })
-export class Residents implements OnDestroy {
+export class Residents {
   private residentsService = inject(ResidentsService);
   private residenceStateService = inject(ResidenceStateService);
 
-  @ViewChild('dateInput') dateInput!: ElementRef;
-  private flatpickrInstance: any;
+  @ViewChild('datetime') datetime!: IonDatetime;
 
   isActive = input<boolean>(false);
 
@@ -94,7 +90,6 @@ export class Residents implements OnDestroy {
   hasMore = signal(false);
   showCalendar = signal(false);
   showSearch = signal(false);
-  dateRangeDisplay = signal<string>('');
   selectedPeriod = signal<number>(7);
 
   // Form controls
@@ -125,9 +120,8 @@ export class Residents implements OnDestroy {
     // Limpiar filtros de calendario
     this.dateFromControl.setValue(null);
     this.dateToControl.setValue(null);
-    this.dateRangeDisplay.set('');
-    if (this.flatpickrInstance) {
-      this.flatpickrInstance.clear();
+    if (this.datetime) {
+      this.datetime.value = undefined;
     }
     this.currentPage.set(1);
     this.loadResidents(true);
@@ -139,73 +133,36 @@ export class Residents implements OnDestroy {
 
   openCalendarModal() {
     this.showCalendar.set(true);
-    // Inicializar flatpickr cuando se abre el modal
-    setTimeout(() => {
-      if (this.dateInput) {
-        const inputElement = this.dateInput.nativeElement;
-
-        // Destruir instancia previa si existe
-        if (this.flatpickrInstance) {
-          this.flatpickrInstance.destroy();
-          this.flatpickrInstance = null;
-        }
-
-        this.flatpickrInstance = flatpickr(inputElement, {
-          mode: 'range',
-          locale: Spanish,
-          dateFormat: 'd/m/Y',
-          clickOpens: true,
-          allowInput: false,
-          inline: false,
-          appendTo: document.body,
-          static: false,
-          positionElement: inputElement,
-          onClose: (selectedDates: Date[], dateStr: string) => {
-            if (selectedDates.length > 0) {
-              if (selectedDates.length === 1) {
-                const date = selectedDates[0];
-                const isoDate = date.toISOString().split('T')[0];
-                this.dateFromControl.setValue(isoDate);
-                this.dateToControl.setValue(isoDate);
-                this.dateRangeDisplay.set(dateStr);
-              } else if (selectedDates.length === 2) {
-                this.dateFromControl.setValue(selectedDates[0].toISOString().split('T')[0]);
-                this.dateToControl.setValue(selectedDates[1].toISOString().split('T')[0]);
-                this.dateRangeDisplay.set(dateStr);
-              }
-            }
-          }
-        });
-      }
-    }, 300);
   }
 
   closeCalendarModal() {
     this.showCalendar.set(false);
   }
 
-  ngOnDestroy() {
-    if (this.flatpickrInstance) {
-      this.flatpickrInstance.destroy();
-    }
-  }
 
   applyCalendar() {
-    // Limpiar periodo seleccionado cuando se usa el calendario
-    this.selectedPeriod.set(0);
-    this.currentPage.set(1);
-    this.loadResidents(true);
-    this.closeCalendarModal();
+    if (this.datetime && this.datetime.value) {
+      const dates = Array.isArray(this.datetime.value)
+        ? this.datetime.value
+        : [this.datetime.value];
+
+      if (dates.length > 0) {
+        this.dateFromControl.setValue(dates[0].split('T')[0]);
+        this.dateToControl.setValue(dates[dates.length - 1].split('T')[0]);
+        this.selectedPeriod.set(0);
+        this.currentPage.set(1);
+        this.loadResidents(true);
+        this.closeCalendarModal();
+      }
+    }
   }
 
   clearCalendar() {
     this.dateFromControl.setValue(null);
     this.dateToControl.setValue(null);
-    this.dateRangeDisplay.set('');
-    if (this.flatpickrInstance) {
-      this.flatpickrInstance.clear();
+    if (this.datetime) {
+      this.datetime.value = undefined;
     }
-    // Volver al periodo por defecto
     this.selectedPeriod.set(7);
     this.currentPage.set(1);
     this.loadResidents(true);

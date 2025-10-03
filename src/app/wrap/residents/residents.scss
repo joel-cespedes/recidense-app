@@ -93,7 +93,7 @@ ion-item {
   margin-bottom: 12px;
 }
 ion-card {
-  background: #473cc1 !important;
+  background: var(--gradient-primary-invert) !important;
   //box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.2) !important;
   margin: 0 0 18px 0;
   padding: 16px;
@@ -170,16 +170,6 @@ ion-card {
 
 .calendar-content {
   padding: 20px;
-
-  .date-input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    background: var(--gradient-end);
-    cursor: pointer;
-  }
 }
 
 .section-icons {
@@ -190,7 +180,6 @@ ion-card {
 
 .search-section {
   max-height: 0;
-  overflow: hidden;
   opacity: 0;
   transition: all 0.3s ease-in-out;
   margin-bottom: 0;
