@@ -10,7 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "api:generate": "ng-openapi-gen"
+    "api:generate": "ng-openapi-gen && node scripts/post-api-generate.js"
   },
   "prettier": {
     "tabWidth": 2,

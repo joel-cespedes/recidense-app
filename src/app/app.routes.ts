@@ -32,7 +32,7 @@ export const routes: Routes = [
       {
         path: 'residents/residents-measures/:id',
         loadComponent: () =>
-          import('./wrap/residents-measure/residents-measure/residents-detail').then(
+          import('./wrap/residents-measure/residents-measure-detail/residents-measure-detail').then(
             m => m.ResidentsDetail
           )
       },

@@ -10,6 +10,7 @@
  *     residence_id (str): ID de la residencia a la que pertenece
  *     resident_id (str): ID del residente medido
  *     resident_full_name (Optional[str]): Nombre completo del residente
+ *     bed_name (Optional[str]): Nombre de la cama asignada al residente
  *     recorded_by (str): ID del usuario que registró la medición
  *     source (MeasurementSource): Fuente de la medición
  *     device_id (Optional[str]): ID del dispositivo utilizado
@@ -26,6 +27,7 @@
  *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
  */
 export interface MeasurementOut {
+  bed_name?: (string | null);
   created_at: string;
   deleted_at?: (string | null);
   device_id?: (string | null);

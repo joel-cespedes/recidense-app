@@ -10,18 +10,17 @@ import {
   IonSpinner,
   NavController
 } from '@ionic/angular/standalone';
-import { ResidentsService } from '../../../../openapi/generated/services/residents.service';
-import { ResidentOut } from '../../../../openapi/generated/models/resident-out';
 import { getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet } from '../../../../openapi/generated/fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
 import { PaginatedResponseMeasurementOut } from '../../../../openapi/generated/models/paginated-response-measurement-out';
 import { MeasurementOut } from '../../../../openapi/generated/models/measurement-out';
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration } from '../../../../openapi/generated/api-configuration';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-residents-details',
-  templateUrl: './residents-detail.html',
-  styleUrls: ['./residents-detail.scss'],
+  templateUrl: './residents-measure-detail.html',
+  styleUrls: ['./residents-measure-detail.scss'],
   imports: [
     CommonModule,
     IonHeader,
@@ -36,15 +35,11 @@ import { ApiConfiguration } from '../../../../openapi/generated/api-configuratio
 export class ResidentsDetail {
   id = input.required<string>();
   private navCtrl = inject(NavController);
-  private residentsService = inject(ResidentsService);
   private http = inject(HttpClient);
   private config = inject(ApiConfiguration);
 
-  resident = signal<ResidentOut | null>(null);
   measurements = signal<MeasurementOut[]>([]);
-  isLoading = signal(true);
   isLoadingMeasurements = signal(true);
-  errorMessage = signal<string | null>(null);
   measurementsError = signal<string | null>(null);
 
   constructor() {
@@ -52,23 +47,6 @@ export class ResidentsDetail {
       const residentId = this.id();
       if (residentId) {
         this.loadMeasurements(residentId);
-      }
-    });
-  }
-
-  loadResident(id: string) {
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-
-    this.residentsService.getResidentResidentsIdGet({ id }).subscribe({
-      next: (resident: ResidentOut) => {
-        this.resident.set(resident);
-        this.isLoading.set(false);
-      },
-      error: error => {
-        console.error('Error loading resident:', error);
-        this.errorMessage.set('Error al cargar el residente');
-        this.isLoading.set(false);
       }
     });
   }
@@ -84,9 +62,10 @@ export class ResidentsDetail {
       time_filter: '7d',
       page: 1,
       size: 20
-    }).subscribe({
-      next: (response: any) => {
-        const paginatedResponse = response.body as PaginatedResponseMeasurementOut;
+    }).pipe(
+      map(response => response.body as PaginatedResponseMeasurementOut)
+    ).subscribe({
+      next: (paginatedResponse) => {
         this.measurements.set(paginatedResponse.items);
         this.isLoadingMeasurements.set(false);
       },

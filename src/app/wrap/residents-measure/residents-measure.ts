@@ -29,11 +29,11 @@ import {
   NavController
 } from '@ionic/angular/standalone';
 
-import { ResidentsService } from '../../../openapi/generated/services/residents.service';
+import { MeasurementsService } from '../../../openapi/generated/services/measurements.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
 import { CommonModule, DatePipe } from '@angular/common';
-import { ResidentOut } from '../../../openapi/generated/models/resident-out';
-import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/paginated-response-resident-out';
+import { MeasurementOut } from '../../../openapi/generated/models/measurement-out';
+import { PaginatedResponseMeasurementOut } from '../../../openapi/generated/models/paginated-response-measurement-out';
 
 @Component({
   selector: 'app-residents',
@@ -68,14 +68,14 @@ import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/
   ]
 })
 export class ResidentsMeasure implements OnInit {
-  private residentsService = inject(ResidentsService);
+  private measurementsService = inject(MeasurementsService);
   private residenceStateService = inject(ResidenceStateService);
   private navCtrl = inject(NavController);
 
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
 
   // Signals
-  residents = signal<ResidentOut[]>([]);
+  measurements = signal<MeasurementOut[]>([]);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
   currentPage = signal(1);
@@ -97,20 +97,20 @@ export class ResidentsMeasure implements OnInit {
     // Search con debounce
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.currentPage.set(1);
-      this.loadResidents(true);
+      this.loadMeasurements(true);
     });
   }
 
   ngOnInit() {
     this.resetFilters();
-    this.loadResidents(true);
+    this.loadMeasurements(true);
   }
 
-  navigateToResidentsDetails(event: Event, resident: ResidentOut) {
+  navigateToMeasurementDetails(event: Event, measurement: MeasurementOut) {
     event.preventDefault();
     event.stopPropagation();
 
-    this.navCtrl.navigateForward(`/wrap/residents-measures/${resident.id}`, {
+    this.navCtrl.navigateForward(`/wrap/residents/residents-measures/${measurement.resident_id}`, {
       animated: true
     });
   }
@@ -137,7 +137,7 @@ export class ResidentsMeasure implements OnInit {
       this.datetimeRef.nativeElement.value = undefined;
     }
     this.currentPage.set(1);
-    this.loadResidents(true);
+    this.loadMeasurements(true);
   }
 
   toggleSearch() {
@@ -168,7 +168,7 @@ export class ResidentsMeasure implements OnInit {
           this.currentPage.set(1);
           this.closeCalendarModal();
           setTimeout(() => {
-            this.loadResidents(true);
+            this.loadMeasurements(true);
           }, 0);
         }
       }
@@ -183,10 +183,10 @@ export class ResidentsMeasure implements OnInit {
     }
     this.selectedPeriod.set(1);
     this.currentPage.set(1);
-    this.loadResidents(true);
+    this.loadMeasurements(true);
   }
 
-  loadResidents(reset = false) {
+  loadMeasurements(reset = false) {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
@@ -215,8 +215,8 @@ export class ResidentsMeasure implements OnInit {
       dateTo = today.toISOString().split('T')[0];
     }
 
-    this.residentsService
-      .listResidentsResidentsGet({
+    this.measurementsService
+      .listMeasurementsMeasurementsGet({
         residence_id: residenceId.toString(),
         page: this.currentPage(),
         size: 20,
@@ -225,39 +225,39 @@ export class ResidentsMeasure implements OnInit {
         date_to: dateTo
       })
       .subscribe({
-        next: (response: PaginatedResponseResidentOut) => {
+        next: (response: PaginatedResponseMeasurementOut) => {
           if (reset) {
-            this.residents.set(response.items);
+            this.measurements.set(response.items);
           } else {
-            this.residents.update(current => [...current, ...response.items]);
+            this.measurements.update(current => [...current, ...response.items]);
           }
           this.totalPages.set(response.pages);
           this.hasMore.set(response.has_next);
           this.isLoading.set(false);
         },
         error: error => {
-          console.error('Error loading residents:', error);
-          this.errorMessage.set('Error al cargar residentes');
+          console.error('Error loading measurements:', error);
+          this.errorMessage.set('Error al cargar mediciones');
           this.isLoading.set(false);
         }
       });
   }
 
-  onIonInfinite(ev: any) {
+  onIonInfinite(ev: Event) {
     if (this.hasMore()) {
       this.currentPage.update(page => page + 1);
-      this.loadResidents();
+      this.loadMeasurements();
       setTimeout(() => {
-        (ev as any).target.complete();
+        (ev.target as HTMLIonInfiniteScrollElement).complete();
       }, 500);
     } else {
-      (ev as any).target.complete();
+      (ev.target as HTMLIonInfiniteScrollElement).complete();
     }
   }
 
-  refresh(ev: any) {
+  refresh(ev: Event) {
     this.currentPage.set(1);
-    this.loadResidents(true);
+    this.loadMeasurements(true);
     setTimeout(() => {
       (ev as RefresherCustomEvent).detail.complete();
     }, 1000);
