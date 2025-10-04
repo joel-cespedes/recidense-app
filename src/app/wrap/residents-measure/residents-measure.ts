@@ -110,7 +110,7 @@ export class ResidentsMeasure implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    this.navCtrl.navigateForward(`/wrap/residents/residents-measures/${measurement.resident_id}`, {
+    this.navCtrl.navigateForward(`/wrap/residents/residents-measures/${measurement.id}`, {
       animated: true
     });
   }

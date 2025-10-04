@@ -52,9 +52,7 @@
     </div>
 
     <div class="search-section" [class.show]="showSearch()">
-      <ion-searchbar
-        [formControl]="searchControl"
-        placeholder="Buscar medición..."></ion-searchbar>
+      <ion-searchbar [formControl]="searchControl" placeholder="Buscar medición..."></ion-searchbar>
     </div>
 
     @if (isLoading() && measurements().length === 0) {
@@ -83,30 +81,26 @@
             </div>
             <div class="info-resident__bed">
               {{ measurement.bed_name ? 'Cama: ' + measurement.bed_name : 'Sin cama' }}
-              <span> - Tipo: {{ measurement.type }}</span>
+              <span>- Tipo: {{ measurement.type }}</span>
             </div>
             <div class="info-resident__icons">
               @if (measurement.systolic && measurement.diastolic) {
               <div class="icon-svg">
                 <img src="assets/icon/electro-white.svg" alt="Presión" />
               </div>
-              }
-              @if (measurement.spo2) {
+              } @if (measurement.spo2) {
               <div class="icon-svg">
                 <img src="assets/icon/oxygen-white.svg" alt="SpO2" />
               </div>
-              }
-              @if (measurement.weight_kg) {
+              } @if (measurement.weight_kg) {
               <div class="icon-svg">
                 <img src="assets/icon/weight-white.svg" alt="Peso" />
               </div>
-              }
-              @if (measurement.temperature_c) {
+              } @if (measurement.temperature_c) {
               <div class="icon-svg">
                 <img src="assets/icon/temperature-white.svg" alt="Temperatura" />
               </div>
-              }
-              @if (measurement.pulse_bpm) {
+              } @if (measurement.pulse_bpm) {
               <div class="icon-svg">
                 <img src="assets/icon/heart-white.svg" alt="Pulso" />
               </div>
@@ -117,7 +111,7 @@
             <div class="content-right__icon">
               <span class="mat-icon">chevron_right</span>
             </div>
-            <div class="date-resident">{{ measurement.taken_at | date : 'dd/MM/yyyy HH:mm' }}</div>
+            <div class="date-resident">{{ measurement.taken_at | date : 'dd/MM/yyyy' }}</div>
           </div>
         </ion-label>
       </button>

@@ -10,12 +10,8 @@ import {
   IonSpinner,
   NavController
 } from '@ionic/angular/standalone';
-import { getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet } from '../../../../openapi/generated/fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
-import { PaginatedResponseMeasurementOut } from '../../../../openapi/generated/models/paginated-response-measurement-out';
+import { MeasurementsService } from '../../../../openapi/generated/services/measurements.service';
 import { MeasurementOut } from '../../../../openapi/generated/models/measurement-out';
-import { HttpClient } from '@angular/common/http';
-import { ApiConfiguration } from '../../../../openapi/generated/api-configuration';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-residents-details',
@@ -35,44 +31,36 @@ import { map } from 'rxjs/operators';
 export class ResidentsDetail {
   id = input.required<string>();
   private navCtrl = inject(NavController);
-  private http = inject(HttpClient);
-  private config = inject(ApiConfiguration);
+  private measurementsService = inject(MeasurementsService);
 
-  measurements = signal<MeasurementOut[]>([]);
-  isLoadingMeasurements = signal(true);
-  measurementsError = signal<string | null>(null);
+  measurement = signal<MeasurementOut | null>(null);
+  isLoading = signal(true);
+  errorMessage = signal<string | null>(null);
 
   constructor() {
     effect(() => {
-      const residentId = this.id();
-      if (residentId) {
-        this.loadMeasurements(residentId);
+      const measurementId = this.id();
+      if (measurementId) {
+        this.loadMeasurement(measurementId);
       }
     });
   }
 
-  loadMeasurements(residentId: string) {
-    this.isLoadingMeasurements.set(true);
-    this.measurementsError.set(null);
+  loadMeasurement(measurementId: string) {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
 
-    const rootUrl = this.config.rootUrl || '';
-
-    getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet(this.http, rootUrl, {
-      resident_id: residentId,
-      time_filter: '7d',
-      page: 1,
-      size: 20
-    }).pipe(
-      map(response => response.body as PaginatedResponseMeasurementOut)
-    ).subscribe({
-      next: (paginatedResponse) => {
-        this.measurements.set(paginatedResponse.items);
-        this.isLoadingMeasurements.set(false);
+    this.measurementsService.getMeasurementMeasurementsMeasurementIdGet({
+      measurement_id: measurementId
+    }).subscribe({
+      next: (measurement: MeasurementOut) => {
+        this.measurement.set(measurement);
+        this.isLoading.set(false);
       },
       error: error => {
-        console.error('Error loading measurements:', error);
-        this.measurementsError.set('Error al cargar las mediciones');
-        this.isLoadingMeasurements.set(false);
+        console.error('Error loading measurement:', error);
+        this.errorMessage.set('Error al cargar la medición');
+        this.isLoading.set(false);
       }
     });
   }
