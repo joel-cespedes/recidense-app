@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Detalle del Residente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="measurements-section">
+      <h3>Mediciones (últimos 7 días)</h3>
+
+      @if (isLoadingMeasurements()) {
+      <div class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando mediciones...</p>
+      </div>
+      } @else if (measurementsError()) {
+      <div class="error-container">
+        <span class="mat-icon">error</span>
+        <p>{{ measurementsError() }}</p>
+      </div>
+      } @else if (measurements().length === 0) {
+      <p class="no-data">No hay mediciones registradas</p>
+      } @else {
+      <div class="measurements-list">
+        @for (measurement of measurements(); track measurement.id) {
+        <div class="measurement-card">
+          <div class="measurement-header">
+            <span class="measurement-type">{{ measurement.type }}</span>
+            <span class="measurement-date">
+              {{ measurement.taken_at | date : 'dd/MM/yyyy HH:mm' }}
+            </span>
+          </div>
+          <div class="measurement-values">
+            @if (measurement.type === 'bp' && measurement.systolic && measurement.diastolic) {
+            <p>
+              <strong>Presión:</strong>
+              {{ measurement.systolic }}/{{ measurement.diastolic }} mmHg
+            </p>
+            } @if (measurement.pulse_bpm) {
+            <p>
+              <strong>Pulso:</strong>
+              {{ measurement.pulse_bpm }} bpm
+            </p>
+            } @if (measurement.spo2) {
+            <p>
+              <strong>SpO2:</strong>
+              {{ measurement.spo2 }}%
+            </p>
+            } @if (measurement.weight_kg) {
+            <p>
+              <strong>Peso:</strong>
+              {{ measurement.weight_kg }} kg
+            </p>
+            } @if (measurement.temperature_c) {
+            <p>
+              <strong>Temperatura:</strong>
+              {{ measurement.temperature_c }}°C
+            </p>
+            }
+          </div>
+          <div class="measurement-footer">
+            <span class="measurement-source">Fuente: {{ measurement.source }}</span>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</ion-content>

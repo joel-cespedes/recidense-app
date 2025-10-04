@@ -25,13 +25,28 @@ export const routes: Routes = [
         canActivate: []
       },
       {
-        path: 'residents',
-        loadComponent: () => import('./wrap/residents/residents').then(m => m.Residents)
+        path: 'residents-measurements',
+        loadComponent: () =>
+          import('./wrap/residents-measure/residents-measure').then(m => m.ResidentsMeasure)
       },
       {
-        path: 'residents/residents-details/:id',
+        path: 'residents/residents-measures/:id',
         loadComponent: () =>
-          import('./wrap/residents/residents/residents-detail').then(m => m.ResidentsDetail)
+          import('./wrap/residents-measure/residents-measure/residents-detail').then(
+            m => m.ResidentsDetail
+          )
+      },
+      {
+        path: 'residents-tasks',
+        loadComponent: () =>
+          import('./wrap/residents-task/residents-task').then(m => m.ResidentsTask)
+      },
+      {
+        path: 'residents/residents-tasks/:id',
+        loadComponent: () =>
+          import('./wrap/residents-task/residents-task-apply/residents-task-apply').then(
+            m => m.ResidentsTaskApply
+          )
       },
       {
         path: '',

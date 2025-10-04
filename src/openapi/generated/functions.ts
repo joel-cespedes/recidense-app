@@ -145,6 +145,8 @@ export type { DeleteApplicationTasksApplicationsApplicationIdDelete$Params } fro
 export { deleteApplicationTasksApplicationsApplicationIdDelete } from './fn/tasks/delete-application-tasks-applications-application-id-delete';
 export type { UpdateApplicationTasksApplicationsApplicationIdPatch$Params } from './fn/tasks/update-application-tasks-applications-application-id-patch';
 export { updateApplicationTasksApplicationsApplicationIdPatch } from './fn/tasks/update-application-tasks-applications-application-id-patch';
+export type { GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Params } from './fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
+export { getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet } from './fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
 export type { CreateMeasurementMeasurementsPost$Params } from './fn/measurements/create-measurement-measurements-post';
 export { createMeasurementMeasurementsPost } from './fn/measurements/create-measurement-measurements-post';
 export type { ListMeasurementsMeasurementsGet$Params } from './fn/measurements/list-measurements-measurements-get';
@@ -159,6 +161,8 @@ export type { DeleteMeasurementMeasurementsMeasurementIdDelete$Params } from './
 export { deleteMeasurementMeasurementsMeasurementIdDelete } from './fn/measurements/delete-measurement-measurements-measurement-id-delete';
 export type { PatchMeasurementMeasurementsMeasurementIdPatch$Params } from './fn/measurements/patch-measurement-measurements-measurement-id-patch';
 export { patchMeasurementMeasurementsMeasurementIdPatch } from './fn/measurements/patch-measurement-measurements-measurement-id-patch';
+export type { GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Params } from './fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
+export { getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet } from './fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
 export type { GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params } from './fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 export { getMeasurementHistoryMeasurementsMeasurementIdHistoryGet } from './fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 export type { GetDashboardDataDashboardGet$Params } from './fn/dashboard/get-dashboard-data-dashboard-get';

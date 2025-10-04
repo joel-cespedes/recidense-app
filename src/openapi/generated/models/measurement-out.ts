@@ -9,6 +9,7 @@
  *     id (str): Identificador único de la medición
  *     residence_id (str): ID de la residencia a la que pertenece
  *     resident_id (str): ID del residente medido
+ *     resident_full_name (Optional[str]): Nombre completo del residente
  *     recorded_by (str): ID del usuario que registró la medición
  *     source (MeasurementSource): Fuente de la medición
  *     device_id (Optional[str]): ID del dispositivo utilizado
@@ -33,6 +34,7 @@ export interface MeasurementOut {
   pulse_bpm?: (number | null);
   recorded_by: string;
   residence_id: string;
+  resident_full_name?: (string | null);
   resident_id: string;
   source: 'device' | 'voice' | 'manual';
   spo2?: (number | null);
@@ -42,4 +44,6 @@ export interface MeasurementOut {
   type: 'bp' | 'spo2' | 'weight' | 'temperature';
   updated_at: string;
   weight_kg?: (number | null);
+
+  [key: string]: any;
 }

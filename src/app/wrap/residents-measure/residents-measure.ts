@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChild
-} from '@angular/core';
+import { Component, computed, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 
@@ -45,8 +37,8 @@ import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/
 
 @Component({
   selector: 'app-residents',
-  templateUrl: './residents.html',
-  styleUrls: ['./residents.scss'],
+  templateUrl: './residents-measure.html',
+  styleUrls: ['./residents-measure.scss'],
   imports: [
     ReactiveFormsModule,
     IonHeader,
@@ -75,7 +67,7 @@ import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/
     DatePipe
   ]
 })
-export class Residents implements OnInit {
+export class ResidentsMeasure implements OnInit {
   private residentsService = inject(ResidentsService);
   private residenceStateService = inject(ResidenceStateService);
   private navCtrl = inject(NavController);
@@ -91,7 +83,7 @@ export class Residents implements OnInit {
   hasMore = signal(false);
   showCalendar = signal(false);
   showSearch = signal(false);
-  selectedPeriod = signal<number>(7);
+  selectedPeriod = signal<number>(1);
 
   // Form controls
   searchControl = new FormControl('');
@@ -118,7 +110,7 @@ export class Residents implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    this.navCtrl.navigateForward(`/wrap/residents/residents-details/${resident.id}`, {
+    this.navCtrl.navigateForward(`/wrap/residents-measures/${resident.id}`, {
       animated: true
     });
   }
@@ -130,7 +122,7 @@ export class Residents implements OnInit {
     if (this.datetimeRef) {
       this.datetimeRef.nativeElement.value = undefined;
     }
-    this.selectedPeriod.set(7);
+    this.selectedPeriod.set(1);
     this.currentPage.set(1);
     this.showSearch.set(false);
     this.showCalendar.set(false);
@@ -189,7 +181,7 @@ export class Residents implements OnInit {
     if (this.datetimeRef) {
       this.datetimeRef.nativeElement.value = undefined;
     }
-    this.selectedPeriod.set(7);
+    this.selectedPeriod.set(1);
     this.currentPage.set(1);
     this.loadResidents(true);
   }

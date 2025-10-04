@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button color="outlined">
@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -21,6 +21,10 @@
   <div class="container">
     <div class="title-section center m-b-32">Últimos</div>
     <div class="btns-raunded">
+      <button class="rounded" [class.active]="selectedPeriod() === 1" (click)="selectPeriod(1)">
+        <div class="rounded__number">1</div>
+        <div class="rounded__label">Día</div>
+      </button>
       <button class="rounded" [class.active]="selectedPeriod() === 7" (click)="selectPeriod(7)">
         <div class="rounded__number">7</div>
         <div class="rounded__label">Días</div>
@@ -32,10 +36,6 @@
       <button class="rounded" [class.active]="selectedPeriod() === 30" (click)="selectPeriod(30)">
         <div class="rounded__number">30</div>
         <div class="rounded__label">Días</div>
-      </button>
-      <button class="rounded" [class.active]="selectedPeriod() === 365" (click)="selectPeriod(365)">
-        <div class="rounded__number">1</div>
-        <div class="rounded__label">Año</div>
       </button>
     </div>
 

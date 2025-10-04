@@ -3,7 +3,8 @@ import {
   RouteReuseStrategy,
   provideRouter,
   withPreloading,
-  PreloadAllModules
+  PreloadAllModules,
+  withComponentInputBinding
 } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
@@ -24,6 +25,6 @@ bootstrapApplication(AppComponent, {
       navAnimation: pageTransition
     }),
     provideApiConfiguration(),
-    provideRouter(routes, withPreloading(PreloadAllModules))
+    provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding())
   ]
 });

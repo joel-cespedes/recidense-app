@@ -22,7 +22,9 @@ import {
   IonToolbar,
   RefresherCustomEvent
 } from '@ionic/angular/standalone';
-import { Residents } from './residents/residents';
+import { ResidentsMeasure } from './residents-measure/residents-measure';
+import { ResidentsTask } from './residents-task/residents-task';
+import { ResidentsTaskApply } from './residents-task/residents-task-apply/residents-task-apply';
 @Component({
   selector: 'app-wrap',
   templateUrl: './wrap.component.html',
@@ -50,7 +52,9 @@ import { Residents } from './residents/residents';
     IonTabBar,
     IonTabButton,
     IonTabs,
-    Residents
+    ResidentsMeasure,
+    ResidentsTask,
+    ResidentsTaskApply
   ]
 })
 export class WrapComponent {
