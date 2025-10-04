@@ -147,6 +147,8 @@ export type { UpdateApplicationTasksApplicationsApplicationIdPatch$Params } from
 export { updateApplicationTasksApplicationsApplicationIdPatch } from './fn/tasks/update-application-tasks-applications-application-id-patch';
 export type { GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Params } from './fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
 export { getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet } from './fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
+export type { CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params } from './fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
+export { createTaskApplicationsBatchTasksApplicationsBatchPost } from './fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
 export type { CreateMeasurementMeasurementsPost$Params } from './fn/measurements/create-measurement-measurements-post';
 export { createMeasurementMeasurementsPost } from './fn/measurements/create-measurement-measurements-post';
 export type { ListMeasurementsMeasurementsGet$Params } from './fn/measurements/list-measurements-measurements-get';

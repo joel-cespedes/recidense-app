@@ -19,7 +19,7 @@
   </ion-refresher>
 
   <div class="container">
-    <ion-segment color="primary" value="primary" class="m-t-32">
+    <ion-segment color="primary" value="primary" class="m-t-32" (ionChange)="onSegmentChange($event)">
       <ion-segment-button value="primary">
         <ion-label>Único</ion-label>
       </ion-segment-button>
@@ -27,6 +27,16 @@
         <ion-label>Selección en bloque</ion-label>
       </ion-segment-button>
     </ion-segment>
+
+    @if (selectionMode() === 'bulk') {
+    <div class="select-all-section m-t-32">
+      <label class="checkbox-container">
+        <input type="checkbox" [checked]="selectAll()" (change)="toggleSelectAll()" />
+        <span class="checkmark"></span>
+        <span class="label-text">Seleccionar todos</span>
+      </label>
+    </div>
+    }
 
     <div class="split-section">
       <div class="title-section">Residentes</div>
@@ -82,8 +92,16 @@
     </div>
     } @else { @for (resident of residents(); track resident.id) {
 
-    <ion-card>
+    <ion-card [class.selected]="selectionMode() === 'bulk' && isResidentSelected(resident.id)">
       <button class="icon-card" (click)="navigateToResidentsDetails($event, resident)">
+        @if (selectionMode() === 'bulk') {
+        <div class="card-checkbox">
+          <label class="checkbox-container">
+            <input type="checkbox" [checked]="isResidentSelected(resident.id)" (click)="$event.stopPropagation()" />
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        }
         <ion-label>
           <div class="info-resident">
             <div class="info-resident__name">
@@ -166,4 +184,13 @@
       </ng-template>
     </ion-modal>
   </div>
+
+  @if (selectionMode() === 'bulk' && selectedResidents().size > 0) {
+  <div class="floating-button-container" [@slideUp]>
+    <button class="floating-button" (click)="navigateToApply()">
+      <span class="mat-icon">arrow_forward</span>
+      <span class="button-text">Siguiente ({{ selectedResidents().size }})</span>
+    </button>
+  </div>
+  }
 </ion-content>

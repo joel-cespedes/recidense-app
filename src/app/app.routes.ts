@@ -46,15 +46,20 @@ export const routes: Routes = [
       },
       {
         path: 'residents-tasks',
-        loadComponent: () =>
-          import('./wrap/residents-task/residents-task').then(m => m.ResidentsTask)
-      },
-      {
-        path: 'residents/residents-tasks/:id',
-        loadComponent: () =>
-          import('./wrap/residents-task/residents-task-apply/residents-task-apply').then(
-            m => m.ResidentsTaskApply
-          )
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-task').then(m => m.ResidentsTask)
+          },
+          {
+            path: 'apply',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-task-apply/residents-task-apply').then(
+                m => m.ResidentsTaskApply
+              )
+          }
+        ]
       },
       {
         path: '',

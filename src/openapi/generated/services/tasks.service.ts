@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { applyTaskTasksApplicationsPost } from '../fn/tasks/apply-task-tasks-applications-post';
 import { ApplyTaskTasksApplicationsPost$Params } from '../fn/tasks/apply-task-tasks-applications-post';
+import { createTaskApplicationsBatchTasksApplicationsBatchPost } from '../fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
+import { CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params } from '../fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
 import { createCategoryTasksCategoriesPost } from '../fn/tasks/create-category-tasks-categories-post';
 import { CreateCategoryTasksCategoriesPost$Params } from '../fn/tasks/create-category-tasks-categories-post';
 import { createTemplateTasksTemplatesPost } from '../fn/tasks/create-template-tasks-templates-post';
@@ -39,6 +41,7 @@ import { PaginatedResponse } from '../models/paginated-response';
 import { patchCategoryTasksCategoriesCategoryIdPatch } from '../fn/tasks/patch-category-tasks-categories-category-id-patch';
 import { PatchCategoryTasksCategoriesCategoryIdPatch$Params } from '../fn/tasks/patch-category-tasks-categories-category-id-patch';
 import { TaskApplicationOut } from '../models/task-application-out';
+import { TaskApplicationBatchResponse } from '../models/task-application-batch-response';
 import { TaskCategoryOut } from '../models/task-category-out';
 import { TaskTemplateOut } from '../models/task-template-out';
 import { updateApplicationTasksApplicationsApplicationIdPatch } from '../fn/tasks/update-application-tasks-applications-application-id-patch';
@@ -579,6 +582,39 @@ export class TasksService extends BaseService {
   updateApplicationTasksApplicationsApplicationIdPatch(params: UpdateApplicationTasksApplicationsApplicationIdPatch$Params, context?: HttpContext): Observable<TaskApplicationOut> {
     return this.updateApplicationTasksApplicationsApplicationIdPatch$Response(params, context).pipe(
       map((r: StrictHttpResponse<TaskApplicationOut>): TaskApplicationOut => r.body)
+    );
+  }
+
+  /** Path part for operation `createTaskApplicationsBatchTasksApplicationsBatchPost()` */
+  static readonly CreateTaskApplicationsBatchTasksApplicationsBatchPostPath = '/tasks/applications/batch';
+
+  /**
+   * Create Task Applications Batch.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createTaskApplicationsBatchTasksApplicationsBatchPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTaskApplicationsBatchTasksApplicationsBatchPost$Response(params: CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskApplicationBatchResponse>> {
+    return createTaskApplicationsBatchTasksApplicationsBatchPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Task Applications Batch.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createTaskApplicationsBatchTasksApplicationsBatchPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTaskApplicationsBatchTasksApplicationsBatchPost(params: CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params, context?: HttpContext): Observable<TaskApplicationBatchResponse> {
+    return this.createTaskApplicationsBatchTasksApplicationsBatchPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TaskApplicationBatchResponse>): TaskApplicationBatchResponse => r.body)
     );
   }
 

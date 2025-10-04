@@ -1,6 +1,7 @@
 import { Component, computed, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import {
   IonAvatar,
@@ -41,6 +42,17 @@ import { PaginatedResponseResidentOut } from '../../../openapi/generated/models/
   selector: 'app-residents',
   templateUrl: './residents-task.html',
   styleUrls: ['./residents-task.scss'],
+  animations: [
+    trigger('slideUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate('300ms ease-out', style({ transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ transform: 'translateY(100%)' }))
+      ])
+    ])
+  ],
   imports: [
     ReactiveFormsModule,
     IonHeader,
@@ -89,6 +101,11 @@ export class ResidentsTask implements OnInit {
   showSearch = signal(false);
   selectedPeriod = signal<number>(1);
 
+  // Selection mode signals
+  selectionMode = signal<'single' | 'bulk'>('single');
+  selectedResidents = signal<Set<string>>(new Set());
+  selectAll = signal(false);
+
   // Form controls
   searchControl = new FormControl('');
   dateFromControl = new FormControl<string | null>(null);
@@ -110,12 +127,65 @@ export class ResidentsTask implements OnInit {
     this.loadResidents(true);
   }
 
+  onSegmentChange(event: any) {
+    const value = event.detail.value;
+    this.selectionMode.set(value === 'primary' ? 'single' : 'bulk');
+    this.selectedResidents.set(new Set());
+    this.selectAll.set(false);
+  }
+
+  toggleSelectAll() {
+    this.selectAll.update(value => !value);
+
+    if (this.selectAll()) {
+      // Seleccionar todos los residentes (incluyendo los no mostrados por paginación)
+      const allIds = this.residents().map(r => r.id);
+      this.selectedResidents.set(new Set(allIds));
+    } else {
+      this.selectedResidents.set(new Set());
+    }
+  }
+
+  toggleResidentSelection(residentId: string) {
+    const selected = new Set(this.selectedResidents());
+
+    if (selected.has(residentId)) {
+      selected.delete(residentId);
+    } else {
+      selected.add(residentId);
+    }
+
+    this.selectedResidents.set(selected);
+
+    // Actualizar selectAll si todos están seleccionados
+    this.selectAll.set(selected.size === this.residents().length);
+  }
+
+  isResidentSelected(residentId: string): boolean {
+    return this.selectedResidents().has(residentId);
+  }
+
   navigateToResidentsDetails(event: Event, resident: ResidentOut) {
     event.preventDefault();
     event.stopPropagation();
 
-    this.navCtrl.navigateForward(`/wrap/residents-tasks/${resident.id}`, {
-      animated: true
+    if (this.selectionMode() === 'bulk') {
+      // En modo bloque, seleccionar/deseleccionar
+      this.toggleResidentSelection(resident.id);
+    } else {
+      // En modo único, navegar
+      this.navCtrl.navigateForward(`/wrap/residents-tasks/apply`, {
+        animated: true,
+        state: { residentIds: [resident.id] }
+      });
+    }
+  }
+
+  navigateToApply() {
+    const residentIds = Array.from(this.selectedResidents());
+    this.navCtrl.navigateForward(`/wrap/residents-tasks/apply`, {
+      animated: true,
+      state: { residentIds }
     });
   }
 

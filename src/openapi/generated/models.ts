@@ -51,6 +51,8 @@ export type { RoomUpdate } from './models/room-update';
 export type { TagCreate } from './models/tag-create';
 export type { TagOut } from './models/tag-out';
 export type { TagUpdate } from './models/tag-update';
+export type { TaskApplicationBatchRequest } from './models/task-application-batch-request';
+export type { TaskApplicationBatchResponse } from './models/task-application-batch-response';
 export type { TaskApplicationCreate } from './models/task-application-create';
 export type { TaskApplicationOut } from './models/task-application-out';
 export type { TaskApplicationUpdate } from './models/task-application-update';

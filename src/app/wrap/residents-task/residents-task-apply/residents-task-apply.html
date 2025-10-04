@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Seleccionar Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    <div class="resident-summary m-t-32">
+      <div class="summary-title">Residentes seleccionados</div>
+      <div class="summary-count">{{ residentIds().length }}</div>
+    </div>
+
+    @if (isLoading() && taskTemplates().length === 0) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando tareas...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else { @if (taskTemplates().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">task</span>
+      <p>No hay tareas disponibles</p>
+    </div>
+    } @else { @for (task of taskTemplates(); track task.id) {
+
+    <ion-card [class.selected]="isTaskSelected(task.id)">
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-info">
+            <div class="task-name">{{ task.name }}</div>
+            <div class="task-category">{{ getCategoryName(task.task_category_id) }}</div>
+          </div>
+
+          @if (hasStatuses(task)) {
+          <!-- Si tiene statuses, mostrar select -->
+          <div class="task-select-container" (click)="$event.stopPropagation()">
+            <select
+              class="status-select"
+              [value]="selectedStatus()[task.id] || ''"
+              (change)="onStatusChange(task.id, $event)">
+              <option value="" disabled>Estado</option>
+              @if (task.status1) {
+              <option [value]="task.status1">{{ task.status1 }}</option>
+              } @if (task.status2) {
+              <option [value]="task.status2">{{ task.status2 }}</option>
+              } @if (task.status3) {
+              <option [value]="task.status3">{{ task.status3 }}</option>
+              } @if (task.status4) {
+              <option [value]="task.status4">{{ task.status4 }}</option>
+              } @if (task.status5) {
+              <option [value]="task.status5">{{ task.status5 }}</option>
+              } @if (task.status6) {
+              <option [value]="task.status6">{{ task.status6 }}</option>
+              }
+            </select>
+          </div>
+          } @else {
+          <!-- Si NO tiene statuses, mostrar checkbox -->
+          <div class="task-checkbox">
+            <label class="checkbox-container">
+              <input
+                type="checkbox"
+                [checked]="isTaskSelected(task.id)"
+                (change)="toggleTaskSelection(task.id)"
+                (click)="$event.stopPropagation()" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          }
+        </div>
+      </div>
+    </ion-card>
+    } } }
+  </div>
+
+  @if (selectedTasks().size > 0 && canApplyTasks()) {
+  <div class="floating-button-container" [@slideUp]>
+    <button class="floating-button" (click)="applyTasks()">
+      <span class="mat-icon">check</span>
+      <span class="button-text">Aplicar Tareas ({{ selectedTasks().size }})</span>
+    </button>
+  </div>
+  }
+</ion-content>
