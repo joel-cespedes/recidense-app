@@ -5,73 +5,119 @@
         <span class="mat-icon">arrow_back</span>
       </ion-button>
     </ion-buttons>
-    <ion-title>Detalle de Medición</ion-title>
+    <ion-title>Mediciones del Día</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="container">
     @if (isLoading()) {
-      <div class="loading-container">
-        <ion-spinner name="crescent"></ion-spinner>
-        <p>Cargando medición...</p>
-      </div>
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando mediciones...</p>
+    </div>
     } @else if (errorMessage()) {
-      <div class="error-container">
-        <span class="mat-icon">error</span>
-        <p>{{ errorMessage() }}</p>
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else if (measurements().length > 0) {
+    <div class="measurement-detail">
+      <div class="resident-info">
+        <h2>{{ measurements()[0].resident_full_name || 'Sin nombre' }}</h2>
+        @if (measurements()[0].bed_name) {
+        <p>
+          <strong>Cama:</strong>
+          {{ measurements()[0].bed_name }}
+        </p>
+        }
+        <p>
+          <strong>Fecha:</strong>
+          {{ date() | date : 'dd/MM/yyyy' }}
+        </p>
+        <p class="measurement-count">{{ measurements().length }} mediciones registradas</p>
       </div>
-    } @else if (measurement()) {
-      <div class="measurement-detail">
-        <div class="resident-info">
-          <h2>{{ measurement()!.resident_full_name || 'Sin nombre' }}</h2>
-          @if (measurement()!.bed_name) {
-            <p><strong>Cama:</strong> {{ measurement()!.bed_name }}</p>
-          }
+
+      @for (stat of measurementStats(); track stat.type) {
+      <div class="measurement-stat-card">
+        <div class="stat-header">
+          <h3>{{ stat.label }}</h3>
         </div>
 
-        <div class="measurement-card">
-          <div class="measurement-header">
-            <span class="measurement-type">{{ measurement()!.type }}</span>
-            <span class="measurement-source">{{ measurement()!.source }}</span>
+        @if (stat.type === 'bp') {
+        <div class="bp-display">
+          <div class="bp-value">
+            <div class="bp-number">{{ stat.avg }}</div>
+            <div class="bp-label">mmHg</div>
+            <div class="bp-sublabel">Sistólica</div>
+          </div>
+          <div class="bp-separator">/</div>
+          <div class="bp-value">
+            <div class="bp-number">{{ stat.min }}</div>
+            <div class="bp-label">mmHg</div>
+            <div class="bp-sublabel">Diastólica</div>
+          </div>
+        </div>
+        } @else {
+        <div class="single-value-display">
+          <div class="value-number">{{ stat.avg }}</div>
+          <div class="value-unit">{{ stat.unit }}</div>
+        </div>
+        }
+
+        <div class="stat-summary">
+          <div class="stat-count">Mediciones tomadas: {{ stat.count }}</div>
+          <div class="stat-range">
+            <span>{{ stat.max }} {{ stat.unit }}</span>
+            <span class="range-label">Máximo</span>
+          </div>
+          <div class="stat-range">
+            <span>{{ stat.avg }} {{ stat.unit }}</span>
+            <span class="range-label">Media</span>
+          </div>
+          <div class="stat-range">
+            <span>{{ stat.min }} {{ stat.unit }}</span>
+            <span class="range-label">Mínimo</span>
+          </div>
+        </div>
+
+        @for (device of stat.devices; track device.device_id) {
+        <div class="device-section">
+          <div class="device-header">
+            <h4>{{ device.device_name }}</h4>
           </div>
 
-          <div class="measurement-date-info">
-            <p><strong>Fecha:</strong> {{ measurement()!.taken_at | date: 'dd/MM/yyyy' }}</p>
-            <p><strong>Hora:</strong> {{ measurement()!.taken_at | date: 'HH:mm:ss' }}</p>
+          @for (period of device.periods; track period.period) {
+          <div class="period-divider">
+            <h1 class="period-label">{{ period.periodLabel }}</h1>
           </div>
 
-          @if (measurement()!.device_id) {
-            <div class="device-info">
-              <p><strong>Equipo:</strong> {{ measurement()!.device_id }}</p>
+          @for (measurement of period.measurements; track measurement.id) {
+          <div class="measurement-card-item" (click)="navigateToChart(measurement.id)">
+            <div class="measurement-time">{{ measurement.taken_at | date : 'HH:mm' }}</div>
+            <div class="measurement-value">
+              @if (stat.type === 'bp') {
+              {{ measurement.systolic }}/{{ measurement.diastolic }} {{ stat.unit }}
+              } @else {
+              {{ measurement[stat.field] }} {{ stat.unit }}
+              }
             </div>
+            <div class="measurement-recorder">
+              {{ measurement.recorded_by_name || measurement.recorded_by }}
+            </div>
+          </div>
           }
-
-          <div class="measurement-values">
-            <h3>Valores de la medición</h3>
-            @if (measurement()!.type === 'bp' && measurement()!.systolic && measurement()!.diastolic) {
-              <p><strong>Presión Arterial:</strong> {{ measurement()!.systolic }}/{{ measurement()!.diastolic }} mmHg</p>
-            }
-            @if (measurement()!.pulse_bpm) {
-              <p><strong>Pulso:</strong> {{ measurement()!.pulse_bpm }} bpm</p>
-            }
-            @if (measurement()!.spo2) {
-              <p><strong>SpO2:</strong> {{ measurement()!.spo2 }}%</p>
-            }
-            @if (measurement()!.weight_kg) {
-              <p><strong>Peso:</strong> {{ measurement()!.weight_kg }} kg</p>
-            }
-            @if (measurement()!.temperature_c) {
-              <p><strong>Temperatura:</strong> {{ measurement()!.temperature_c }}°C</p>
-            }
-          </div>
-
-          <div class="measurement-footer">
-            <p><strong>Registrado por:</strong> {{ measurement()!.recorded_by }}</p>
-            <p><strong>Creado:</strong> {{ measurement()!.created_at | date: 'dd/MM/yyyy HH:mm' }}</p>
-          </div>
+          }
         </div>
+        }
       </div>
+      }
+    </div>
+    } @else {
+    <div class="empty-container">
+      <span class="mat-icon">info</span>
+      <p>No hay mediciones para este día</p>
+    </div>
     }
   </div>
 </ion-content>

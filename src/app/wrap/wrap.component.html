@@ -3,16 +3,13 @@
     <ion-tab-button tab="home">
       <span class="mat-icon">home</span>
     </ion-tab-button>
-    <ion-tab-button tab="residents-measurements">
-      <!-- diario -->
+    <ion-tab-button tab="residents-measurements" [disabled]="!hasResidence()">
       <span class="mat-icon">view_timeline</span>
     </ion-tab-button>
-    <ion-tab-button tab="data">
-      <!-- tareas -->
+    <ion-tab-button tab="data" [disabled]="!hasResidence()">
       <span class="mat-icon">checklist</span>
     </ion-tab-button>
-    <ion-tab-button tab="measures">
-      <!-- toma de datos -->
+    <ion-tab-button tab="measures" [disabled]="!hasResidence()">
       <span class="mat-icon">stacked_line_chart</span>
     </ion-tab-button>
   </ion-tab-bar>

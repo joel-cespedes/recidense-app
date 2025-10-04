@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import {
   IonButton,
   IonButtons,
@@ -20,16 +22,18 @@ import {
   IonTabs,
   IonTitle,
   IonToolbar,
-  RefresherCustomEvent
+  RefresherCustomEvent,
+  NavController
 } from '@ionic/angular/standalone';
 import { ResidentsMeasure } from './residents-measure/residents-measure';
-import { ResidentsTask } from './residents-task/residents-task';
-import { ResidentsTaskApply } from './residents-task/residents-task-apply/residents-task-apply';
+import { ResidenceStateService } from '../services/residence-state.service';
+
 @Component({
   selector: 'app-wrap',
   templateUrl: './wrap.component.html',
   styleUrls: ['./wrap.component.scss'],
   imports: [
+    CommonModule,
     IonRouterOutlet,
     IonHeader,
     IonToolbar,
@@ -52,13 +56,17 @@ import { ResidentsTaskApply } from './residents-task/residents-task-apply/reside
     IonTabBar,
     IonTabButton,
     IonTabs,
-    ResidentsMeasure,
-    ResidentsTask,
-    ResidentsTaskApply
+    ResidentsMeasure
   ]
 })
 export class WrapComponent {
+  private residenceStateService = inject(ResidenceStateService);
+  private router = inject(Router);
+  private navCtrl = inject(NavController);
+
   currentTab = 'home';
+
+  hasResidence = computed(() => !!this.residenceStateService.residenceId());
 
   refresh(ev: any) {
     setTimeout(() => {
@@ -71,6 +79,18 @@ export class WrapComponent {
       return;
     }
 
-    this.currentTab = event.tab;
+    const tab = event.tab;
+
+    // Si no hay residencia y está intentando ir a otro tab que no sea home
+    if (!this.hasResidence() && tab !== 'home') {
+      // Cancelar navegación y redirigir a selección de residencia
+      this.router.navigate(['/wrap/select-residences']);
+      return;
+    }
+
+    // Limpiar stack de navegación al cambiar de tab
+    this.navCtrl.navigateRoot(`/wrap/${tab}`);
+
+    this.currentTab = tab;
   }
 }

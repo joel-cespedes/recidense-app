@@ -15,6 +15,12 @@ import { createMeasurementMeasurementsPost } from '../fn/measurements/create-mea
 import { CreateMeasurementMeasurementsPost$Params } from '../fn/measurements/create-measurement-measurements-post';
 import { deleteMeasurementMeasurementsMeasurementIdDelete } from '../fn/measurements/delete-measurement-measurements-measurement-id-delete';
 import { DeleteMeasurementMeasurementsMeasurementIdDelete$Params } from '../fn/measurements/delete-measurement-measurements-measurement-id-delete';
+import { getDailySummaryMeasurementsDailySummaryGet } from '../fn/measurements/get-daily-summary-measurements-daily-summary-get';
+import { GetDailySummaryMeasurementsDailySummaryGet$Params } from '../fn/measurements/get-daily-summary-measurements-daily-summary-get';
+import { getMeasurementsByDayMeasurementsByDayGet } from '../fn/measurements/get-measurements-by-day-measurements-by-day-get';
+import { GetMeasurementsByDayMeasurementsByDayGet$Params } from '../fn/measurements/get-measurements-by-day-measurements-by-day-get';
+import { getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet } from '../fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
+import { GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Params } from '../fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
 import { getMeasurementHistoryMeasurementsMeasurementIdHistoryGet } from '../fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 import { GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params } from '../fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 import { getMeasurementMeasurementsMeasurementIdGet } from '../fn/measurements/get-measurement-measurements-measurement-id-get';
@@ -25,6 +31,8 @@ import { listMeasurementsSimpleMeasurementsSimpleGet } from '../fn/measurements/
 import { ListMeasurementsSimpleMeasurementsSimpleGet$Params } from '../fn/measurements/list-measurements-simple-measurements-simple-get';
 import { MeasurementOut } from '../models/measurement-out';
 import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseMeasurementDailySummary } from '../models/paginated-response-measurement-daily-summary';
+import { PaginatedResponseMeasurementOut } from '../models/paginated-response-measurement-out';
 import { patchMeasurementMeasurementsMeasurementIdPatch } from '../fn/measurements/patch-measurement-measurements-measurement-id-patch';
 import { PatchMeasurementMeasurementsMeasurementIdPatch$Params } from '../fn/measurements/patch-measurement-measurements-measurement-id-patch';
 import { updateMeasurementMeasurementsMeasurementIdPut } from '../fn/measurements/update-measurement-measurements-measurement-id-put';
@@ -307,6 +315,105 @@ export class MeasurementsService extends BaseService {
 }>>): Array<{
 [key: string]: any;
 }> => r.body)
+    );
+  }
+
+  /** Path part for operation `getDailySummaryMeasurementsDailySummaryGet()` */
+  static readonly GetDailySummaryMeasurementsDailySummaryGetPath = '/measurements/daily-summary';
+
+  /**
+   * Get Daily Summary.
+   *
+   * Get daily summary of measurements grouped by resident and date
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDailySummaryMeasurementsDailySummaryGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDailySummaryMeasurementsDailySummaryGet$Response(params: GetDailySummaryMeasurementsDailySummaryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseMeasurementDailySummary>> {
+    return getDailySummaryMeasurementsDailySummaryGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Daily Summary.
+   *
+   * Get daily summary of measurements grouped by resident and date
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDailySummaryMeasurementsDailySummaryGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDailySummaryMeasurementsDailySummaryGet(params: GetDailySummaryMeasurementsDailySummaryGet$Params, context?: HttpContext): Observable<PaginatedResponseMeasurementDailySummary> {
+    return this.getDailySummaryMeasurementsDailySummaryGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponseMeasurementDailySummary>): PaginatedResponseMeasurementDailySummary => r.body)
+    );
+  }
+
+  /** Path part for operation `getMeasurementsByDayMeasurementsByDayGet()` */
+  static readonly GetMeasurementsByDayMeasurementsByDayGetPath = '/measurements/by-day';
+
+  /**
+   * Get Measurements By Day.
+   *
+   * Get all measurements for a specific resident and date
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMeasurementsByDayMeasurementsByDayGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMeasurementsByDayMeasurementsByDayGet$Response(params: GetMeasurementsByDayMeasurementsByDayGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
+    return getMeasurementsByDayMeasurementsByDayGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Measurements By Day.
+   *
+   * Get all measurements for a specific resident and date
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMeasurementsByDayMeasurementsByDayGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMeasurementsByDayMeasurementsByDayGet(params: GetMeasurementsByDayMeasurementsByDayGet$Params, context?: HttpContext): Observable<Array<MeasurementOut>> {
+    return this.getMeasurementsByDayMeasurementsByDayGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<MeasurementOut>>): Array<MeasurementOut> => r.body)
+    );
+  }
+
+  /** Path part for operation `getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet()` */
+  static readonly GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGetPath = '/measurements/residents/{resident_id}/measurements';
+
+  /**
+   * Get Measurements By Resident.
+   *
+   * Get measurements for a specific resident with filters and pagination
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Response(params: GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseMeasurementOut>> {
+    return getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Measurements By Resident.
+   *
+   * Get measurements for a specific resident with filters and pagination
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet(params: GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Params, context?: HttpContext): Observable<PaginatedResponseMeasurementOut> {
+    return this.getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponseMeasurementOut>): PaginatedResponseMeasurementOut => r.body)
     );
   }
 

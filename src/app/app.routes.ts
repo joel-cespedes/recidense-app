@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { residenceGuard } from './guards/residence.guard';
+import { loginGuard } from './guards/login.guard';
 import { WrapComponent } from './wrap/wrap.component';
 
 export const routes: Routes = [
@@ -10,11 +11,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     canActivateChild: [residenceGuard],
     children: [
-      {
-        path: 'select-residences',
-        loadComponent: () => import('./wrap/residences/residences').then(m => m.Residences),
-        canActivate: []
-      },
       {
         path: 'home',
         loadComponent: () => import('./wrap/home/home.page').then(m => m.HomePage)
@@ -26,15 +22,27 @@ export const routes: Routes = [
       },
       {
         path: 'residents-measurements',
-        loadComponent: () =>
-          import('./wrap/residents-measure/residents-measure').then(m => m.ResidentsMeasure)
-      },
-      {
-        path: 'residents/residents-measures/:id',
-        loadComponent: () =>
-          import('./wrap/residents-measure/residents-measure-detail/residents-measure-detail').then(
-            m => m.ResidentsDetail
-          )
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./wrap/residents-measure/residents-measure').then(m => m.ResidentsMeasure)
+          },
+          {
+            path: 'chart/:id',
+            loadComponent: () =>
+              import(
+                './wrap/residents-measure/residents-measure-detail/chart-measure/chart-measure'
+              ).then(m => m.ChartMeasure)
+          },
+          {
+            path: ':resident_id/:date',
+            loadComponent: () =>
+              import(
+                './wrap/residents-measure/residents-measure-detail/residents-measure-detail'
+              ).then(m => m.ResidentsDetail)
+          }
+        ]
       },
       {
         path: 'residents-tasks',
@@ -57,7 +65,8 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login').then(m => m.Login)
+    loadComponent: () => import('./login/login').then(m => m.Login),
+    canActivate: [loginGuard]
   },
   {
     path: '',

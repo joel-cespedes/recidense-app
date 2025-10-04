@@ -153,6 +153,12 @@ export type { ListMeasurementsMeasurementsGet$Params } from './fn/measurements/l
 export { listMeasurementsMeasurementsGet } from './fn/measurements/list-measurements-measurements-get';
 export type { ListMeasurementsSimpleMeasurementsSimpleGet$Params } from './fn/measurements/list-measurements-simple-measurements-simple-get';
 export { listMeasurementsSimpleMeasurementsSimpleGet } from './fn/measurements/list-measurements-simple-measurements-simple-get';
+export type { GetDailySummaryMeasurementsDailySummaryGet$Params } from './fn/measurements/get-daily-summary-measurements-daily-summary-get';
+export { getDailySummaryMeasurementsDailySummaryGet } from './fn/measurements/get-daily-summary-measurements-daily-summary-get';
+export type { GetMeasurementsByDayMeasurementsByDayGet$Params } from './fn/measurements/get-measurements-by-day-measurements-by-day-get';
+export { getMeasurementsByDayMeasurementsByDayGet } from './fn/measurements/get-measurements-by-day-measurements-by-day-get';
+export type { GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Params } from './fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
+export { getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet } from './fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
 export type { GetMeasurementMeasurementsMeasurementIdGet$Params } from './fn/measurements/get-measurement-measurements-measurement-id-get';
 export { getMeasurementMeasurementsMeasurementIdGet } from './fn/measurements/get-measurement-measurements-measurement-id-get';
 export type { UpdateMeasurementMeasurementsMeasurementIdPut$Params } from './fn/measurements/update-measurement-measurements-measurement-id-put';
@@ -161,8 +167,6 @@ export type { DeleteMeasurementMeasurementsMeasurementIdDelete$Params } from './
 export { deleteMeasurementMeasurementsMeasurementIdDelete } from './fn/measurements/delete-measurement-measurements-measurement-id-delete';
 export type { PatchMeasurementMeasurementsMeasurementIdPatch$Params } from './fn/measurements/patch-measurement-measurements-measurement-id-patch';
 export { patchMeasurementMeasurementsMeasurementIdPatch } from './fn/measurements/patch-measurement-measurements-measurement-id-patch';
-export type { GetMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet$Params } from './fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
-export { getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet } from './fn/measurements/get-measurements-by-resident-measurements-residents-resident-id-measurements-get';
 export type { GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params } from './fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 export { getMeasurementHistoryMeasurementsMeasurementIdHistoryGet } from './fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 export type { GetDashboardDataDashboardGet$Params } from './fn/dashboard/get-dashboard-data-dashboard-get';

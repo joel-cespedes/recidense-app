@@ -32,8 +32,8 @@ import {
 import { MeasurementsService } from '../../../openapi/generated/services/measurements.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
 import { CommonModule, DatePipe } from '@angular/common';
-import { MeasurementOut } from '../../../openapi/generated/models/measurement-out';
-import { PaginatedResponseMeasurementOut } from '../../../openapi/generated/models/paginated-response-measurement-out';
+import { MeasurementDailySummary } from '../../../openapi/generated/models/measurement-daily-summary';
+import { PaginatedResponseMeasurementDailySummary } from '../../../openapi/generated/models/paginated-response-measurement-daily-summary';
 
 @Component({
   selector: 'app-residents',
@@ -75,7 +75,7 @@ export class ResidentsMeasure implements OnInit {
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
 
   // Signals
-  measurements = signal<MeasurementOut[]>([]);
+  dailySummaries = signal<MeasurementDailySummary[]>([]);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
   currentPage = signal(1);
@@ -106,11 +106,11 @@ export class ResidentsMeasure implements OnInit {
     this.loadMeasurements(true);
   }
 
-  navigateToMeasurementDetails(event: Event, measurement: MeasurementOut) {
+  navigateToMeasurementDetails(event: Event, summary: MeasurementDailySummary) {
     event.preventDefault();
     event.stopPropagation();
 
-    this.navCtrl.navigateForward(`/wrap/residents/residents-measures/${measurement.id}`, {
+    this.navCtrl.navigateForward(`/wrap/residents-measurements/${summary.resident_id}/${summary.date}`, {
       animated: true
     });
   }
@@ -216,7 +216,7 @@ export class ResidentsMeasure implements OnInit {
     }
 
     this.measurementsService
-      .listMeasurementsMeasurementsGet({
+      .getDailySummaryMeasurementsDailySummaryGet({
         residence_id: residenceId.toString(),
         page: this.currentPage(),
         size: 20,
@@ -225,17 +225,17 @@ export class ResidentsMeasure implements OnInit {
         date_to: dateTo
       })
       .subscribe({
-        next: (response: PaginatedResponseMeasurementOut) => {
+        next: (response: PaginatedResponseMeasurementDailySummary) => {
           if (reset) {
-            this.measurements.set(response.items);
+            this.dailySummaries.set(response.items);
           } else {
-            this.measurements.update(current => [...current, ...response.items]);
+            this.dailySummaries.update(current => [...current, ...response.items]);
           }
           this.totalPages.set(response.pages);
           this.hasMore.set(response.has_next);
           this.isLoading.set(false);
         },
-        error: error => {
+        error: (error: Error) => {
           console.error('Error loading measurements:', error);
           this.errorMessage.set('Error al cargar mediciones');
           this.isLoading.set(false);

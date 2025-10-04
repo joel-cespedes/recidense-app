@@ -1,0 +1,29 @@
+:host {
+  --background: --ion-text-color-home;
+  --ion-color-light: var(--ion-text-color-home);
+  --ion-toolbar-color: var(--text-color-secondaray);
+  background: linear-gradient(-40deg, #dbe9f7 0%, #dbe9f7 60%, #ffff 100%) !important;
+}
+
+.container {
+  padding: 16px;
+}
+
+.chart-container {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  h2 {
+    margin: 0 0 8px 0;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+  }
+
+  .chart-date {
+    margin: 0 0 20px 0;
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+  }
+}
