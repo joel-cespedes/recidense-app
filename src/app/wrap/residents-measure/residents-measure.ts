@@ -205,14 +205,20 @@ export class ResidentsMeasure implements OnInit {
     if (this.dateFromControl.value && this.dateToControl.value) {
       // Usar las fechas del calendario
       dateFrom = this.dateFromControl.value;
-      dateTo = this.dateToControl.value;
+      // Sumar 1 día a date_to para incluir el día completo
+      const toDate = new Date(this.dateToControl.value);
+      toDate.setDate(toDate.getDate() + 1);
+      dateTo = toDate.toISOString().split('T')[0];
     } else if (this.selectedPeriod() > 0) {
       // Si no hay fechas del calendario, usar el periodo seleccionado
       const today = new Date();
       const fromDate = new Date(today.getTime() - this.selectedPeriod() * 24 * 60 * 60 * 1000);
 
       dateFrom = fromDate.toISOString().split('T')[0];
-      dateTo = today.toISOString().split('T')[0];
+      // Sumar 1 día a date_to para incluir hoy completo
+      const toDate = new Date(today);
+      toDate.setDate(toDate.getDate() + 1);
+      dateTo = toDate.toISOString().split('T')[0];
     }
 
     this.measurementsService

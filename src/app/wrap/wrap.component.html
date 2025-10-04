@@ -1,16 +1,16 @@
-<ion-tabs (ionTabsDidChange)="onTabChange($any($event))">
+<ion-tabs (ionTabsWillChange)="onTabWillChange($any($event))" (ionTabsDidChange)="onTabChange($any($event))">
   <ion-tab-bar slot="bottom" [class.home-tab]="currentTab === 'home'">
     <ion-tab-button tab="home">
       <span class="mat-icon">home</span>
     </ion-tab-button>
     <ion-tab-button tab="residents-measurements" [disabled]="!hasResidence()">
-      <span class="mat-icon">view_timeline</span>
+      <span class="mat-icon">stacked_line_chart</span>
     </ion-tab-button>
-    <ion-tab-button tab="data" [disabled]="!hasResidence()">
+    <ion-tab-button tab="residents-tasks" [disabled]="!hasResidence()">
       <span class="mat-icon">checklist</span>
     </ion-tab-button>
     <ion-tab-button tab="measures" [disabled]="!hasResidence()">
-      <span class="mat-icon">stacked_line_chart</span>
+      <span class="mat-icon">view_timeline</span>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

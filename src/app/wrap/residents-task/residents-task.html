@@ -19,25 +19,14 @@
   </ion-refresher>
 
   <div class="container">
-    <div class="title-section center m-b-32">Últimos</div>
-    <div class="btns-raunded">
-      <button class="rounded" [class.active]="selectedPeriod() === 1" (click)="selectPeriod(1)">
-        <div class="rounded__number">1</div>
-        <div class="rounded__label">Día</div>
-      </button>
-      <button class="rounded" [class.active]="selectedPeriod() === 7" (click)="selectPeriod(7)">
-        <div class="rounded__number">7</div>
-        <div class="rounded__label">Días</div>
-      </button>
-      <button class="rounded" [class.active]="selectedPeriod() === 15" (click)="selectPeriod(15)">
-        <div class="rounded__number">15</div>
-        <div class="rounded__label">Días</div>
-      </button>
-      <button class="rounded" [class.active]="selectedPeriod() === 30" (click)="selectPeriod(30)">
-        <div class="rounded__number">30</div>
-        <div class="rounded__label">Días</div>
-      </button>
-    </div>
+    <ion-segment color="primary" value="primary" class="m-t-32">
+      <ion-segment-button value="primary">
+        <ion-label>Único</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="secondary">
+        <ion-label>Selección en bloque</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
     <div class="split-section">
       <div class="title-section">Residentes</div>
@@ -52,6 +41,25 @@
     </div>
 
     <div class="search-section" [class.show]="showSearch()">
+      <div class="title-section center m-b-32">Últimos</div>
+      <div class="btns-raunded">
+        <button class="rounded" [class.active]="selectedPeriod() === 1" (click)="selectPeriod(1)">
+          <div class="rounded__number">1</div>
+          <div class="rounded__label">Día</div>
+        </button>
+        <button class="rounded" [class.active]="selectedPeriod() === 7" (click)="selectPeriod(7)">
+          <div class="rounded__number">7</div>
+          <div class="rounded__label">Días</div>
+        </button>
+        <button class="rounded" [class.active]="selectedPeriod() === 15" (click)="selectPeriod(15)">
+          <div class="rounded__number">15</div>
+          <div class="rounded__label">Días</div>
+        </button>
+        <button class="rounded" [class.active]="selectedPeriod() === 30" (click)="selectPeriod(30)">
+          <div class="rounded__number">30</div>
+          <div class="rounded__label">Días</div>
+        </button>
+      </div>
       <ion-searchbar
         [formControl]="searchControl"
         placeholder="Buscar residente..."></ion-searchbar>
@@ -85,7 +93,7 @@
               {{ resident.bed_name ? 'Cama: ' + resident.bed_name : 'Sin cama asignada' }}
               {{ resident.floor_name ? ' / Planta: ' + resident.floor_name : '' }}
             </div>
-            <div class="info-resident__icons">
+            <!-- <div class="info-resident__icons">
               <div class="icon-svg">
                 <img src="assets/icon/electro-white.svg" alt="Thermostat" />
               </div>
@@ -101,7 +109,7 @@
               <div class="icon-svg">
                 <img src="assets/icon/heart-white.svg" alt="Heart Rate" />
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="content-right">
             <div class="content-right__icon">

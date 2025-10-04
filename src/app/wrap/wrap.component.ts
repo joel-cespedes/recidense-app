@@ -74,7 +74,7 @@ export class WrapComponent {
     }, 3000);
   }
 
-  onTabChange(event: { tab: string }) {
+  onTabWillChange(event: { tab: string }) {
     if (!event?.tab) {
       return;
     }
@@ -83,14 +83,17 @@ export class WrapComponent {
 
     // Si no hay residencia y está intentando ir a otro tab que no sea home
     if (!this.hasResidence() && tab !== 'home') {
-      // Cancelar navegación y redirigir a selección de residencia
+      // Redirigir a selección de residencia
       this.router.navigate(['/wrap/select-residences']);
       return;
     }
+  }
 
-    // Limpiar stack de navegación al cambiar de tab
-    this.navCtrl.navigateRoot(`/wrap/${tab}`);
+  onTabChange(event: { tab: string }) {
+    if (!event?.tab) {
+      return;
+    }
 
-    this.currentTab = tab;
+    this.currentTab = event.tab;
   }
 }
