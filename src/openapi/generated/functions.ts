@@ -155,6 +155,10 @@ export type { GetTaskApplicationsByResidentDateTasksApplicationsResidentResident
 export { getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet } from './fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
 export type { GetUserAssignersTasksUsersAssignersGet$Params } from './fn/tasks/get-user-assigners-tasks-users-assigners-get';
 export { getUserAssignersTasksUsersAssignersGet } from './fn/tasks/get-user-assigners-tasks-users-assigners-get';
+export type { ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params } from './fn/tasks/parse-voice-transcript-tasks-applications-parse-voice-post';
+export { parseVoiceTranscriptTasksApplicationsParseVoicePost } from './fn/tasks/parse-voice-transcript-tasks-applications-parse-voice-post';
+export type { CreateVoiceApplicationTasksApplicationsVoicePost$Params } from './fn/tasks/create-voice-application-tasks-applications-voice-post';
+export { createVoiceApplicationTasksApplicationsVoicePost } from './fn/tasks/create-voice-application-tasks-applications-voice-post';
 export type { CreateMeasurementMeasurementsPost$Params } from './fn/measurements/create-measurement-measurements-post';
 export { createMeasurementMeasurementsPost } from './fn/measurements/create-measurement-measurements-post';
 export type { ListMeasurementsMeasurementsGet$Params } from './fn/measurements/list-measurements-measurements-get';

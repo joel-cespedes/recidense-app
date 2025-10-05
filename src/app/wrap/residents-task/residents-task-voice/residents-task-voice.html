@@ -5,12 +5,71 @@
         <span class="mat-icon">arrow_back</span>
       </ion-button>
     </ion-buttons>
-    <ion-title>Grabación por voz</ion-title>
+    <ion-title>Asignar tarea por voz</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="container">
-    <p>Componente de grabación por voz</p>
+    <!-- Instructions -->
+    <ion-card class="instructions-card">
+      <div class="card-content">
+        <span class="mat-icon">info</span>
+        <div class="text">
+          <h3>Instrucciones</h3>
+          <p>Presiona el micrófono y di el nombre del residente y la tarea a asignar.</p>
+          <p class="example">Ejemplo: "Asignar baño a Juan Pérez"</p>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Recording Button -->
+    <div class="recording-section">
+      <button
+        class="mic-button"
+        [class.recording]="isRecording()"
+        [class.processing]="isProcessing()"
+        (click)="startRecording()"
+        [disabled]="isRecording() || isProcessing()">
+        @if (isRecording()) {
+        <span class="mat-icon pulse">mic</span>
+        <span class="status-text">Escuchando...</span>
+        } @else if (isProcessing()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        <span class="status-text">Procesando...</span>
+        } @else {
+        <span class="mat-icon">mic</span>
+        <span class="status-text">Presiona para hablar</span>
+        }
+      </button>
+    </div>
+
+    <!-- Transcript Display -->
+    @if (transcript()) {
+    <ion-card class="transcript-card">
+      <div class="card-header">
+        <span class="mat-icon">chat_bubble</span>
+        <h3>Texto capturado</h3>
+      </div>
+      <p class="transcript-text">{{ transcript() }}</p>
+    </ion-card>
+    }
+
+    <!-- Error Display -->
+    @if (errorMessage()) {
+    <ion-card class="error-card">
+      <div class="card-content">
+        <span class="mat-icon">error_outline</span>
+        <p>{{ errorMessage() }}</p>
+      </div>
+    </ion-card>
+    }
   </div>
+
+  <!-- Confirmation Alert -->
+  <ion-alert
+    [isOpen]="showConfirmAlert()"
+    [header]="'Confirmar asignación'"
+    [message]="parsedData()?.confirmation_message || ''"
+    [buttons]="alertButtons"></ion-alert>
 </ion-content>

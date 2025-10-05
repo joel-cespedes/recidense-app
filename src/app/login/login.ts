@@ -48,10 +48,22 @@ export class Login {
   errorMessage = signal<string | null>(null);
   showPassword = signal(false);
 
+  // loginForm = new FormGroup({
+  //   alias: new FormControl('admin', [Validators.required, Validators.minLength(3)]),
+  //   password: new FormControl('admin123', [Validators.required, Validators.minLength(6)])
+  // });
   loginForm = new FormGroup({
-    alias: new FormControl('admin', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('admin123', [Validators.required, Validators.minLength(6)])
+    alias: new FormControl('profesional1', [Validators.required, Validators.minLength(3)]),
+    password: new FormControl('test123', [Validators.required, Validators.minLength(6)])
   });
+
+  // gestor1 / password: test123 / Nombre: Carlos Gestor
+  // gestor2 / password: test123 / Nombre: María Gestora
+  // gestor3 / password: test123 / Nombre: José Gestor
+
+  // profesional1 / password: test123 / Nombre: Luis Profesional
+  // profesional2 / password: test123 / Nombre: Carmen Profesional
+  // profesional3 / password: test123 / Nombre: Pedro Profesional
 
   togglePasswordVisibility() {
     this.showPassword.update(value => !value);

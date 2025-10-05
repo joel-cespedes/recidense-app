@@ -59,6 +59,12 @@ import { updateCategoryTasksCategoriesCategoryIdPut } from '../fn/tasks/update-c
 import { UpdateCategoryTasksCategoriesCategoryIdPut$Params } from '../fn/tasks/update-category-tasks-categories-category-id-put';
 import { updateTemplateTasksTemplatesTemplateIdPatch } from '../fn/tasks/update-template-tasks-templates-template-id-patch';
 import { UpdateTemplateTasksTemplatesTemplateIdPatch$Params } from '../fn/tasks/update-template-tasks-templates-template-id-patch';
+import { parseVoiceTranscriptTasksApplicationsParseVoicePost } from '../fn/tasks/parse-voice-transcript-tasks-applications-parse-voice-post';
+import { ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params } from '../fn/tasks/parse-voice-transcript-tasks-applications-parse-voice-post';
+import { createVoiceApplicationTasksApplicationsVoicePost } from '../fn/tasks/create-voice-application-tasks-applications-voice-post';
+import { CreateVoiceApplicationTasksApplicationsVoicePost$Params } from '../fn/tasks/create-voice-application-tasks-applications-voice-post';
+import { VoiceParseResponse } from '../models/voice-parse-response';
+import { VoiceApplicationResponse } from '../models/voice-application-response';
 
 @Injectable({ providedIn: 'root' })
 export class TasksService extends BaseService {
@@ -723,6 +729,72 @@ export class TasksService extends BaseService {
   getUserAssignersTasksUsersAssignersGet(params: GetUserAssignersTasksUsersAssignersGet$Params, context?: HttpContext): Observable<Array<UserAssigner>> {
     return this.getUserAssignersTasksUsersAssignersGet$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<UserAssigner>>): Array<UserAssigner> => r.body)
+    );
+  }
+
+  /** Path part for operation `parseVoiceTranscriptTasksApplicationsParseVoicePost()` */
+  static readonly ParseVoiceTranscriptTasksApplicationsParseVoicePostPath = '/tasks/applications/parse-voice';
+
+  /**
+   * Parse Voice Transcript.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `parseVoiceTranscriptTasksApplicationsParseVoicePost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  parseVoiceTranscriptTasksApplicationsParseVoicePost$Response(params: ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params, context?: HttpContext): Observable<StrictHttpResponse<VoiceParseResponse>> {
+    return parseVoiceTranscriptTasksApplicationsParseVoicePost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Parse Voice Transcript.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `parseVoiceTranscriptTasksApplicationsParseVoicePost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  parseVoiceTranscriptTasksApplicationsParseVoicePost(params: ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params, context?: HttpContext): Observable<VoiceParseResponse> {
+    return this.parseVoiceTranscriptTasksApplicationsParseVoicePost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VoiceParseResponse>): VoiceParseResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `createVoiceApplicationTasksApplicationsVoicePost()` */
+  static readonly CreateVoiceApplicationTasksApplicationsVoicePostPath = '/tasks/applications/voice';
+
+  /**
+   * Create Voice Application.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createVoiceApplicationTasksApplicationsVoicePost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createVoiceApplicationTasksApplicationsVoicePost$Response(params: CreateVoiceApplicationTasksApplicationsVoicePost$Params, context?: HttpContext): Observable<StrictHttpResponse<VoiceApplicationResponse>> {
+    return createVoiceApplicationTasksApplicationsVoicePost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Voice Application.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createVoiceApplicationTasksApplicationsVoicePost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createVoiceApplicationTasksApplicationsVoicePost(params: CreateVoiceApplicationTasksApplicationsVoicePost$Params, context?: HttpContext): Observable<VoiceApplicationResponse> {
+    return this.createVoiceApplicationTasksApplicationsVoicePost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VoiceApplicationResponse>): VoiceApplicationResponse => r.body)
     );
   }
 

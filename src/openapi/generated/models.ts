@@ -74,4 +74,8 @@ export type { UserCreate } from './models/user-create';
 export type { UserOut } from './models/user-out';
 export type { UserResidenceAssignment } from './models/user-residence-assignment';
 export type { ValidationError } from './models/validation-error';
+export type { VoiceApplicationRequest } from './models/voice-application-request';
+export type { VoiceApplicationResponse } from './models/voice-application-response';
+export type { VoiceParseRequest } from './models/voice-parse-request';
+export type { VoiceParseResponse } from './models/voice-parse-response';
 export type { YearComparison } from './models/year-comparison';
