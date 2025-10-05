@@ -17,7 +17,8 @@ import {
   IonTitle,
   IonToolbar,
   NavController,
-  RefresherCustomEvent
+  RefresherCustomEvent,
+  ToastController
 } from '@ionic/angular/standalone';
 
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
@@ -52,6 +53,7 @@ export class ResidentsTaskApply implements OnInit {
   private residenceStateService = inject(ResidenceStateService);
   private navCtrl = inject(NavController);
   private router = inject(Router);
+  private toastController = inject(ToastController);
 
   // Signals
   taskTemplates = signal<TaskTemplateOut[]>([]);
@@ -232,15 +234,37 @@ export class ResidentsTaskApply implements OnInit {
         body
       })
       .subscribe({
-        next: response => {
+        next: async response => {
           this.isLoading.set(false);
-          console.log(`Se crearon ${response.created_count} aplicaciones`);
-          this.navCtrl.back();
+
+          // Limpiar selecciones
+          this.selectedTasks.set(new Set());
+          this.selectedStatus.set({});
+
+          // Mostrar toast de éxito
+          const toast = await this.toastController.create({
+            message: `Asignación creada con éxito: ${response.created_count} tarea(s) asignada(s)`,
+            duration: 2000,
+            position: 'top',
+            color: 'success'
+          });
+          await toast.present();
+
+          // Navegar al menú principal
+          this.navCtrl.navigateRoot('/wrap/residents-tasks');
         },
-        error: error => {
+        error: async error => {
           console.error('Error applying tasks:', error);
-          this.errorMessage.set('Error al aplicar tareas');
           this.isLoading.set(false);
+
+          // Mostrar toast de error
+          const toast = await this.toastController.create({
+            message: 'Error al aplicar tareas',
+            duration: 3000,
+            position: 'top',
+            color: 'danger'
+          });
+          await toast.present();
         }
       });
   }
