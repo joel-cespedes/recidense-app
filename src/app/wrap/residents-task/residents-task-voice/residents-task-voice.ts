@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   IonHeader,
   IonToolbar,
@@ -9,6 +10,12 @@ import {
   IonCard,
   IonSpinner,
   IonAlert,
+  IonModal,
+  IonRadioGroup,
+  IonRadio,
+  IonList,
+  IonItem,
+  IonLabel,
   NavController,
   ToastController
 } from '@ionic/angular/standalone';
@@ -23,6 +30,7 @@ import { VoiceParseResponse } from '../../../../openapi/generated/models/voice-p
   templateUrl: './residents-task-voice.html',
   styleUrls: ['./residents-task-voice.scss'],
   imports: [
+    FormsModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -31,7 +39,13 @@ import { VoiceParseResponse } from '../../../../openapi/generated/models/voice-p
     IonButton,
     IonCard,
     IonSpinner,
-    IonAlert
+    IonAlert,
+    IonModal,
+    IonRadioGroup,
+    IonRadio,
+    IonList,
+    IonItem,
+    IonLabel
   ]
 })
 export class ResidentsTaskVoice {
@@ -46,7 +60,11 @@ export class ResidentsTaskVoice {
   transcript = signal<string>('');
   parsedData = signal<VoiceParseResponse | null>(null);
   showConfirmAlert = signal(false);
+  showOptionsModal = signal(false);
   errorMessage = signal<string | null>(null);
+  selectedResidentId = signal<string | null>(null);
+  selectedTaskId = signal<string | null>(null);
+  selectedStatus = signal<string | null>(null);
 
   // Computed
   residenceId = computed(() => this.residenceStateService.residenceId());
@@ -88,40 +106,79 @@ export class ResidentsTaskVoice {
   }
 
   async startRecording() {
+    console.log('startRecording called, isRecording:', this.isRecording());
+
     try {
+      // Detener cualquier reconocimiento previo que pueda estar corriendo
+      try {
+        SpeechRecognition.stop();
+      } catch (e) {
+        // Ignorar si no hay nada corriendo
+      }
+
+      // Limpiar cualquier listener previo
+      await SpeechRecognition.removeAllListeners();
+
       this.isRecording.set(true);
       this.transcript.set('');
       this.errorMessage.set(null);
 
-      let finalTranscript = '';
-
-      SpeechRecognition.addListener('partialResults', data => {
+      // Listener para capturar resultados parciales
+      await SpeechRecognition.addListener('partialResults', (data) => {
+        console.log('partialResults:', data);
         if (data.matches && data.matches.length > 0) {
           this.transcript.set(data.matches[0]);
-          finalTranscript = data.matches[0];
         }
       });
 
+      console.log('Starting SpeechRecognition...');
       await SpeechRecognition.start({
         language: 'es-ES',
-        maxResults: 1,
+        maxResults: 5,
         prompt: 'Di el nombre del residente y la tarea a asignar',
         partialResults: true,
-        popup: true
+        popup: false
       });
-
-      if (finalTranscript) {
-        this.transcript.set(finalTranscript);
-        await this.parseTranscript(finalTranscript);
-      } else {
-        this.errorMessage.set('No se pudo capturar el audio');
-      }
+      console.log('SpeechRecognition started');
     } catch (error: any) {
       console.error('Error recording:', error);
       this.errorMessage.set('Error al grabar: ' + (error.message || 'Desconocido'));
-    } finally {
       this.isRecording.set(false);
-      await SpeechRecognition.stop();
+      SpeechRecognition.removeAllListeners();
+    }
+  }
+
+  async stopRecording() {
+    console.log('stopRecording called');
+
+    // Cambiar el estado visual
+    this.isRecording.set(false);
+
+    try {
+      console.log('Calling SpeechRecognition.stop()');
+      SpeechRecognition.stop(); // Sin await - no bloquear
+      console.log('Stop called, waiting for final results...');
+
+      // Esperar 800ms para que lleguen los últimos partialResults
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Ahora obtener el transcript final
+      const currentTranscript = this.transcript();
+      console.log('Final transcript:', currentTranscript);
+
+      // Limpiar listeners
+      await SpeechRecognition.removeAllListeners();
+      console.log('Listeners removed');
+
+      if (currentTranscript) {
+        console.log('Parsing transcript:', currentTranscript);
+        await this.parseTranscript(currentTranscript);
+      } else {
+        this.errorMessage.set('No se capturó ningún audio');
+      }
+    } catch (error: any) {
+      console.error('Error stopping recording:', error);
+      this.errorMessage.set('Error al detener grabación: ' + (error.message || 'Desconocido'));
       SpeechRecognition.removeAllListeners();
     }
   }
@@ -146,11 +203,16 @@ export class ResidentsTaskVoice {
       .subscribe({
         next: (response: VoiceParseResponse) => {
           this.isProcessing.set(false);
+          this.parsedData.set(response);
 
           if (response.success) {
-            this.parsedData.set(response);
+            // Match único - mostrar confirmación
             this.showConfirmAlert.set(true);
+          } else if (response.resident_options || response.task_options || response.status_options) {
+            // Hay opciones para seleccionar
+            this.showOptionsModal.set(true);
           } else {
+            // Error general
             this.errorMessage.set(response.error || 'Error al procesar el audio');
           }
         },
@@ -213,6 +275,75 @@ export class ResidentsTaskVoice {
     this.showConfirmAlert.set(false);
     this.parsedData.set(null);
     this.transcript.set('');
+  }
+
+  confirmSelection() {
+    const data = this.parsedData();
+    const residenceId = this.residenceId();
+
+    if (!data || !residenceId) return;
+
+    // Construir el body con las selecciones del usuario
+    const residentId = this.selectedResidentId() || data.resident_id;
+    const taskId = this.selectedTaskId() || data.task_id;
+    const status = this.selectedStatus() || data.status;
+
+    if (!residentId || !taskId) {
+      this.errorMessage.set('Debes seleccionar todas las opciones');
+      return;
+    }
+
+    this.showOptionsModal.set(false);
+    this.isProcessing.set(true);
+
+    this.tasksService
+      .createVoiceApplicationTasksApplicationsVoicePost({
+        body: {
+          resident_id: residentId,
+          task_id: taskId.toString(),
+          status: status || null,
+          residence_id: residenceId.toString()
+        }
+      })
+      .subscribe({
+        next: async () => {
+          this.isProcessing.set(false);
+          const toast = await this.toastCtrl.create({
+            message: 'Tarea asignada exitosamente',
+            duration: 2000,
+            color: 'success',
+            position: 'top'
+          });
+          await toast.present();
+
+          // Reset
+          this.resetState();
+        },
+        error: async (error: Error) => {
+          console.error('Error creating task:', error);
+          this.isProcessing.set(false);
+          const toast = await this.toastCtrl.create({
+            message: 'Error al asignar tarea',
+            duration: 2000,
+            color: 'danger',
+            position: 'top'
+          });
+          await toast.present();
+        }
+      });
+  }
+
+  cancelSelection() {
+    this.showOptionsModal.set(false);
+    this.resetState();
+  }
+
+  resetState() {
+    this.transcript.set('');
+    this.parsedData.set(null);
+    this.selectedResidentId.set(null);
+    this.selectedTaskId.set(null);
+    this.selectedStatus.set(null);
   }
 
   goBack() {

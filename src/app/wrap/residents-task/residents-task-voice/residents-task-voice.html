@@ -29,11 +29,11 @@
         class="mic-button"
         [class.recording]="isRecording()"
         [class.processing]="isProcessing()"
-        (click)="startRecording()"
-        [disabled]="isRecording() || isProcessing()">
+        (click)="isRecording() ? stopRecording() : startRecording()"
+        [disabled]="isProcessing()">
         @if (isRecording()) {
-        <span class="mat-icon pulse">mic</span>
-        <span class="status-text">Escuchando...</span>
+        <span class="mat-icon pulse">stop</span>
+        <span class="status-text">Presiona para detener</span>
         } @else if (isProcessing()) {
         <ion-spinner name="crescent"></ion-spinner>
         <span class="status-text">Procesando...</span>
@@ -43,17 +43,6 @@
         }
       </button>
     </div>
-
-    <!-- Transcript Display -->
-    @if (transcript()) {
-    <ion-card class="transcript-card">
-      <div class="card-header">
-        <span class="mat-icon">chat_bubble</span>
-        <h3>Texto capturado</h3>
-      </div>
-      <p class="transcript-text">{{ transcript() }}</p>
-    </ion-card>
-    }
 
     <!-- Error Display -->
     @if (errorMessage()) {
@@ -72,4 +61,99 @@
     [header]="'Confirmar asignación'"
     [message]="parsedData()?.confirmation_message || ''"
     [buttons]="alertButtons"></ion-alert>
+
+  <!-- Options Modal -->
+  <ion-modal [isOpen]="showOptionsModal()" (didDismiss)="cancelSelection()" class="options-modal">
+    <ng-template>
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h3>Selecciona la opción correcta</h3>
+          <ion-button fill="clear" (click)="cancelSelection()">
+            <span class="mat-icon">close</span>
+          </ion-button>
+        </div>
+
+        <div class="modal-content">
+          <!-- Opciones de Residente -->
+          @if (parsedData()?.resident_options && parsedData()?.resident_options!.length > 0) {
+          <div class="options-section">
+            <h4>Selecciona el residente:</h4>
+            <ion-radio-group [(ngModel)]="selectedResidentId">
+              <ion-list>
+                @for (option of parsedData()?.resident_options; track option.id) {
+                <ion-item>
+                  <ion-radio [value]="option.id">
+                    <div class="option-label">
+                      <div class="option-name">{{ option.full_name }}</div>
+                      @if (option.room_name || option.bed_number) {
+                      <div class="option-detail">
+                        @if (option.room_name) {
+                        <span>{{ option.room_name }}</span>
+                        }
+                        @if (option.bed_number) {
+                        <span>Cama {{ option.bed_number }}</span>
+                        }
+                      </div>
+                      }
+                    </div>
+                  </ion-radio>
+                </ion-item>
+                }
+              </ion-list>
+            </ion-radio-group>
+          </div>
+          }
+
+          <!-- Opciones de Tarea -->
+          @if (parsedData()?.task_options && parsedData()?.task_options!.length > 0) {
+          <div class="options-section">
+            <h4>Selecciona la tarea:</h4>
+            <ion-radio-group [(ngModel)]="selectedTaskId">
+              <ion-list>
+                @for (option of parsedData()?.task_options; track option.id) {
+                <ion-item>
+                  <ion-radio [value]="option.id">
+                    <div class="option-label">
+                      <div class="option-name">{{ option.name }}</div>
+                    </div>
+                  </ion-radio>
+                </ion-item>
+                }
+              </ion-list>
+            </ion-radio-group>
+          </div>
+          }
+
+          <!-- Opciones de Estado -->
+          @if (parsedData()?.status_options && parsedData()?.status_options!.length > 0) {
+          <div class="options-section">
+            <h4>Selecciona el estado:</h4>
+            <ion-radio-group [(ngModel)]="selectedStatus">
+              <ion-list>
+                @for (option of parsedData()?.status_options; track option.value) {
+                <ion-item>
+                  <ion-radio [value]="option.value">
+                    <div class="option-label">
+                      <div class="option-name">{{ option.value }}</div>
+                    </div>
+                  </ion-radio>
+                </ion-item>
+                }
+              </ion-list>
+            </ion-radio-group>
+          </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <ion-button expand="block" (click)="confirmSelection()" color="primary">
+            Confirmar
+          </ion-button>
+          <ion-button expand="block" (click)="cancelSelection()" fill="outline">
+            Cancelar
+          </ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>
