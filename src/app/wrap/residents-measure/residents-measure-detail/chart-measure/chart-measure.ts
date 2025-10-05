@@ -7,6 +7,8 @@ import {
   IonContent,
   IonButtons,
   IonButton,
+  IonSelect,
+  IonSelectOption,
   NavController
 } from '@ionic/angular/standalone';
 import { NgApexchartsModule, ApexChart, ApexDataLabels, ApexStroke, ApexFill, ApexXAxis, ApexYAxis, ApexGrid, ApexTooltip, ApexAxisChartSeries, ApexNonAxisChartSeries } from 'ng-apexcharts';
@@ -25,6 +27,8 @@ import { MeasurementOut } from '../../../../../openapi/generated/models/measurem
     IonContent,
     IonButtons,
     IonButton,
+    IonSelect,
+    IonSelectOption,
     NgApexchartsModule
   ]
 })

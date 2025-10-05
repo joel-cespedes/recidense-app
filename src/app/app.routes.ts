@@ -53,10 +53,31 @@ export const routes: Routes = [
               import('./wrap/residents-task/residents-task').then(m => m.ResidentsTask)
           },
           {
-            path: 'apply',
+            path: 'manual',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-task-list/residents-task-list').then(
+                m => m.ResidentsTaskList
+              )
+          },
+          {
+            path: 'manual/apply',
             loadComponent: () =>
               import('./wrap/residents-task/residents-task-apply/residents-task-apply').then(
                 m => m.ResidentsTaskApply
+              )
+          },
+          {
+            path: 'voice',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-task-voice/residents-task-voice').then(
+                m => m.ResidentsTaskVoice
+              )
+          },
+          {
+            path: 'history',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-task-history/residents-task-history').then(
+                m => m.ResidentsTaskHistory
               )
           }
         ]

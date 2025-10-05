@@ -1,0 +1,167 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="outlined">
+        <span class="mat-icon">clear_all</span>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="outlined">
+        <span class="mat-icon">account_circle</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    <div class="title-section center m-b-32">Últimos</div>
+    <div class="btns-raunded">
+      <button class="rounded" [class.active]="selectedPeriod() === 1" (click)="selectPeriod(1)">
+        <div class="rounded__number">1</div>
+        <div class="rounded__label">Día</div>
+      </button>
+      <button class="rounded" [class.active]="selectedPeriod() === 7" (click)="selectPeriod(7)">
+        <div class="rounded__number">7</div>
+        <div class="rounded__label">Días</div>
+      </button>
+      <button class="rounded" [class.active]="selectedPeriod() === 15" (click)="selectPeriod(15)">
+        <div class="rounded__number">15</div>
+        <div class="rounded__label">Días</div>
+      </button>
+      <button class="rounded" [class.active]="selectedPeriod() === 30" (click)="selectPeriod(30)">
+        <div class="rounded__number">30</div>
+        <div class="rounded__label">Días</div>
+      </button>
+    </div>
+
+    <div class="split-section">
+      <div class="title-section">Mediciones</div>
+      <div class="section-icons">
+        <button class="icon-filter" (click)="openCalendarModal()">
+          <span class="mat-icon">calendar_month</span>
+        </button>
+        <button class="icon-filter" (click)="toggleSearch()">
+          <span class="mat-icon">filter_list</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-section" [class.show]="showSearch()">
+      <ion-searchbar [formControl]="searchControl" placeholder="Buscar medición..."></ion-searchbar>
+    </div>
+
+    @if (isLoading() && dailySummaries().length === 0) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando mediciones...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else { @if (dailySummaries().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">diversity_1</span>
+      <p>No hay mediciones</p>
+    </div>
+    } @else { @for (summary of dailySummaries(); track summary.resident_id + summary.date) {
+
+    <ion-card>
+      <button class="icon-card" (click)="navigateToMeasurementDetails($event, summary)">
+        <ion-label>
+          <div class="info-resident">
+            <div class="info-resident__name">
+              {{ summary.resident_full_name || 'Sin nombre' }}
+            </div>
+            <div class="info-resident__bed">
+              {{ summary.bed_name ? 'Cama: ' + summary.bed_name : 'Sin cama' }}
+              <span>- {{ summary.measurement_count }} mediciones</span>
+            </div>
+            <div class="info-resident__icons">
+              @for (type of summary.measurement_types; track type) {
+                @if (type === 'bp') {
+                <div class="icon-svg">
+                  <img src="assets/icon/electro-white.svg" alt="Presión" />
+                </div>
+                } @if (type === 'spo2') {
+                <div class="icon-svg">
+                  <img src="assets/icon/oxygen-white.svg" alt="SpO2" />
+                </div>
+                } @if (type === 'weight') {
+                <div class="icon-svg">
+                  <img src="assets/icon/weight-white.svg" alt="Peso" />
+                </div>
+                } @if (type === 'temperature') {
+                <div class="icon-svg">
+                  <img src="assets/icon/temperature-white.svg" alt="Temperatura" />
+                </div>
+                } @if (type === 'pulse') {
+                <div class="icon-svg">
+                  <img src="assets/icon/heart-white.svg" alt="Pulso" />
+                </div>
+                }
+              }
+            </div>
+          </div>
+          <div class="content-right">
+            <div class="content-right__icon">
+              <span class="mat-icon">chevron_right</span>
+            </div>
+            <div class="date-resident">{{ summary.date | date : 'dd/MM/yyyy' }}</div>
+          </div>
+        </ion-label>
+      </button>
+    </ion-card>
+    }
+
+    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    } }
+
+    <ion-modal [isOpen]="showCalendar()" (didDismiss)="closeCalendarModal()" class="calendar-modal">
+      <ng-template>
+        <div class="calendar-wrapper">
+          <div class="calendar-header">
+            <h3>Seleccionar fecha</h3>
+            <ion-button fill="clear" (click)="closeCalendarModal()">
+              <span class="mat-icon">close</span>
+            </ion-button>
+          </div>
+
+          <div class="calendar-content">
+            <ion-datetime
+              #datetime
+              [multiple]="true"
+              presentation="date"
+              locale="es-ES"></ion-datetime>
+
+            <ion-button
+              expand="block"
+              fill="clear"
+              size="small"
+              class="m-t-32 m-b-16"
+              (click)="clearCalendar()">
+              Limpiar
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              size="small"
+              class="m-b-16"
+              (click)="applyCalendar()"
+              color="primary">
+              Aplicar
+            </ion-button>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+  </div>
+</ion-content>

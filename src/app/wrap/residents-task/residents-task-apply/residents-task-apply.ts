@@ -2,15 +2,17 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { trigger, style, transition, animate } from '@angular/animations';
 import {
   IonButton,
   IonButtons,
   IonCard,
+  IonCheckbox,
   IonContent,
   IonHeader,
   IonRefresher,
   IonRefresherContent,
+  IonSelect,
+  IonSelectOption,
   IonSpinner,
   IonTitle,
   IonToolbar,
@@ -27,15 +29,6 @@ import { TaskCategoryOut } from '../../../../openapi/generated/models/task-categ
   selector: 'app-residents-task-apply',
   templateUrl: './residents-task-apply.html',
   styleUrls: ['./residents-task-apply.scss'],
-  animations: [
-    trigger('slideUp', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)' }),
-        animate('300ms ease-out', style({ transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateY(100%)' }))])
-    ])
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -48,7 +41,10 @@ import { TaskCategoryOut } from '../../../../openapi/generated/models/task-categ
     IonButtons,
     IonButton,
     IonSpinner,
-    IonCard
+    IonCard,
+    IonSelect,
+    IonSelectOption,
+    IonCheckbox
   ]
 })
 export class ResidentsTaskApply implements OnInit {
@@ -173,11 +169,11 @@ export class ResidentsTaskApply implements OnInit {
   }
 
   onStatusChange(taskId: string, event: any) {
-    const statusValue = event.target.value;
+    const statusValue = event.detail.value;
     const status = { ...this.selectedStatus() };
     const selected = new Set(this.selectedTasks());
 
-    if (statusValue === '') {
+    if (!statusValue || statusValue === '') {
       // Si deselecciona (vuelve a "Seleccione un estado"), quitar de seleccionados
       delete status[taskId];
       selected.delete(taskId);
@@ -218,15 +214,22 @@ export class ResidentsTaskApply implements OnInit {
       }
     });
 
+    // Crear body solo con campos necesarios
+    const body: any = {
+      residence_id: residenceId.toString(),
+      resident_ids: residentIds,
+      task_template_ids: taskTemplateIds
+    };
+
+    // Solo agregar task_statuses si hay alguno
+    if (Object.keys(taskStatuses).length > 0) {
+      body.task_statuses = taskStatuses;
+    }
+
     // Llamada al endpoint batch
     this.tasksService
       .createTaskApplicationsBatchTasksApplicationsBatchPost({
-        body: {
-          residence_id: residenceId.toString(),
-          resident_ids: residentIds,
-          task_template_ids: taskTemplateIds,
-          task_statuses: taskStatuses
-        }
+        body
       })
       .subscribe({
         next: response => {

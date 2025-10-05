@@ -18,11 +18,14 @@
 
         <div class="chart-controls">
           <label>Mostrar últimas:</label>
-          <select [value]="measurementLimit()" (change)="onLimitChange(+$any($event.target).value)">
-            <option [value]="4">4 mediciones</option>
-            <option [value]="10">10 mediciones</option>
-            <option [value]="30">30 mediciones</option>
-          </select>
+          <ion-select
+            interface="popover"
+            [value]="measurementLimit()"
+            (ionChange)="onLimitChange(+$event.detail.value)">
+            <ion-select-option [value]="4">4 mediciones</ion-select-option>
+            <ion-select-option [value]="10">10 mediciones</ion-select-option>
+            <ion-select-option [value]="30">30 mediciones</ion-select-option>
+          </ion-select>
         </div>
 
         @if (chartConfig().series && chartConfig().series.length > 0) {

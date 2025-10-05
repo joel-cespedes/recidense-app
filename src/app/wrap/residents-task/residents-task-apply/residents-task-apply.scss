@@ -38,38 +38,38 @@
 }
 
 .resident-summary {
-  background: var(--gradient-primary);
+  background: white;
   border-radius: 16px;
-  padding: 20px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2) !important;
   .summary-title {
     font-size: 16px;
     font-weight: 500;
-    color: #ffffff;
+    color: #5247c9;
   }
 
   .summary-count {
     font-size: 32px;
     font-weight: 700;
-    color: #ffffff;
+    color: #5247c9;
   }
 }
 
 ion-card {
-  background: var(--gradient-primary-invert) !important;
+  background: white;
   box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2) !important;
   margin: 0 0 18px 0;
   padding: 16px;
   transition: all 0.3s ease;
 
-  &.selected {
-    border: 2px solid var(--color-primary);
-    box-shadow: 0px 12px 25px rgba(82, 71, 201, 0.3) !important;
-  }
+  // &.selected {
+  //   border: 2px solid var(--color-primary);
+  //   box-shadow: 0px 12px 25px rgba(82, 71, 201, 0.3) !important;
+  // }
 
   .task-card {
     background: transparent !important;
@@ -86,7 +86,8 @@ ion-card {
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-
+    margin-right: 0 !important;
+    color: #3428ba;
     .task-info {
       flex: 1;
 
@@ -103,8 +104,9 @@ ion-card {
     }
 
     .task-select-container {
-      min-width: 200px;
-      max-width: 250px;
+      ion-select {
+        --popover-offset-x: -20px;
+      }
 
       .status-select {
         width: 100%;
@@ -140,6 +142,12 @@ ion-card {
       align-items: center;
       justify-content: center;
       min-width: 40px;
+
+      ion-checkbox {
+        --border-color: #3428ba;
+        --checkbox-background-checked: #3428ba;
+        --checkmark-color: #ffffff;
+      }
     }
   }
 }
@@ -188,45 +196,6 @@ ion-card {
       border: solid var(--color-primary);
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
-    }
-  }
-}
-
-.floating-button-container {
-  position: fixed;
-  bottom: 80px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  z-index: 1000;
-  padding: 0 24px;
-
-  .floating-button {
-    background: var(--gradient-primary);
-    color: #ffffff;
-    border: none;
-    border-radius: 30px;
-    padding: 16px 32px;
-    font-size: 16px;
-    font-weight: 600;
-    box-shadow: 0px 12px 25px rgba(82, 71, 201, 0.4);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    .mat-icon {
-      font-size: 24px;
-    }
-
-    .button-text {
-      font-size: 16px;
     }
   }
 }

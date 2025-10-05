@@ -47,38 +47,38 @@
 
           @if (hasStatuses(task)) {
           <!-- Si tiene statuses, mostrar select -->
-          <div class="task-select-container" (click)="$event.stopPropagation()">
-            <select
-              class="status-select"
+          <div
+            class="task-select-container"
+            (click)="$event.stopPropagation()"
+            (keydown)="$event.stopPropagation()"
+            tabindex="0">
+            <ion-select
+              label="Estado"
+              interface="popover"
               [value]="selectedStatus()[task.id] || ''"
-              (change)="onStatusChange(task.id, $event)">
-              <option value="" disabled>Estado</option>
+              (ionChange)="onStatusChange(task.id, $event)">
               @if (task.status1) {
-              <option [value]="task.status1">{{ task.status1 }}</option>
+              <ion-select-option [value]="task.status1">{{ task.status1 }}</ion-select-option>
               } @if (task.status2) {
-              <option [value]="task.status2">{{ task.status2 }}</option>
+              <ion-select-option [value]="task.status2">{{ task.status2 }}</ion-select-option>
               } @if (task.status3) {
-              <option [value]="task.status3">{{ task.status3 }}</option>
+              <ion-select-option [value]="task.status3">{{ task.status3 }}</ion-select-option>
               } @if (task.status4) {
-              <option [value]="task.status4">{{ task.status4 }}</option>
+              <ion-select-option [value]="task.status4">{{ task.status4 }}</ion-select-option>
               } @if (task.status5) {
-              <option [value]="task.status5">{{ task.status5 }}</option>
+              <ion-select-option [value]="task.status5">{{ task.status5 }}</ion-select-option>
               } @if (task.status6) {
-              <option [value]="task.status6">{{ task.status6 }}</option>
+              <ion-select-option [value]="task.status6">{{ task.status6 }}</ion-select-option>
               }
-            </select>
+            </ion-select>
           </div>
           } @else {
-          <!-- Si NO tiene statuses, mostrar checkbox -->
+
           <div class="task-checkbox">
-            <label class="checkbox-container">
-              <input
-                type="checkbox"
-                [checked]="isTaskSelected(task.id)"
-                (change)="toggleTaskSelection(task.id)"
-                (click)="$event.stopPropagation()" />
-              <span class="checkmark"></span>
-            </label>
+            <ion-checkbox
+              [checked]="isTaskSelected(task.id)"
+              (ionChange)="toggleTaskSelection(task.id)"
+              (click)="$event.stopPropagation()"></ion-checkbox>
           </div>
           }
         </div>
@@ -87,12 +87,10 @@
     } } }
   </div>
 
-  @if (selectedTasks().size > 0 && canApplyTasks()) {
-  <div class="floating-button-container" [@slideUp]>
+  <div class="floating-button-container" [class.show]="selectedTasks().size > 0 && canApplyTasks()">
     <button class="floating-button" (click)="applyTasks()">
       <span class="mat-icon">check</span>
       <span class="button-text">Aplicar Tareas ({{ selectedTasks().size }})</span>
     </button>
   </div>
-  }
 </ion-content>

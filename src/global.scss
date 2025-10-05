@@ -45,3 +45,93 @@ ion-modal {
 ion-backdrop {
   --backdrop-opacity: 0.32;
 }
+
+.floating-button-container {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0 24px;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  pointer-events: none;
+
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .floating-button {
+    background: white;
+    color: var(--color-primary);
+    border: none;
+    border-radius: 30px;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0px 12px 25px rgba(82, 71, 201, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2) !important;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    .mat-icon {
+      font-size: 24px;
+    }
+
+    .button-text {
+      font-size: 16px;
+    }
+  }
+}
+
+ion-checkbox {
+  --border-radius: 8px;
+  --size: 24px;
+  --border-color: #ffffff;
+  --checkbox-background-checked: #ffffff;
+  --checkmark-color: var(--color-primary);
+}
+
+ion-select {
+  width: 86px;
+
+  &::part(icon) {
+    color: #3428ba;
+  }
+  &::part(label) {
+    margin-right: 0 !important;
+  }
+}
+
+ion-select-popover {
+  ion-list {
+    background: var(--color-primary);
+  }
+
+  ion-item {
+    --background: var(--color-primary);
+    --color: var(--ion-text-color-home);
+
+    &::part(native) {
+      background: var(--color-primary);
+      color: var(--ion-text-color-home);
+    }
+  }
+
+  ion-radio-group ion-item {
+    --background: var(--color-primary);
+    --color: var(--ion-text-color-home);
+  }
+}
