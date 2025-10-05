@@ -8,8 +8,8 @@
 export interface TaskApplicationBatchRequest {
   residence_id: string;
   resident_ids: Array<string>;
-  task_statuses: {
+  task_statuses?: ({
 [key: string]: string;
-};
+} | null);
   task_template_ids: Array<string>;
 }

@@ -79,6 +79,13 @@ export const routes: Routes = [
               import('./wrap/residents-task/residents-task-history/residents-task-history').then(
                 m => m.ResidentsTaskHistory
               )
+          },
+          {
+            path: 'history/detail',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-task-history/residents-task-history-detail/residents-task-history-detail').then(
+                m => m.ResidentsTaskHistoryDetail
+              )
           }
         ]
       },

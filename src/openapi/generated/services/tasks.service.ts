@@ -25,6 +25,12 @@ import { deleteCategoryTasksCategoriesCategoryIdDelete } from '../fn/tasks/delet
 import { DeleteCategoryTasksCategoriesCategoryIdDelete$Params } from '../fn/tasks/delete-category-tasks-categories-category-id-delete';
 import { deleteTemplateTasksTemplatesTemplateIdDelete } from '../fn/tasks/delete-template-tasks-templates-template-id-delete';
 import { DeleteTemplateTasksTemplatesTemplateIdDelete$Params } from '../fn/tasks/delete-template-tasks-templates-template-id-delete';
+import { getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet } from '../fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
+import { GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params } from '../fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
+import { getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet } from '../fn/tasks/get-task-applications-daily-summary-tasks-applications-daily-summary-get';
+import { GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params } from '../fn/tasks/get-task-applications-daily-summary-tasks-applications-daily-summary-get';
+import { getUserAssignersTasksUsersAssignersGet } from '../fn/tasks/get-user-assigners-tasks-users-assigners-get';
+import { GetUserAssignersTasksUsersAssignersGet$Params } from '../fn/tasks/get-user-assigners-tasks-users-assigners-get';
 import { listApplicationsSimpleTasksApplicationsSimpleGet } from '../fn/tasks/list-applications-simple-tasks-applications-simple-get';
 import { ListApplicationsSimpleTasksApplicationsSimpleGet$Params } from '../fn/tasks/list-applications-simple-tasks-applications-simple-get';
 import { listApplicationsTasksApplicationsGet } from '../fn/tasks/list-applications-tasks-applications-get';
@@ -38,6 +44,9 @@ import { ListTemplatesSimpleTasksTemplatesSimpleGet$Params } from '../fn/tasks/l
 import { listTemplatesTasksTemplatesGet } from '../fn/tasks/list-templates-tasks-templates-get';
 import { ListTemplatesTasksTemplatesGet$Params } from '../fn/tasks/list-templates-tasks-templates-get';
 import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseTaskApplicationDailySummary } from '../models/paginated-response-task-application-daily-summary';
+import { TaskApplicationResidentDay } from '../models/task-application-resident-day';
+import { UserAssigner } from '../models/user-assigner';
 import { patchCategoryTasksCategoriesCategoryIdPatch } from '../fn/tasks/patch-category-tasks-categories-category-id-patch';
 import { PatchCategoryTasksCategoriesCategoryIdPatch$Params } from '../fn/tasks/patch-category-tasks-categories-category-id-patch';
 import { TaskApplicationOut } from '../models/task-application-out';
@@ -615,6 +624,105 @@ export class TasksService extends BaseService {
   createTaskApplicationsBatchTasksApplicationsBatchPost(params: CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params, context?: HttpContext): Observable<TaskApplicationBatchResponse> {
     return this.createTaskApplicationsBatchTasksApplicationsBatchPost$Response(params, context).pipe(
       map((r: StrictHttpResponse<TaskApplicationBatchResponse>): TaskApplicationBatchResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet()` */
+  static readonly GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGetPath = '/tasks/applications/daily-summary';
+
+  /**
+   * Get Task Applications Daily Summary.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Response(params: GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskApplicationDailySummary>> {
+    return getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Task Applications Daily Summary.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet(params: GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params, context?: HttpContext): Observable<PaginatedResponseTaskApplicationDailySummary> {
+    return this.getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponseTaskApplicationDailySummary>): PaginatedResponseTaskApplicationDailySummary => r.body)
+    );
+  }
+
+  /** Path part for operation `getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet()` */
+  static readonly GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGetPath = '/tasks/applications/resident/{resident_id}/date/{date}';
+
+  /**
+   * Get Task Applications By Resident Date.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Response(params: GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskApplicationResidentDay>> {
+    return getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Task Applications By Resident Date.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet(params: GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params, context?: HttpContext): Observable<TaskApplicationResidentDay> {
+    return this.getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TaskApplicationResidentDay>): TaskApplicationResidentDay => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserAssignersTasksUsersAssignersGet()` */
+  static readonly GetUserAssignersTasksUsersAssignersGetPath = '/tasks/users/assigners';
+
+  /**
+   * Get User Assigners.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserAssignersTasksUsersAssignersGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserAssignersTasksUsersAssignersGet$Response(params: GetUserAssignersTasksUsersAssignersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserAssigner>>> {
+    return getUserAssignersTasksUsersAssignersGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get User Assigners.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserAssignersTasksUsersAssignersGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserAssignersTasksUsersAssignersGet(params: GetUserAssignersTasksUsersAssignersGet$Params, context?: HttpContext): Observable<Array<UserAssigner>> {
+    return this.getUserAssignersTasksUsersAssignersGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserAssigner>>): Array<UserAssigner> => r.body)
     );
   }
 

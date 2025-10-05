@@ -149,6 +149,12 @@ export type { GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicati
 export { getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet } from './fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
 export type { CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params } from './fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
 export { createTaskApplicationsBatchTasksApplicationsBatchPost } from './fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
+export type { GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params } from './fn/tasks/get-task-applications-daily-summary-tasks-applications-daily-summary-get';
+export { getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet } from './fn/tasks/get-task-applications-daily-summary-tasks-applications-daily-summary-get';
+export type { GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params } from './fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
+export { getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet } from './fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
+export type { GetUserAssignersTasksUsersAssignersGet$Params } from './fn/tasks/get-user-assigners-tasks-users-assigners-get';
+export { getUserAssignersTasksUsersAssignersGet } from './fn/tasks/get-user-assigners-tasks-users-assigners-get';
 export type { CreateMeasurementMeasurementsPost$Params } from './fn/measurements/create-measurement-measurements-post';
 export { createMeasurementMeasurementsPost } from './fn/measurements/create-measurement-measurements-post';
 export type { ListMeasurementsMeasurementsGet$Params } from './fn/measurements/list-measurements-measurements-get';

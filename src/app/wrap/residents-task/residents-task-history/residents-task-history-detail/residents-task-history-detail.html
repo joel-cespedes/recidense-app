@@ -1,0 +1,79 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ residentName() }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container">
+    <div class="header-info">
+      <div class="date-title">{{ date() | date: 'dd/MM/yyyy' }}</div>
+      @if (detailData()?.bed_name) {
+      <div class="bed-info">{{ detailData()?.bed_name }}</div>
+      }
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando tareas...</p>
+    </div>
+    }
+
+    <!-- Error -->
+    @if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error_outline</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    }
+
+    <!-- Empty -->
+    @if (!isLoading() && applications().length === 0 && !errorMessage()) {
+    <div class="empty-container">
+      <span class="mat-icon">inbox</span>
+      <p>No hay tareas aplicadas</p>
+    </div>
+    }
+
+    <!-- Lista de tareas por hora -->
+    @for (task of applications(); track task.id) {
+    <ion-card>
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-time">
+            <span class="mat-icon">schedule</span>
+            <span class="time">{{ getTimeFromDate(task.assigned_at) }}</span>
+          </div>
+          <div class="task-category">{{ task.task_category }}</div>
+        </div>
+
+        <div class="task-body">
+          <div class="task-name">{{ task.task_name }}</div>
+          @if (task.status) {
+          <div class="task-status">Estado: {{ task.status }}</div>
+          }
+        </div>
+
+        <div class="task-footer">
+          <div class="assigned-by">
+            <span class="mat-icon">person</span>
+            <span class="name">{{ task.assigned_by_name }}</span>
+            <span class="role">({{ task.assigned_by_role }})</span>
+          </div>
+        </div>
+      </div>
+    </ion-card>
+    }
+  </div>
+</ion-content>
