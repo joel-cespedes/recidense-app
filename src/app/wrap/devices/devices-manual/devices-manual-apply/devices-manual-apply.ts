@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -11,11 +11,15 @@ import {
   IonLabel,
   IonSegment,
   IonSegmentButton,
+  IonSpinner,
   IonToolbar,
-  NavController
+  NavController,
+  ToastController
 } from '@ionic/angular/standalone';
 
 import { ResidentOut } from '../../../../../openapi/generated/models/resident-out';
+import { MeasurementsService } from '../../../../../openapi/generated/services/measurements.service';
+import { ResidenceStateService } from '../../../../services/residence-state.service';
 
 @Component({
   selector: 'app-devices-manual-apply',
@@ -31,15 +35,22 @@ import { ResidentOut } from '../../../../../openapi/generated/models/resident-ou
     IonSegment,
     IonSegmentButton,
     IonLabel,
-    IonInput
+    IonInput,
+    IonSpinner
   ]
 })
 export class DevicesManualApply implements OnInit {
   private navCtrl = inject(NavController);
   private router = inject(Router);
+  private measurementsService = inject(MeasurementsService);
+  private residenceStateService = inject(ResidenceStateService);
+  private toastCtrl = inject(ToastController);
 
   resident = signal<ResidentOut | null>(null);
   selectedDevice = signal<string>('blood_pressure');
+  isSubmitting = signal(false);
+
+  residenceId = computed(() => this.residenceStateService.residenceId());
 
   // Forms para cada dispositivo
   bloodPressureForm = new FormGroup({
@@ -103,28 +114,100 @@ export class DevicesManualApply implements OnInit {
     const form = this.getCurrentForm();
 
     if (form.invalid) {
-      console.log('Form invalid', form.errors);
+      this.showErrorToast('Por favor completa todos los campos requeridos');
       return;
     }
 
     const resident = this.resident();
-    if (!resident) {
+    const residenceId = this.residenceId();
+
+    if (!resident || !residenceId) {
+      this.showErrorToast('Datos incompletos');
       return;
     }
 
-    const deviceType = this.selectedDevice();
-    const values = form.value;
+    this.isSubmitting.set(true);
 
-    console.log('Submitting measurement:', {
-      resident: resident.id,
-      deviceType,
-      values
+    // Mapear tipo de dispositivo al formato del backend
+    const measurementTypeMap: Record<string, string> = {
+      blood_pressure: 'bp',
+      oximeter: 'spo2',
+      scale: 'weight',
+      thermometer: 'temperature'
+    };
+
+    const measurementType = measurementTypeMap[this.selectedDevice()];
+    const formValues = form.value;
+
+    // Construir el body según el tipo
+    const body: any = {
+      resident_id: resident.id,
+      type: measurementType,
+      source: 'manual',
+      taken_at: new Date().toISOString()
+    };
+
+    if (this.selectedDevice() === 'blood_pressure') {
+      body.systolic = formValues.systolic;
+      body.diastolic = formValues.diastolic;
+      if (formValues.pulse) {
+        body.pulse_bpm = formValues.pulse;
+      }
+    } else if (this.selectedDevice() === 'oximeter') {
+      body.spo2 = formValues.oxygen_saturation;
+      if (formValues.pulse) {
+        body.pulse_bpm = formValues.pulse;
+      }
+    } else if (this.selectedDevice() === 'scale') {
+      body.weight_kg = formValues.weight;
+    } else if (this.selectedDevice() === 'thermometer') {
+      body.temperature_c = formValues.temperature;
+    }
+
+    // Crear medición
+    this.measurementsService
+      .createMeasurementMeasurementsPost({
+        residence_id: residenceId.toString(),
+        body: body
+      })
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.showSuccessToast('Medición registrada correctamente');
+          setTimeout(() => {
+            this.router.navigateByUrl('/wrap/devices');
+          }, 2000);
+        },
+        error: (error: any) => {
+          console.error('Error submitting measurement:', error);
+          this.isSubmitting.set(false);
+          this.showErrorToast(
+            error.error?.message || 'Error al guardar la medición. Intenta de nuevo.'
+          );
+        }
+      });
+  }
+
+  async showSuccessToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      position: 'top',
+      color: 'success',
+      icon: 'checkmark-circle'
     });
+    await toast.present();
+  }
 
-    // TODO: Aquí enviar al backend la medición manual
-    // Por ahora solo mostramos en consola
-
-    this.navCtrl.back();
+  async showErrorToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 3000,
+      position: 'top',
+      color: 'danger',
+      icon: 'alert-circle'
+    });
+    await toast.present();
   }
 
   goBack() {

@@ -130,8 +130,13 @@
         color="primary"
         class="m-t-32"
         (click)="submitMeasurement()"
-        [disabled]="getCurrentForm().invalid">
-        Guardar Medición
+        [disabled]="getCurrentForm().invalid || isSubmitting()">
+        @if (isSubmitting()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        <span style="margin-left: 8px;">Guardando...</span>
+        } @else {
+        <span>Guardar Medición</span>
+        }
       </ion-button>
     </div>
     }

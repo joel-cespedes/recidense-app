@@ -5,8 +5,9 @@
 /**
  * Opción de residente para selección cuando hay ambigüedad
  */
-export interface ResidentOption {
+export interface AppSchemasMeasurementResidentOption {
   bed_number?: (string | null);
+  floor_name?: (string | null);
   full_name: string;
   id: string;
   room_name?: (string | null);

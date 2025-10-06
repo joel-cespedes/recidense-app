@@ -9,8 +9,109 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="title-section center m-b-16">Registro por Voz</div>
   <div class="container">
-    <p>Componente de registro por voz - En desarrollo</p>
+    <div class="title-section center m-b-16">Registrar medición por voz</div>
+    <!-- Instructions -->
+    <ion-card class="instructions-card">
+      <div class="card-content">
+        <span class="mat-icon">info</span>
+        <div class="text">
+          <h3>Instrucciones</h3>
+          <p>Presiona el micrófono y di el nombre del residente y la medición.</p>
+          <p class="example"><strong>Ejemplos:</strong></p>
+          <p class="example">• "Tensión de Juan Pérez 120 80"</p>
+          <p class="example">• "Oxígeno de María García 98"</p>
+          <p class="example">• "Peso de Pedro López 75 kilos"</p>
+          <p class="example">• "Temperatura de Ana Martínez 36.5"</p>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Recording Button -->
+    <div class="recording-section">
+      <button
+        class="mic-button"
+        [class.recording]="isRecording()"
+        [class.processing]="isProcessing()"
+        (click)="isRecording() ? stopRecording() : startRecording()"
+        [disabled]="isProcessing()">
+        @if (isRecording()) {
+        <span class="mat-icon pulse">stop</span>
+        <span class="status-text">Presiona para detener</span>
+        } @else if (isProcessing()) {
+        <ion-spinner name="crescent"></ion-spinner>
+        <span class="status-text">Procesando...</span>
+        } @else {
+        <span class="mat-icon">mic</span>
+        <span class="status-text">Presiona para hablar</span>
+        }
+      </button>
+    </div>
+
+    <!-- Error Display -->
+    @if (errorMessage()) {
+    <ion-card class="error-card">
+      <div class="card-content">
+        <span class="mat-icon">error_outline</span>
+        <p>{{ errorMessage() }}</p>
+      </div>
+    </ion-card>
+    }
   </div>
+
+  <!-- Options Modal -->
+  <ion-modal [isOpen]="showOptionsModal()" (didDismiss)="cancelSelection()" class="options-modal">
+    <ng-template>
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h3>Selecciona el residente correcto</h3>
+          <ion-button fill="clear" (click)="cancelSelection()">
+            <span class="mat-icon">close</span>
+          </ion-button>
+        </div>
+
+        <div class="modal-content">
+          <!-- Opciones de Residente -->
+          @if (parsedData()?.resident_options && parsedData()?.resident_options!.length > 0) {
+          <div class="options-section">
+            <h4>Hay múltiples residentes con ese nombre:</h4>
+            <ion-radio-group [(ngModel)]="selectedResidentId">
+              <ion-list>
+                @for (option of parsedData()?.resident_options; track option.id) {
+                <ion-item>
+                  <ion-radio [value]="option.id">
+                    <div class="option-label">
+                      <div class="option-name">{{ option.full_name }}</div>
+                      @if (option.room_name || option.bed_number || option.floor_name) {
+                      <div class="option-detail">
+                        @if (option.room_name) {
+                        <span>{{ option.room_name }}</span>
+                        } @if (option.bed_number) {
+                        <span>• Cama {{ option.bed_number }}</span>
+                        } @if (option.floor_name) {
+                        <span>• {{ option.floor_name }}</span>
+                        }
+                      </div>
+                      }
+                    </div>
+                  </ion-radio>
+                </ion-item>
+                }
+              </ion-list>
+            </ion-radio-group>
+          </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <ion-button expand="block" (click)="confirmSelection()" color="primary">
+            Confirmar
+          </ion-button>
+          <ion-button expand="block" (click)="cancelSelection()" fill="outline">
+            Cancelar
+          </ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>

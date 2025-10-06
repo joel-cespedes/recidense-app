@@ -121,11 +121,6 @@ export const routes: Routes = [
               {
                 path: '',
                 loadComponent: () =>
-                  import('./wrap/devices/devices-manual/devices-manual').then(m => m.DevicesManual)
-              },
-              {
-                path: 'list',
-                loadComponent: () =>
                   import('./wrap/devices/devices-manual/devices-manual-list/devices-manual-list').then(
                     m => m.DevicesManualList
                   )
@@ -138,6 +133,11 @@ export const routes: Routes = [
                   )
               }
             ]
+          },
+          {
+            path: 'list',
+            loadComponent: () =>
+              import('./wrap/devices/devices-list/devices-list').then(m => m.DevicesList)
           }
         ]
       },

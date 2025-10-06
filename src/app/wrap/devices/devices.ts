@@ -28,4 +28,8 @@ export class Devices {
   navigateToManual() {
     this.navCtrl.navigateForward('/wrap/devices/manual');
   }
+
+  navigateToList() {
+    this.navCtrl.navigateForward('/wrap/devices/list');
+  }
 }

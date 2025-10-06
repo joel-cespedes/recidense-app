@@ -181,6 +181,10 @@ export type { PatchMeasurementMeasurementsMeasurementIdPatch$Params } from './fn
 export { patchMeasurementMeasurementsMeasurementIdPatch } from './fn/measurements/patch-measurement-measurements-measurement-id-patch';
 export type { GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params } from './fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 export { getMeasurementHistoryMeasurementsMeasurementIdHistoryGet } from './fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
+export type { ProcessVoiceMeasurementMeasurementsVoicePost$Params } from './fn/measurements/process-voice-measurement-measurements-voice-post';
+export { processVoiceMeasurementMeasurementsVoicePost } from './fn/measurements/process-voice-measurement-measurements-voice-post';
+export type { ConfirmVoiceMeasurementMeasurementsVoiceConfirmPost$Params } from './fn/measurements/confirm-voice-measurement-measurements-voice-confirm-post';
+export { confirmVoiceMeasurementMeasurementsVoiceConfirmPost } from './fn/measurements/confirm-voice-measurement-measurements-voice-confirm-post';
 export type { GetDashboardDataDashboardGet$Params } from './fn/dashboard/get-dashboard-data-dashboard-get';
 export { getDashboardDataDashboardGet } from './fn/dashboard/get-dashboard-data-dashboard-get';
 export type { GetNavigationCountsDashboardNavigationCountsGet$Params } from './fn/dashboard/get-navigation-counts-dashboard-navigation-counts-get';

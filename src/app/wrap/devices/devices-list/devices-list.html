@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="title-section center m-b-16">Dispositivos Disponibles</div>
+
+  <div class="container">
+    @if (isLoading() && devices().length === 0) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando dispositivos...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else if (devices().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">devices</span>
+      <p>No hay dispositivos registrados en esta residencia</p>
+    </div>
+    } @else {
+    <div class="devices-grid">
+      @for (device of devices(); track device.id) {
+      <ion-card class="device-card">
+        <div class="device-info">
+          <div class="device-type">{{ getDeviceTypeLabel(device['measurement_type']) }}</div>
+          <div class="device-name">{{ device.name }}</div>
+          @if (device['mac_address']) {
+          <div class="device-mac">MAC: {{ device['mac_address'] }}</div>
+          } @if (device['manufacturer']) {
+          <div class="device-manufacturer">{{ device['manufacturer'] }}</div>
+          }
+        </div>
+        @if (device['is_active']) {
+        <div class="device-status active">
+          <span class="mat-icon">check_circle</span>
+          <span>Activo</span>
+        </div>
+        } @else {
+        <div class="device-status inactive">
+          <span class="mat-icon">cancel</span>
+          <span>Inactivo</span>
+        </div>
+        }
+      </ion-card>
+      }
+    </div>
+    }
+  </div>
+</ion-content>
