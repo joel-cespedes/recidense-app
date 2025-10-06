@@ -5,12 +5,12 @@
         <span class="mat-icon">arrow_back</span>
       </ion-button>
     </ion-buttons>
-    <ion-title>Asignar tarea por voz</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="container">
+    <div class="title-section center m-b-16">Asignar tarea por voz</div>
     <!-- Instructions -->
     <ion-card class="instructions-card">
       <div class="card-content">
@@ -89,8 +89,7 @@
                       <div class="option-detail">
                         @if (option.room_name) {
                         <span>{{ option.room_name }}</span>
-                        }
-                        @if (option.bed_number) {
+                        } @if (option.bed_number) {
                         <span>Cama {{ option.bed_number }}</span>
                         }
                       </div>

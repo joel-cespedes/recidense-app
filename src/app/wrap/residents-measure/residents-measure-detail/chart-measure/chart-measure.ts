@@ -14,6 +14,7 @@ import {
 import { NgApexchartsModule, ApexChart, ApexDataLabels, ApexStroke, ApexFill, ApexXAxis, ApexYAxis, ApexGrid, ApexTooltip, ApexAxisChartSeries, ApexNonAxisChartSeries } from 'ng-apexcharts';
 import { MeasurementsService } from '../../../../../openapi/generated/services/measurements.service';
 import { MeasurementOut } from '../../../../../openapi/generated/models/measurement-out';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 
 @Component({
   selector: 'app-chart-measure',
@@ -42,6 +43,7 @@ export class ChartMeasure {
   residentId = signal<string>('');
   selectedDate = signal<string>('');
   measurementLimit = signal<number>(4); // 4, 10, 30
+  isFullscreen = signal<boolean>(false);
 
   chartConfig = signal<{
     series: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -320,7 +322,49 @@ export class ChartMeasure {
     }, 100);
   }
 
+  async toggleFullscreen() {
+    const newFullscreenState = !this.isFullscreen();
+    this.isFullscreen.set(newFullscreenState);
+
+    try {
+      if (newFullscreenState) {
+        // Entrar en modo fullscreen - forzar landscape
+        await ScreenOrientation.lock({ orientation: 'landscape' });
+
+        // Actualizar tamaño de gráfica para landscape
+        const currentConfig = this.chartConfig();
+        this.chartConfig.set({
+          ...currentConfig,
+          chart: {
+            ...currentConfig.chart,
+            height: window.innerHeight - 100
+          }
+        });
+      } else {
+        // Salir de fullscreen - permitir cualquier orientación
+        await ScreenOrientation.unlock();
+
+        // Restaurar tamaño original de gráfica
+        const currentConfig = this.chartConfig();
+        this.chartConfig.set({
+          ...currentConfig,
+          chart: {
+            ...currentConfig.chart,
+            height: 350
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling orientation:', error);
+    }
+  }
+
   goBack() {
-    this.navCtrl.back();
+    // Si está en fullscreen, primero salir
+    if (this.isFullscreen()) {
+      this.toggleFullscreen();
+    } else {
+      this.navCtrl.back();
+    }
   }
 }

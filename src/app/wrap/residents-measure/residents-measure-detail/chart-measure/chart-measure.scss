@@ -5,8 +5,29 @@
   background: linear-gradient(-40deg, #dbe9f7 0%, #dbe9f7 60%, #ffff 100%) !important;
 }
 
+ion-header.hidden {
+  display: none;
+}
+
+ion-content.fullscreen-mode {
+  --background: white;
+}
+
 .container {
   padding: 16px;
+
+  &.fullscreen-container {
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .chart-container {
@@ -14,6 +35,16 @@
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  &.fullscreen-chart {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
 
   h2 {
     margin: 0 0 8px 0;
@@ -25,5 +56,32 @@
     margin: 0 0 20px 0;
     color: var(--ion-color-medium);
     font-size: 0.9rem;
+  }
+}
+
+.chart-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  &.fullscreen-controls {
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+
+  &__label {
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+.fullscreen-btn {
+  --padding-start: 8px;
+  --padding-end: 8px;
+
+  .mat-icon {
+    font-size: 28px;
   }
 }

@@ -5,7 +5,6 @@
         <span class="mat-icon">arrow_back</span>
       </ion-button>
     </ion-buttons>
-    <ion-title>Ver historial</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,6 +12,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <div class="title-section center m-b-32">Ver historial</div>
 
   <div class="container">
     <div class="title-section center m-b-32">Últimos</div>
@@ -48,8 +48,14 @@
     </div>
 
     <div class="search-section" [class.show]="showSearch()">
-      <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente..."></ion-searchbar>
-      <ion-select label="Asignado por" interface="popover" [formControl]="assignedByControl" placeholder="Todos">
+      <ion-searchbar
+        [formControl]="searchControl"
+        placeholder="Buscar residente..."></ion-searchbar>
+      <ion-select
+        label="Asignado por"
+        interface="popover"
+        [formControl]="assignedByControl"
+        placeholder="Todos">
         <ion-select-option [value]="null">Todos</ion-select-option>
         @for (user of assigners(); track user.id) {
         <ion-select-option [value]="user.id">{{ user.full_name }}</ion-select-option>
@@ -93,14 +99,16 @@
             }
           </div>
           <div class="summary-date">
-            <div class="date">{{ summary.date | date: 'dd/MM/yyyy' }}</div>
+            <div class="date">{{ summary.date | date : 'dd/MM/yyyy' }}</div>
           </div>
         </div>
 
         <div class="summary-footer">
           <div class="task-count">
             <span class="mat-icon">assignment</span>
-            <span class="count">{{ summary.task_count }} tarea{{ summary.task_count !== 1 ? 's' : '' }}</span>
+            <span class="count">
+              {{ summary.task_count }} tarea{{ summary.task_count !== 1 ? 's' : '' }}
+            </span>
           </div>
         </div>
       </div>
@@ -127,11 +135,29 @@
         </div>
 
         <div class="calendar-content">
-          <ion-datetime #datetime [multiple]="true" presentation="date" locale="es-ES"></ion-datetime>
+          <ion-datetime
+            #datetime
+            [multiple]="true"
+            presentation="date"
+            locale="es-ES"></ion-datetime>
 
-          <ion-button expand="block" fill="clear" size="small" class="m-t-32 m-b-16" (click)="clearCalendar()"> Limpiar </ion-button>
+          <ion-button
+            expand="block"
+            fill="clear"
+            size="small"
+            class="m-t-32 m-b-16"
+            (click)="clearCalendar()">
+            Limpiar
+          </ion-button>
 
-          <ion-button expand="block" size="small" class="m-b-16" (click)="applyCalendar()" color="primary"> Aplicar </ion-button>
+          <ion-button
+            expand="block"
+            size="small"
+            class="m-b-16"
+            (click)="applyCalendar()"
+            color="primary">
+            Aplicar
+          </ion-button>
         </div>
       </div>
     </ng-template>
