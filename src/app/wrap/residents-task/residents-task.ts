@@ -28,4 +28,8 @@ export class ResidentsTask {
   navigateToHistory() {
     this.navCtrl.navigateForward('/wrap/residents-tasks/history');
   }
+
+  navigateToTask() {
+    this.navCtrl.navigateForward('/wrap/residents-tasks/categories');
+  }
 }

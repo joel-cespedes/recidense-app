@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="title-section center m-b-16">Categorías y Tareas</div>
+
+  <div class="container">
+    @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando categorías...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else if (categories().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">category</span>
+      <p>No hay categorías disponibles</p>
+    </div>
+    } @else {
+    <ion-accordion-group>
+      @for (category of categories(); track category.id) {
+      <ion-accordion [value]="category.id">
+        <ion-item slot="header" color="light">
+          <ion-label>
+            <h2>{{ category.name }}</h2>
+            <p class="task-count">{{ category.tasks?.length || 0 }} tareas</p>
+          </ion-label>
+        </ion-item>
+
+        <div class="ion-padding" slot="content">
+          @if (category.tasks && category.tasks.length > 0) {
+          <ion-list>
+            @for (task of category.tasks; track task.id) {
+            <ion-item>
+              <ion-label>
+                <h3>{{ task.name }}</h3>
+              </ion-label>
+            </ion-item>
+            }
+          </ion-list>
+          } @else {
+          <p class="no-tasks">No hay tareas en esta categoría</p>
+          }
+        </div>
+      </ion-accordion>
+      }
+    </ion-accordion-group>
+    }
+  </div>
+</ion-content>

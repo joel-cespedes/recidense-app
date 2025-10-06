@@ -53,6 +53,13 @@ export const routes: Routes = [
               import('./wrap/residents-task/residents-task').then(m => m.ResidentsTask)
           },
           {
+            path: 'categories',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-categories/residents-categories').then(
+                m => m.ResidentsCategories
+              )
+          },
+          {
             path: 'manual',
             loadComponent: () =>
               import('./wrap/residents-task/residents-task-list/residents-task-list').then(

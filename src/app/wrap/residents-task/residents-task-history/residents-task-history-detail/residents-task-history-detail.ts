@@ -10,7 +10,6 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
-  IonTitle,
   IonToolbar,
   NavController,
   RefresherCustomEvent
@@ -27,7 +26,6 @@ import { ResidenceStateService } from '../../../../services/residence-state.serv
   imports: [
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonButtons,
     IonButton,

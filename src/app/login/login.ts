@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,9 +7,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle,
   IonContent,
-  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -16,7 +15,6 @@ import {
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../openapi/generated/services/auth.service';
 import { AuthStateService } from '../services/auth-state.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -28,13 +26,11 @@ import { HttpErrorResponse } from '@angular/common/http';
     IonContent,
     IonCard,
     IonCardHeader,
-    IonCardTitle,
     IonCardContent,
     IonItem,
     IonLabel,
     IonInput,
     IonButton,
-    IonIcon,
     IonSpinner
   ]
 })
