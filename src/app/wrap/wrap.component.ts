@@ -94,6 +94,28 @@ export class WrapComponent {
       return;
     }
 
+    // Si haces click en el tab que ya está activo, scroll to top
+    if (this.currentTab === event.tab) {
+      // Buscar el ion-content activo y hacer scroll to top
+      const ionContent = document.querySelector('ion-content');
+      if (ionContent) {
+        ionContent.scrollToTop(300);
+      }
+    } else {
+      // Si cambias de tab, ir a la raíz de ese tab
+      const tabRoutes: { [key: string]: string } = {
+        'home': '/wrap/home',
+        'residents-measurements': '/wrap/residents-measurements',
+        'residents-tasks': '/wrap/residents-tasks',
+        'measures': '/wrap/measures'
+      };
+
+      const rootRoute = tabRoutes[event.tab];
+      if (rootRoute) {
+        this.router.navigate([rootRoute]);
+      }
+    }
+
     this.currentTab = event.tab;
   }
 }
