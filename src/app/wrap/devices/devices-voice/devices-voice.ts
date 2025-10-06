@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { map } from 'rxjs/operators';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 import {
   IonButton,
@@ -24,35 +25,7 @@ import { processVoiceMeasurementMeasurementsVoicePost } from '../../../../openap
 import { confirmVoiceMeasurementMeasurementsVoiceConfirmPost } from '../../../../openapi/generated/fn/measurements/confirm-voice-measurement-measurements-voice-confirm-post';
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration } from '../../../../openapi/generated/api-configuration';
-
-interface VoiceMeasurementResponse {
-  status: 'success' | 'ambiguous' | 'error';
-  message: string;
-  measurement?: {
-    id: string;
-    resident_id: string;
-    resident_name: string;
-    measurement_type: 'bp' | 'spo2' | 'weight' | 'temperature';
-    values: any;
-    source: string;
-    recorded_at: string;
-    recorded_by: string;
-  };
-  confirmation_message?: string;
-  resident_options?: {
-    id: string;
-    full_name: string;
-    room_name?: string;
-    bed_number?: string;
-    floor_name?: string;
-  }[];
-  parsed_measurement?: {
-    measurement_type: 'bp' | 'spo2' | 'weight' | 'temperature';
-    values: any;
-  };
-  error_code?: string;
-  details?: any;
-}
+import { VoiceMeasurementResponse } from '../../../../openapi/generated/models/voice-measurement-response';
 
 @Component({
   selector: 'app-devices-voice',
@@ -191,14 +164,13 @@ export class DevicesVoice implements OnInit {
         transcript
       }
     })
-      .pipe((res: any) => res)
+      .pipe(map(res => res.body))
       .subscribe({
-        next: (response: any) => {
+        next: (response: VoiceMeasurementResponse) => {
           this.isProcessing.set(false);
           this.parsedData.set(response);
 
           if (response.status === 'success') {
-            // Mostrar mensaje de confirmación
             this.showSuccessToast(
               response.confirmation_message || 'Medición registrada correctamente'
             );
@@ -206,17 +178,16 @@ export class DevicesVoice implements OnInit {
               this.goBack();
             }, 2000);
           } else if (response.status === 'ambiguous') {
-            // Mostrar modal de selección
             this.showOptionsModal.set(true);
           } else if (response.status === 'error') {
             this.errorMessage.set(response.message);
           }
         },
-        error: (error: any) => {
+        error: (error: unknown) => {
           console.error('Error parsing transcript:', error);
           this.isProcessing.set(false);
           this.errorMessage.set(
-            error.error?.message || 'Error al procesar la medición. Intenta de nuevo.'
+            (error as any)?.error?.message || 'Error al procesar la medición. Intenta de nuevo.'
           );
         }
       });
@@ -238,14 +209,14 @@ export class DevicesVoice implements OnInit {
       body: {
         residence_id: residenceId.toString(),
         resident_id: this.selectedResidentId,
-        measurement_type: data.parsed_measurement.measurement_type,
-        values: data.parsed_measurement.values,
+        measurement_type: (data.parsed_measurement as any)['measurement_type'],
+        values: (data.parsed_measurement as any)['values'],
         transcript: this.transcript()
       }
     })
-      .pipe((res: any) => res)
+      .pipe(map(res => res.body))
       .subscribe({
-        next: (response: any) => {
+        next: (response: VoiceMeasurementResponse) => {
           this.isProcessing.set(false);
           this.showSuccessToast(
             response.confirmation_message || 'Medición registrada correctamente'
@@ -254,11 +225,11 @@ export class DevicesVoice implements OnInit {
             this.goBack();
           }, 2000);
         },
-        error: (error: any) => {
+        error: (error: unknown) => {
           console.error('Error confirming measurement:', error);
           this.isProcessing.set(false);
           this.errorMessage.set(
-            error.error?.message || 'Error al confirmar la medición. Intenta de nuevo.'
+            (error as any)?.error?.message || 'Error al confirmar la medición. Intenta de nuevo.'
           );
         }
       });

@@ -29,6 +29,7 @@ import { PaginatedResponseResidentOut } from '../../../../openapi/generated/mode
 import { ResidentOut } from '../../../../openapi/generated/models/resident-out';
 import { ResidentsService } from '../../../../openapi/generated/services/residents.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
+import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
   selector: 'app-residents-task-list',
@@ -60,6 +61,7 @@ export class ResidentsTaskList implements OnInit {
   private residentsService = inject(ResidentsService);
   private residenceStateService = inject(ResidenceStateService);
   private navCtrl = inject(NavController);
+  private authStateService = inject(AuthStateService);
 
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
 
@@ -86,6 +88,14 @@ export class ResidentsTaskList implements OnInit {
 
   // Computed residence ID
   residenceId = computed(() => this.residenceStateService.residenceId());
+
+  residentsWithSelection = computed(() => {
+    const selected = this.selectedResidents();
+    return this.residents().map(resident => ({
+      ...resident,
+      isSelected: selected.has(resident.id)
+    }));
+  });
 
   constructor() {
     // Search con debounce
@@ -132,10 +142,6 @@ export class ResidentsTaskList implements OnInit {
 
     // Actualizar selectAll si todos están seleccionados
     this.selectAll.set(selected.size === this.residents().length);
-  }
-
-  isResidentSelected(residentId: string): boolean {
-    return this.selectedResidents().has(residentId);
   }
 
   navigateToResidentsDetails(event: Event, resident: ResidentOut) {
@@ -318,5 +324,9 @@ export class ResidentsTaskList implements OnInit {
 
   goBack() {
     this.navCtrl.back();
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

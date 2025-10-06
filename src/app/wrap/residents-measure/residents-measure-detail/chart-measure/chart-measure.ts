@@ -25,6 +25,7 @@ import {
   NgApexchartsModule
 } from 'ng-apexcharts';
 import { MeasurementOut } from '../../../../../openapi/generated/models/measurement-out';
+import { PaginatedResponseMeasurementOut } from '../../../../../openapi/generated/models/paginated-response-measurement-out';
 import { MeasurementsService } from '../../../../../openapi/generated/services/measurements.service';
 
 @Component({
@@ -167,18 +168,14 @@ export class ChartMeasure {
     this.measurementsService
       .getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet(params)
       .subscribe({
-        next: (response: any) => {
+        next: (response: PaginatedResponseMeasurementOut) => {
           console.log('Response received:', response);
-
-          // El backend devuelve array directo
-          const residentMeasurements = response.items || response;
-
-          console.log('Loaded last N measurements:', residentMeasurements);
-          this.measurements.set(residentMeasurements);
-          this.configureChart(measurement, residentMeasurements);
+          console.log('Loaded last N measurements:', response.items);
+          this.measurements.set(response.items);
+          this.configureChart(measurement, response.items);
         },
-        error: (error: Error) => {
-          console.error('Error loading measurements:', error);
+        error: () => {
+          console.error('Error loading measurements');
           this.measurements.set([measurement]);
           this.configureChart(measurement, [measurement]);
         }

@@ -28,6 +28,7 @@ import { TaskApplicationDailySummary } from '../../../../openapi/generated/model
 import { UserAssigner } from '../../../../openapi/generated/models/user-assigner';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
+import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
   selector: 'app-residents-task-history',
@@ -58,6 +59,7 @@ export class ResidentsTaskHistory implements OnInit {
   private tasksService = inject(TasksService);
   private residenceStateService = inject(ResidenceStateService);
   private navCtrl = inject(NavController);
+  private authStateService = inject(AuthStateService);
 
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
 
@@ -274,5 +276,9 @@ export class ResidentsTaskHistory implements OnInit {
         assignedById: this.assignedByControl.value // Pasar el filtro actual
       }
     });
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

@@ -7,6 +7,7 @@ import {
   IonToolbar,
   NavController
 } from '@ionic/angular/standalone';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
   selector: 'app-devices',
@@ -16,6 +17,7 @@ import {
 })
 export class Devices {
   private navCtrl = inject(NavController);
+  private authStateService = inject(AuthStateService);
 
   navigateToBluetooth() {
     this.navCtrl.navigateForward('/wrap/devices/bluetooth');
@@ -31,5 +33,9 @@ export class Devices {
 
   navigateToList() {
     this.navCtrl.navigateForward('/wrap/devices/list');
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

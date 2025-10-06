@@ -16,6 +16,9 @@ import {
 } from '@ionic/angular/standalone';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
+import { AuthStateService } from '../../../services/auth-state.service';
+import { PaginatedResponseTaskCategoryOut } from '../../../../openapi/generated/models/paginated-response-task-category-out';
+import { PaginatedResponseTaskTemplateOut } from '../../../../openapi/generated/models/paginated-response-task-template-out';
 import { TaskCategoryOut } from '../../../../openapi/generated/models/task-category-out';
 import { TaskTemplateOut } from '../../../../openapi/generated/models/task-template-out';
 import { forkJoin } from 'rxjs';
@@ -47,6 +50,7 @@ export class ResidentsCategories implements OnInit {
   private navCtrl = inject(NavController);
   private tasksService = inject(TasksService);
   private residenceStateService = inject(ResidenceStateService);
+  private authStateService = inject(AuthStateService);
 
   categories = signal<CategoryWithTasks[]>([]);
   isLoading = signal(false);
@@ -73,8 +77,8 @@ export class ResidentsCategories implements OnInit {
         residence_id: residenceId.toString()
       })
       .subscribe({
-        next: (response: any) => {
-          const categoriesData: TaskCategoryOut[] = response.items || response;
+        next: (response: PaginatedResponseTaskCategoryOut) => {
+          const categoriesData = response.items;
 
           // Cargar tareas para cada categoría
           if (categoriesData.length === 0) {
@@ -92,19 +96,17 @@ export class ResidentsCategories implements OnInit {
           );
 
           forkJoin(taskRequests).subscribe({
-            next: tasksResponses => {
+            next: (tasksResponses: PaginatedResponseTaskTemplateOut[]) => {
               const categoriesWithTasks: CategoryWithTasks[] = categoriesData.map(
-                (category, index) => {
-                  const tasksData: any = tasksResponses[index];
-                  const tasks = tasksData.items || [];
-                  return { ...category, tasks };
-                }
+                (category, index) => ({
+                  ...category,
+                  tasks: tasksResponses[index].items
+                })
               );
               this.categories.set(categoriesWithTasks);
               this.isLoading.set(false);
             },
-            error: (error: Error) => {
-              console.error('Error loading tasks:', error);
+            error: () => {
               // Aún mostrar categorías sin tareas
               const categoriesWithTasks: CategoryWithTasks[] = categoriesData.map(category => ({
                 ...category,
@@ -115,8 +117,7 @@ export class ResidentsCategories implements OnInit {
             }
           });
         },
-        error: (error: Error) => {
-          console.error('Error loading categories:', error);
+        error: () => {
           this.errorMessage.set('Error al cargar las categorías');
           this.isLoading.set(false);
         }
@@ -125,5 +126,9 @@ export class ResidentsCategories implements OnInit {
 
   goBack() {
     this.navCtrl.back();
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

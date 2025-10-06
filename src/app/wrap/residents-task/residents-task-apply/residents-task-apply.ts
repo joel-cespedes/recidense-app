@@ -20,10 +20,12 @@ import {
   ToastController
 } from '@ionic/angular/standalone';
 
+import { PaginatedResponseTaskTemplateOut } from '../../../../openapi/generated/models/paginated-response-task-template-out';
 import { TaskCategoryOut } from '../../../../openapi/generated/models/task-category-out';
 import { TaskTemplateOut } from '../../../../openapi/generated/models/task-template-out';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
+import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
   selector: 'app-residents-task-apply',
@@ -52,6 +54,7 @@ export class ResidentsTaskApply implements OnInit {
   private navCtrl = inject(NavController);
   private router = inject(Router);
   private toastController = inject(ToastController);
+  private authStateService = inject(AuthStateService);
 
   // Signals
   taskTemplates = signal<TaskTemplateOut[]>([]);
@@ -63,6 +66,26 @@ export class ResidentsTaskApply implements OnInit {
   errorMessage = signal<string | null>(null);
 
   residenceId = computed(() => this.residenceStateService.residenceId());
+
+  tasksWithMetadata = computed(() => {
+    const tasks = this.taskTemplates();
+    const categories = this.categories();
+    const selected = this.selectedTasks();
+
+    return tasks.map(task => ({
+      ...task,
+      categoryName: categories.find(c => c.id === task.task_category_id)?.name || '',
+      hasStatuses: !!(
+        task.status1 ||
+        task.status2 ||
+        task.status3 ||
+        task.status4 ||
+        task.status5 ||
+        task.status6
+      ),
+      isSelected: selected.has(task.id)
+    }));
+  });
 
   canApplyTasks = computed(() => {
     const tasks = Array.from(this.selectedTasks());
@@ -125,13 +148,11 @@ export class ResidentsTaskApply implements OnInit {
         size: 100
       })
       .subscribe({
-        next: (response: any) => {
-          const templates = response.items || [];
-          this.taskTemplates.set(templates);
+        next: (response: PaginatedResponseTaskTemplateOut) => {
+          this.taskTemplates.set(response.items);
           this.isLoading.set(false);
         },
-        error: error => {
-          console.error('Error loading task templates:', error);
+        error: () => {
           this.errorMessage.set('Error al cargar tareas');
           this.isLoading.set(false);
         }
@@ -279,5 +300,9 @@ export class ResidentsTaskApply implements OnInit {
     setTimeout(() => {
       (ev as RefresherCustomEvent).detail.complete();
     }, 1000);
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

@@ -16,6 +16,7 @@ import {
   NavController
 } from '@ionic/angular/standalone';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
+import { AuthStateService } from '../../services/auth-state.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
 
 @Component({
@@ -42,6 +43,7 @@ export class Residences implements OnInit {
   private navCtrl = inject(NavController);
   private router = inject(Router);
   private residencesService = inject(ResidencesService);
+  private authStateService = inject(AuthStateService);
   private residenceStateService = inject(ResidenceStateService);
 
   // Signals
@@ -82,5 +84,9 @@ export class Residences implements OnInit {
 
     // Navegar a home con animación de retroceso
     this.navCtrl.navigateBack(['/wrap/home']);
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

@@ -55,6 +55,17 @@ export class ResidentsTaskHistoryDetail implements OnInit {
   residenceId = computed(() => this.residenceStateService.residenceId());
   applications = computed(() => this.detailData()?.applications || []);
 
+  applicationsWithTime = computed(() => {
+    const apps = this.detailData()?.applications || [];
+    return apps.map(app => ({
+      ...app,
+      timeFormatted: new Date(app.assigned_at).toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }));
+  });
+
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state || history.state;

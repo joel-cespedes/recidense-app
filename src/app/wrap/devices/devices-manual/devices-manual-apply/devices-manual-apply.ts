@@ -17,6 +17,7 @@ import {
   ToastController
 } from '@ionic/angular/standalone';
 
+import { MeasurementOut } from '../../../../../openapi/generated/models/measurement-out';
 import { ResidentOut } from '../../../../../openapi/generated/models/resident-out';
 import { MeasurementsService } from '../../../../../openapi/generated/services/measurements.service';
 import { ResidenceStateService } from '../../../../services/residence-state.service';
@@ -171,18 +172,18 @@ export class DevicesManualApply implements OnInit {
         body: body
       })
       .subscribe({
-        next: () => {
+        next: (_measurement: MeasurementOut) => {
           this.isSubmitting.set(false);
           this.showSuccessToast('Medición registrada correctamente');
           setTimeout(() => {
             this.router.navigateByUrl('/wrap/devices');
           }, 2000);
         },
-        error: (error: any) => {
+        error: (error: unknown) => {
           console.error('Error submitting measurement:', error);
           this.isSubmitting.set(false);
           this.showErrorToast(
-            error.error?.message || 'Error al guardar la medición. Intenta de nuevo.'
+            (error as any)?.error?.message || 'Error al guardar la medición. Intenta de nuevo.'
           );
         }
       });

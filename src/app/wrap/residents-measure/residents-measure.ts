@@ -26,6 +26,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MeasurementDailySummary } from '../../../openapi/generated/models/measurement-daily-summary';
 import { PaginatedResponseMeasurementDailySummary } from '../../../openapi/generated/models/paginated-response-measurement-daily-summary';
 import { MeasurementsService } from '../../../openapi/generated/services/measurements.service';
+import { AuthStateService } from '../../services/auth-state.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
 
 @Component({
@@ -56,6 +57,7 @@ import { ResidenceStateService } from '../../services/residence-state.service';
 export class ResidentsMeasure implements OnInit {
   private measurementsService = inject(MeasurementsService);
   private residenceStateService = inject(ResidenceStateService);
+  private authStateService = inject(AuthStateService);
   private navCtrl = inject(NavController);
 
   @ViewChild('datetime', { read: ElementRef }) datetimeRef!: ElementRef;
@@ -256,5 +258,9 @@ export class ResidentsMeasure implements OnInit {
     setTimeout(() => {
       (ev as RefresherCustomEvent).detail.complete();
     }, 1000);
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

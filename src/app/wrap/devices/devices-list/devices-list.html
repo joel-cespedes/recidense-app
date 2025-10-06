@@ -33,28 +33,15 @@
     </div>
     } @else {
     <div class="devices-grid">
-      @for (device of devices(); track device.id) {
+      @for (device of devicesWithLabels(); track device.id) {
       <ion-card class="device-card">
         <div class="device-info">
-          <div class="device-type">{{ getDeviceTypeLabel(device['measurement_type']) }}</div>
+          <div class="device-type">{{ device.typeLabel }}</div>
           <div class="device-name">{{ device.name }}</div>
-          @if (device['mac_address']) {
-          <div class="device-mac">MAC: {{ device['mac_address'] }}</div>
-          } @if (device['manufacturer']) {
-          <div class="device-manufacturer">{{ device['manufacturer'] }}</div>
+          @if (device.mac) {
+          <div class="device-mac">MAC: {{ device.mac }}</div>
           }
         </div>
-        @if (device['is_active']) {
-        <div class="device-status active">
-          <span class="mat-icon">check_circle</span>
-          <span>Activo</span>
-        </div>
-        } @else {
-        <div class="device-status inactive">
-          <span class="mat-icon">cancel</span>
-          <span>Inactivo</span>
-        </div>
-        }
       </ion-card>
       }
     </div>

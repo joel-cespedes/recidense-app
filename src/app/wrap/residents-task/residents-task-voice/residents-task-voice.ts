@@ -102,8 +102,6 @@ export class ResidentsTaskVoice implements OnInit {
   }
 
   async startRecording() {
-    console.log('startRecording called, isRecording:', this.isRecording());
-
     try {
       // Detener cualquier reconocimiento previo que pueda estar corriendo
       try {
@@ -145,35 +143,26 @@ export class ResidentsTaskVoice implements OnInit {
   }
 
   async stopRecording() {
-    console.log('stopRecording called');
-
     // Cambiar el estado visual
     this.isRecording.set(false);
 
     try {
-      console.log('Calling SpeechRecognition.stop()');
       SpeechRecognition.stop(); // Sin await - no bloquear
-      console.log('Stop called, waiting for final results...');
 
       // Esperar 800ms para que lleguen los últimos partialResults
       await new Promise(resolve => setTimeout(resolve, 800));
 
       // Ahora obtener el transcript final
       const currentTranscript = this.transcript();
-      console.log('Final transcript:', currentTranscript);
 
       // Limpiar listeners
       await SpeechRecognition.removeAllListeners();
-      console.log('Listeners removed');
-
       if (currentTranscript) {
-        console.log('Parsing transcript:', currentTranscript);
         await this.parseTranscript(currentTranscript);
       } else {
         this.errorMessage.set('No se capturó ningún audio');
       }
     } catch (error: any) {
-      console.error('Error stopping recording:', error);
       this.errorMessage.set('Error al detener grabación: ' + (error.message || 'Desconocido'));
       SpeechRecognition.removeAllListeners();
     }

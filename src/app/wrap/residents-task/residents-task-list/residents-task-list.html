@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="outlined">
+      <ion-button color="outlined" (click)="logout()">
         <span class="mat-icon">exit_to_app</span>
       </ion-button>
     </ion-buttons>
@@ -95,13 +95,13 @@
       <span class="mat-icon">diversity_1</span>
       <p>No hay residentes</p>
     </div>
-    } @else { @for (resident of residents(); track resident.id) {
+    } @else { @for (resident of residentsWithSelection(); track resident.id) {
 
-    <ion-card [class.selected]="selectionMode() === 'bulk' && isResidentSelected(resident.id)">
+    <ion-card [class.selected]="selectionMode() === 'bulk' && resident.isSelected">
       <button class="icon-card" (click)="navigateToResidentsDetails($event, resident)">
         @if (selectionMode() === 'bulk') {
         <div class="card-checkbox">
-          <ion-checkbox [checked]="isResidentSelected(resident.id)"></ion-checkbox>
+          <ion-checkbox [checked]="resident.isSelected"></ion-checkbox>
         </div>
         }
         <ion-label>

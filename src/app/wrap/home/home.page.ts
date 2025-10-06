@@ -46,4 +46,8 @@ export class HomePage {
     // Usar router.navigateByUrl para evitar que el tab intercepte
     this.router.navigateByUrl(`/wrap/${route}`);
   }
+
+  logout() {
+    this.authStateService.logout();
+  }
 }

@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="outlined">
+      <ion-button color="outlined" (click)="logout()">
         <span class="mat-icon">exit_to_app</span>
       </ion-button>
     </ion-buttons>
@@ -35,22 +35,22 @@
       <span class="mat-icon">error</span>
       <p>{{ errorMessage() }}</p>
     </div>
-    } @else { @if (taskTemplates().length === 0) {
+    } @else { @if (tasksWithMetadata().length === 0) {
     <div class="empty-container">
       <span class="mat-icon">task</span>
       <p>No hay tareas disponibles</p>
     </div>
-    } @else { @for (task of taskTemplates(); track task.id) {
+    } @else { @for (task of tasksWithMetadata(); track task.id) {
 
-    <ion-card [class.selected]="isTaskSelected(task.id)">
+    <ion-card [class.selected]="task.isSelected">
       <div class="task-card">
         <div class="task-header">
           <div class="task-info">
             <div class="task-name">{{ task.name }}</div>
-            <div class="task-category">{{ getCategoryName(task.task_category_id) }}</div>
+            <div class="task-category">{{ task.categoryName }}</div>
           </div>
 
-          @if (hasStatuses(task)) {
+          @if (task.hasStatuses) {
           <!-- Si tiene statuses, mostrar select -->
           <div
             class="task-select-container"
@@ -81,7 +81,7 @@
 
           <div class="task-checkbox">
             <ion-checkbox
-              [checked]="isTaskSelected(task.id)"
+              [checked]="task.isSelected"
               (ionChange)="toggleTaskSelection(task.id)"
               (click)="$event.stopPropagation()"></ion-checkbox>
           </div>

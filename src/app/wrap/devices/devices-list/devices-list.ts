@@ -14,6 +14,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { DeviceOut } from '../../../../openapi/generated/models/device-out';
+import { PaginatedResponseDeviceOut } from '../../../../openapi/generated/models/paginated-response-device-out';
 import { DevicesService } from '../../../../openapi/generated/services/devices.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
 
@@ -46,6 +47,28 @@ export class DevicesList implements OnInit {
   // Computed
   residenceId = computed(() => this.residenceStateService.residenceId());
 
+  devicesWithLabels = computed(() => {
+    const labels: Record<string, string> = {
+      blood_pressure: 'Tensiómetro',
+      pulse_oximeter: 'Oxímetro',
+      scale: 'Báscula',
+      thermometer: 'Termómetro'
+    };
+
+    const icons: Record<string, string> = {
+      blood_pressure: 'favorite',
+      pulse_oximeter: 'water',
+      scale: 'scale',
+      thermometer: 'thermometer'
+    };
+
+    return this.devices().map(device => ({
+      ...device,
+      typeLabel: labels[device.type] || device.type,
+      typeIcon: icons[device.type] || 'hardware_chip'
+    }));
+  });
+
   ngOnInit() {
     this.loadDevices();
   }
@@ -65,27 +88,15 @@ export class DevicesList implements OnInit {
         residence_id: residenceId.toString()
       })
       .subscribe({
-        next: (response: any) => {
-          const devicesData = response.items || response || [];
-          this.devices.set(devicesData);
+        next: (response: PaginatedResponseDeviceOut) => {
+          this.devices.set(response.items);
           this.isLoading.set(false);
         },
-        error: (error: any) => {
-          console.error('Error loading devices:', error);
+        error: () => {
           this.errorMessage.set('Error al cargar dispositivos');
           this.isLoading.set(false);
         }
       });
-  }
-
-  getDeviceTypeLabel(type: string): string {
-    const labels: Record<string, string> = {
-      bp: 'Tensiómetro',
-      spo2: 'Oxímetro',
-      weight: 'Báscula',
-      temperature: 'Termómetro'
-    };
-    return labels[type] || type;
   }
 
   refresh(ev: any) {

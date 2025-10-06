@@ -7,6 +7,7 @@ import {
   IonToolbar,
   NavController
 } from '@ionic/angular/standalone';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
   selector: 'app-residents-task',
@@ -16,6 +17,7 @@ import {
 })
 export class ResidentsTask {
   private navCtrl = inject(NavController);
+  private authStateService = inject(AuthStateService);
 
   navigateToManual() {
     this.navCtrl.navigateForward('/wrap/residents-tasks/manual');
@@ -31,5 +33,9 @@ export class ResidentsTask {
 
   navigateToTask() {
     this.navCtrl.navigateForward('/wrap/residents-tasks/categories');
+  }
+
+  logout() {
+    this.authStateService.logout();
   }
 }

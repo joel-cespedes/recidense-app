@@ -47,13 +47,13 @@
     }
 
     <!-- Lista de tareas por hora -->
-    @for (task of applications(); track task.id) {
+    @for (task of applicationsWithTime(); track task.id) {
     <ion-card>
       <div class="task-card">
         <div class="task-header">
           <div class="task-time">
             <span class="mat-icon">schedule</span>
-            <span class="time">{{ getTimeFromDate(task.assigned_at) }}</span>
+            <span class="time">{{ task.timeFormatted }}</span>
           </div>
           <div class="task-category">{{ task.task_category }}</div>
         </div>
