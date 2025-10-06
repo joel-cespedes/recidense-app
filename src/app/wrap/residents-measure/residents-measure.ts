@@ -29,7 +29,7 @@ import { MeasurementsService } from '../../../openapi/generated/services/measure
 import { ResidenceStateService } from '../../services/residence-state.service';
 
 @Component({
-  selector: 'app-residents',
+  selector: 'app-residents-measure',
   templateUrl: './residents-measure.html',
   styleUrls: ['./residents-measure.scss'],
   imports: [

@@ -64,7 +64,7 @@ export class WrapComponent {
         home: '/wrap/home',
         'residents-measurements': '/wrap/residents-measurements',
         'residents-tasks': '/wrap/residents-tasks',
-        measures: '/wrap/measures'
+        devices: '/wrap/devices'
       };
 
       const rootRoute = tabRoutes[event.tab];

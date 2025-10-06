@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="outlined">
+        <span class="mat-icon">clear_all</span>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button color="outlined">
+        <span class="mat-icon">account_circle</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="title-section center m-b-32">Dispositivos</div>
+  <div class="container p-t-32 m-t-32">
+    <ion-button class="selection" color="primary" expand="block" (click)="navigateToBluetooth()">
+      <span class="mat-icon">bluetooth</span>
+      <span class="label">Registro Bluetooth</span>
+    </ion-button>
+
+    <ion-button class="selection" color="primary" expand="block" (click)="navigateToVoice()">
+      <span class="mat-icon">keyboard_voice</span>
+      <span class="label">Registro por voz</span>
+    </ion-button>
+
+    <ion-button class="selection" color="primary" expand="block" (click)="navigateToManual()">
+      <span class="mat-icon">edit_note</span>
+      <span class="label">Registro manual</span>
+    </ion-button>
+  </div>
+</ion-content>

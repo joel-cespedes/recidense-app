@@ -39,6 +39,7 @@ export class HomePage {
 
   navigateTo(event: Event, route: string) {
     event.preventDefault();
+    console.log(`/wrap/${route}`);
     this.navCtrl.navigateForward(`/wrap/${route}`, {
       animated: true
     });

@@ -1,0 +1,28 @@
+:host {
+  --background: --ion-text-color-home;
+  --ion-color-light: var(--ion-text-color-home);
+  --ion-toolbar-color: var(--text-color-secondaray);
+}
+
+.container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+ion-button.selection {
+  --border-radius: 16px;
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2) !important;
+  height: 80px;
+  margin-bottom: 16px;
+
+  .mat-icon {
+    font-size: 32px;
+  }
+
+  .label {
+    font-size: 18px;
+    margin-left: 22px;
+  }
+}

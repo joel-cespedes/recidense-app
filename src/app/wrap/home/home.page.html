@@ -40,15 +40,15 @@
         </button>
       </ion-card>
       <ion-card>
-        <button class="icon-card" (click)="navigateTo($event, 'residents-tasks')">
+        <button class="icon-card" (click)="navigateTo($event, 'residents-tasks/voice')">
           <span class="mat-icon">fact_check</span>
           <div class="icon-card-title">Tareas</div>
         </button>
       </ion-card>
       <ion-card>
-        <button class="icon-card">
-          <span class="mat-icon">view_day</span>
-          <div class="icon-card-title">Toma de datos</div>
+        <button class="icon-card" (click)="navigateTo($event, 'residents-tasks/history')">
+          <span class="mat-icon">event_repeat</span>
+          <div class="icon-card-title">Historial</div>
         </button>
       </ion-card>
     </div>
@@ -57,7 +57,7 @@
     <div class="list-cards__title">Equipos</div>
   </div>
   <ion-card class="m-b-16">
-    <button class="icon-card">
+    <button class="icon-card" (click)="navigateTo($event, 'devices')">
       <span class="mat-icon">connect_without_contact</span>
       <div class="icon-card-title">Dispositivos</div>
     </button>

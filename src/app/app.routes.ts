@@ -90,9 +90,35 @@ export const routes: Routes = [
           {
             path: 'history/detail',
             loadComponent: () =>
-              import('./wrap/residents-task/residents-task-history/residents-task-history-detail/residents-task-history-detail').then(
-                m => m.ResidentsTaskHistoryDetail
+              import(
+                './wrap/residents-task/residents-task-history/residents-task-history-detail/residents-task-history-detail'
+              ).then(m => m.ResidentsTaskHistoryDetail)
+          }
+        ]
+      },
+      {
+        path: 'devices',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./wrap/devices/devices').then(m => m.Devices)
+          },
+          {
+            path: 'bluetooth',
+            loadComponent: () =>
+              import('./wrap/devices/devices-bluetooth/devices-bluetooth').then(
+                m => m.DevicesBluetooth
               )
+          },
+          {
+            path: 'voice',
+            loadComponent: () =>
+              import('./wrap/devices/devices-voice/devices-voice').then(m => m.DevicesVoice)
+          },
+          {
+            path: 'manual',
+            loadComponent: () =>
+              import('./wrap/devices/devices-manual/devices-manual').then(m => m.DevicesManual)
           }
         ]
       },
