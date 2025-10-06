@@ -5,46 +5,45 @@
         <span class="mat-icon">arrow_back</span>
       </ion-button>
     </ion-buttons>
-    <ion-title>Gráfica de Medición</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div class="title-section center m-b-16">Gráfica de Medición</div>
   <div class="container">
     @if (measurement()) {
-      <div class="chart-container">
-        <h2>{{ measurement()!.resident_full_name || 'Sin nombre' }}</h2>
-        <p class="chart-date">{{ measurement()!.taken_at | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <div class="chart-container">
+      <h2>{{ measurement()!.resident_full_name || 'Sin nombre' }}</h2>
+      <p class="chart-date">{{ measurement()!.taken_at | date : 'dd/MM/yyyy HH:mm' }}</p>
 
-        <div class="chart-controls">
-          <label>Mostrar últimas:</label>
-          <ion-select
-            interface="popover"
-            [value]="measurementLimit()"
-            (ionChange)="onLimitChange(+$event.detail.value)">
-            <ion-select-option [value]="4">4 mediciones</ion-select-option>
-            <ion-select-option [value]="10">10 mediciones</ion-select-option>
-            <ion-select-option [value]="30">30 mediciones</ion-select-option>
-          </ion-select>
-        </div>
-
-        @if (chartConfig().series && chartConfig().series.length > 0) {
-          <apx-chart
-            [series]="chartConfig().series"
-            [chart]="chartConfig().chart"
-            [colors]="chartConfig().colors"
-            [dataLabels]="chartConfig().dataLabels"
-            [stroke]="chartConfig().stroke"
-            [fill]="chartConfig().fill"
-            [xaxis]="chartConfig().xaxis"
-            [yaxis]="chartConfig().yaxis"
-            [grid]="chartConfig().grid"
-            [tooltip]="chartConfig().tooltip"
-          ></apx-chart>
-        } @else {
-          <p>Cargando gráfica...</p>
-        }
+      <div class="chart-controls">
+        <div class="chart-controls__label">Mostrar últimas:</div>
+        <ion-select
+          interface="popover"
+          [value]="measurementLimit()"
+          (ionChange)="onLimitChange(+$event.detail.value)">
+          <ion-select-option [value]="4">4 mediciones</ion-select-option>
+          <ion-select-option [value]="10">10 mediciones</ion-select-option>
+          <ion-select-option [value]="30">30 mediciones</ion-select-option>
+        </ion-select>
       </div>
+
+      @if (chartConfig().series && chartConfig().series.length > 0) {
+      <apx-chart
+        [series]="chartConfig().series"
+        [chart]="chartConfig().chart"
+        [colors]="chartConfig().colors"
+        [dataLabels]="chartConfig().dataLabels"
+        [stroke]="chartConfig().stroke"
+        [fill]="chartConfig().fill"
+        [xaxis]="chartConfig().xaxis"
+        [yaxis]="chartConfig().yaxis"
+        [grid]="chartConfig().grid"
+        [tooltip]="chartConfig().tooltip"></apx-chart>
+      } @else {
+      <p>Cargando gráfica...</p>
+      }
+    </div>
     }
   </div>
 </ion-content>

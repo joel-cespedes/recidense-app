@@ -86,16 +86,17 @@
         @for (device of stat.devices; track device.device_id) {
         <div class="device-section">
           <div class="device-header">
-            <h4>{{ device.device_name }}</h4>
+            <div class="device-header__title">{{ device.device_name }}</div>
           </div>
 
-          @for (period of device.periods; track period.period) {
-          <div class="period-divider">
-            <h1 class="period-label">{{ period.periodLabel }}</h1>
-          </div>
-
-          @for (measurement of period.measurements; track measurement.id) {
-          <div class="measurement-card-item" (click)="navigateToChart(measurement.id)">
+          @for (period of device.periods; track period.period) { @for (measurement of
+          period.measurements; track measurement.id) {
+          <div
+            class="measurement-card-item"
+            (click)="navigateToChart(measurement.id)"
+            (keyup.enter)="navigateToChart(measurement.id)"
+            tabindex="0"
+            role="button">
             <div class="measurement-time">{{ measurement.taken_at | date : 'HH:mm' }}</div>
             <div class="measurement-value">
               @if (stat.type === 'bp') {
