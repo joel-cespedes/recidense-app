@@ -5,11 +5,11 @@
         <span class="mat-icon">arrow_back</span>
       </ion-button>
     </ion-buttons>
-    <ion-title>Mediciones del Día</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div class="title-section center m-b-16">Mediciones del Día</div>
   <div class="container">
     @if (isLoading()) {
     <div class="loading-container">
@@ -24,7 +24,9 @@
     } @else if (measurements().length > 0) {
     <div class="measurement-detail">
       <div class="resident-info">
-        <h2>{{ measurements()[0].resident_full_name || 'Sin nombre' }}</h2>
+        <div class="resident-info__name">
+          {{ measurements()[0].resident_full_name || 'Sin nombre' }}
+        </div>
         @if (measurements()[0].bed_name) {
         <p>
           <strong>Cama:</strong>
@@ -41,7 +43,7 @@
       @for (stat of measurementStats(); track stat.type) {
       <div class="measurement-stat-card">
         <div class="stat-header">
-          <h3>{{ stat.label }}</h3>
+          <div class="stat-header__title">{{ stat.label }}</div>
         </div>
 
         @if (stat.type === 'bp') {
@@ -106,8 +108,7 @@
               {{ measurement.recorded_by_name || measurement.recorded_by }}
             </div>
           </div>
-          }
-          }
+          } }
         </div>
         }
       </div>

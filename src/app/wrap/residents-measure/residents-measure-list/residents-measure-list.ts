@@ -36,7 +36,7 @@ import { MeasurementDailySummary } from '../../../../openapi/generated/models/me
 import { PaginatedResponseMeasurementDailySummary } from '../../../../openapi/generated/models/paginated-response-measurement-daily-summary';
 
 @Component({
-  selector: 'app-residents',
+  selector: 'app-residents-measure-list',
   templateUrl: './residents-measure-list.html',
   styleUrls: ['./residents-measure-list.scss'],
   imports: [

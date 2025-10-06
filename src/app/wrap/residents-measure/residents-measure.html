@@ -19,7 +19,7 @@
   </ion-refresher>
 
   <div class="container">
-    <div class="title-section center m-b-32">Últimos</div>
+    <div class="title-section center m-b-25">Últimos</div>
     <div class="btns-raunded">
       <button class="rounded" [class.active]="selectedPeriod() === 1" (click)="selectPeriod(1)">
         <div class="rounded__number">1</div>
@@ -84,29 +84,27 @@
               <span>- {{ summary.measurement_count }} mediciones</span>
             </div>
             <div class="info-resident__icons">
-              @for (type of summary.measurement_types; track type) {
-                @if (type === 'bp') {
-                <div class="icon-svg">
-                  <img src="assets/icon/electro-white.svg" alt="Presión" />
-                </div>
-                } @if (type === 'spo2') {
-                <div class="icon-svg">
-                  <img src="assets/icon/oxygen-white.svg" alt="SpO2" />
-                </div>
-                } @if (type === 'weight') {
-                <div class="icon-svg">
-                  <img src="assets/icon/weight-white.svg" alt="Peso" />
-                </div>
-                } @if (type === 'temperature') {
-                <div class="icon-svg">
-                  <img src="assets/icon/temperature-white.svg" alt="Temperatura" />
-                </div>
-                } @if (type === 'pulse') {
-                <div class="icon-svg">
-                  <img src="assets/icon/heart-white.svg" alt="Pulso" />
-                </div>
-                }
-              }
+              @for (type of summary.measurement_types; track type) { @if (type === 'bp') {
+              <div class="icon-svg">
+                <img src="assets/icon/electro-white.svg" alt="Presión" />
+              </div>
+              } @if (type === 'spo2') {
+              <div class="icon-svg">
+                <img src="assets/icon/oxygen-white.svg" alt="SpO2" />
+              </div>
+              } @if (type === 'weight') {
+              <div class="icon-svg">
+                <img src="assets/icon/weight-white.svg" alt="Peso" />
+              </div>
+              } @if (type === 'temperature') {
+              <div class="icon-svg">
+                <img src="assets/icon/temperature-white.svg" alt="Temperatura" />
+              </div>
+              } @if (type === 'pulse') {
+              <div class="icon-svg">
+                <img src="assets/icon/heart-white.svg" alt="Pulso" />
+              </div>
+              } }
             </div>
           </div>
           <div class="content-right">
