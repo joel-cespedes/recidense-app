@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular/standalone';
 import { AuthStateService } from '../../services/auth-state.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
@@ -19,6 +20,7 @@ import {
   imports: [IonHeader, IonToolbar, IonContent, IonButtons, IonButton, IonCard, IonContent]
 })
 export class HomePage {
+  private router = inject(Router);
   private navCtrl = inject(NavController);
   private authStateService = inject(AuthStateService);
   private residenceStateService = inject(ResidenceStateService);
@@ -39,9 +41,9 @@ export class HomePage {
 
   navigateTo(event: Event, route: string) {
     event.preventDefault();
+    event.stopPropagation();
     console.log(`/wrap/${route}`);
-    this.navCtrl.navigateForward(`/wrap/${route}`, {
-      animated: true
-    });
+    // Usar router.navigateByUrl para evitar que el tab intercepte
+    this.router.navigateByUrl(`/wrap/${route}`);
   }
 }

@@ -117,8 +117,27 @@ export const routes: Routes = [
           },
           {
             path: 'manual',
-            loadComponent: () =>
-              import('./wrap/devices/devices-manual/devices-manual').then(m => m.DevicesManual)
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./wrap/devices/devices-manual/devices-manual').then(m => m.DevicesManual)
+              },
+              {
+                path: 'list',
+                loadComponent: () =>
+                  import('./wrap/devices/devices-manual/devices-manual-list/devices-manual-list').then(
+                    m => m.DevicesManualList
+                  )
+              },
+              {
+                path: 'apply',
+                loadComponent: () =>
+                  import('./wrap/devices/devices-manual/devices-manual-apply/devices-manual-apply').then(
+                    m => m.DevicesManualApply
+                  )
+              }
+            ]
           }
         ]
       },

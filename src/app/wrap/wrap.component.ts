@@ -59,7 +59,7 @@ export class WrapComponent {
         ionContent.scrollToTop(300);
       }
     } else {
-      // Si cambias de tab, ir a la raíz de ese tab
+      // Si cambias de tab, siempre ir a la raíz de ese tab
       const tabRoutes: Record<string, string> = {
         home: '/wrap/home',
         'residents-measurements': '/wrap/residents-measurements',

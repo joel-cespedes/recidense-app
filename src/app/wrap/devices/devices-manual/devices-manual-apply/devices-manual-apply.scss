@@ -1,0 +1,113 @@
+:host {
+  --ion-color-light: var(--ion-text-color-home);
+  --ion-toolbar-color: var(--text-color-secondaray);
+  background: linear-gradient(-40deg, #dbe9f7 0%, #dbe9f7 60%, #ffff 100%) !important;
+}
+
+.container {
+  padding: 24px;
+}
+
+.resident-info {
+  background: var(--gradient-primary-invert);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
+  margin-bottom: 24px;
+
+  .resident-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ion-text-color-home);
+    margin-bottom: 8px;
+  }
+
+  .resident-bed {
+    font-size: 14px;
+    color: var(--ion-text-color-home);
+    opacity: 0.8;
+  }
+}
+
+ion-segment {
+  --background: #f0f0f0;
+  border-radius: 30px;
+  background-color: #ffffff;
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+ion-segment-button {
+  --background: transparent;
+  --background-checked: transparent;
+  --background-hover: transparent;
+  --color: #000000;
+  --color-checked: #ffffff;
+  --indicator-height: 100%;
+  border-radius: 30px;
+  min-height: 40px;
+  transition: all 0.3s ease;
+  font-size: 12px;
+  padding: 0 8px;
+
+  &::part(indicator-background) {
+    background: var(--gradient-primary);
+    border-radius: 30px;
+  }
+
+  &::part(native) {
+    color: #000000;
+  }
+
+  &.segment-button-checked::part(native) {
+    color: #ffffff;
+  }
+}
+
+.device-forms {
+  margin-top: 24px;
+}
+
+.measurement-form {
+  background: var(--gradient-primary-invert);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
+
+  .form-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--ion-text-color-home);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    ion-label {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: block;
+      color: var(--ion-text-color-home);
+    }
+
+    ion-input {
+      --background: rgba(255, 255, 255, 0.9);
+      --color: var(--ion-text-color);
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 8px;
+      font-size: 16px;
+    }
+  }
+}
+
+ion-button {
+  --border-radius: 12px;
+  height: 48px;
+  font-weight: 600;
+}

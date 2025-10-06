@@ -1,0 +1,139 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="title-section center m-b-16">Registro Manual</div>
+
+  <div class="container">
+    @if (resident()) {
+    <div class="resident-info">
+      <div class="resident-name">{{ resident()!.full_name }}</div>
+      <div class="resident-bed">
+        {{ resident()!.bed_name ? 'Cama: ' + resident()!.bed_name : 'Sin cama asignada' }}
+      </div>
+    </div>
+
+    <ion-segment
+      [value]="selectedDevice()"
+      (ionChange)="onSegmentChange($event)"
+      color="primary"
+      class="m-t-32 m-b-32">
+      <ion-segment-button value="blood_pressure">
+        <ion-label>Tensiómetro</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="oximeter">
+        <ion-label>Oxímetro</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="scale">
+        <ion-label>Báscula</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="thermometer">
+        <ion-label>Termómetro</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <div class="device-forms">
+      @if (selectedDevice() === 'blood_pressure') {
+      <form [formGroup]="bloodPressureForm" class="measurement-form">
+        <div class="form-title">Medición de Presión Arterial</div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Sistólica (mmHg) *</ion-label>
+          <ion-input
+            type="number"
+            formControlName="systolic"
+            placeholder="Ej: 120"
+            min="0"></ion-input>
+        </div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Diastólica (mmHg) *</ion-label>
+          <ion-input
+            type="number"
+            formControlName="diastolic"
+            placeholder="Ej: 80"
+            min="0"></ion-input>
+        </div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Pulso (ppm)</ion-label>
+          <ion-input
+            type="number"
+            formControlName="pulse"
+            placeholder="Ej: 70"
+            min="0"></ion-input>
+        </div>
+      </form>
+      } @if (selectedDevice() === 'oximeter') {
+      <form [formGroup]="oximeterForm" class="measurement-form">
+        <div class="form-title">Medición de Oxímetro</div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Saturación de Oxígeno (%) *</ion-label>
+          <ion-input
+            type="number"
+            formControlName="oxygen_saturation"
+            placeholder="Ej: 98"
+            min="0"
+            max="100"></ion-input>
+        </div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Pulso (ppm)</ion-label>
+          <ion-input
+            type="number"
+            formControlName="pulse"
+            placeholder="Ej: 70"
+            min="0"></ion-input>
+        </div>
+      </form>
+      } @if (selectedDevice() === 'scale') {
+      <form [formGroup]="scaleForm" class="measurement-form">
+        <div class="form-title">Medición de Peso</div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Peso (kg) *</ion-label>
+          <ion-input
+            type="number"
+            formControlName="weight"
+            placeholder="Ej: 70.5"
+            min="0"
+            step="0.1"></ion-input>
+        </div>
+      </form>
+      } @if (selectedDevice() === 'thermometer') {
+      <form [formGroup]="thermometerForm" class="measurement-form">
+        <div class="form-title">Medición de Temperatura</div>
+
+        <div class="form-group">
+          <ion-label position="stacked">Temperatura (°C) *</ion-label>
+          <ion-input
+            type="number"
+            formControlName="temperature"
+            placeholder="Ej: 36.5"
+            min="30"
+            max="45"
+            step="0.1"></ion-input>
+        </div>
+      </form>
+      }
+
+      <ion-button
+        expand="block"
+        color="primary"
+        class="m-t-32"
+        (click)="submitMeasurement()"
+        [disabled]="getCurrentForm().invalid">
+        Guardar Medición
+      </ion-button>
+    </div>
+    }
+  </div>
+</ion-content>
