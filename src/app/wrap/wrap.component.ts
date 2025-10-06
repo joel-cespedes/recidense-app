@@ -1,63 +1,20 @@
-import { Component, inject, computed } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
-  IonButton,
-  IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonList,
-  IonRefresher,
-  IonRefresherContent,
-  IonRouterOutlet,
-  IonTab,
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonTitle,
-  IonToolbar,
-  RefresherCustomEvent,
-  NavController
+  NavController,
+  RefresherCustomEvent
 } from '@ionic/angular/standalone';
-import { ResidentsMeasure } from './residents-measure/residents-measure';
 import { ResidenceStateService } from '../services/residence-state.service';
 
 @Component({
   selector: 'app-wrap',
   templateUrl: './wrap.component.html',
   styleUrls: ['./wrap.component.scss'],
-  imports: [
-    CommonModule,
-    IonRouterOutlet,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonRefresher,
-    IonRefresherContent,
-    IonList,
-    IonButtons,
-    IonButton,
-    IonIcon,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonContent,
-    IonIcon,
-    IonTab,
-    IonTabBar,
-    IonTabButton,
-    IonTabs,
-    ResidentsMeasure
-  ]
+  imports: [CommonModule, IonTabBar, IonTabButton, IonTabs]
 })
 export class WrapComponent {
   private residenceStateService = inject(ResidenceStateService);
@@ -103,11 +60,11 @@ export class WrapComponent {
       }
     } else {
       // Si cambias de tab, ir a la raíz de ese tab
-      const tabRoutes: { [key: string]: string } = {
-        'home': '/wrap/home',
+      const tabRoutes: Record<string, string> = {
+        home: '/wrap/home',
         'residents-measurements': '/wrap/residents-measurements',
         'residents-tasks': '/wrap/residents-tasks',
-        'measures': '/wrap/measures'
+        measures: '/wrap/measures'
       };
 
       const rootRoute = tabRoutes[event.tab];

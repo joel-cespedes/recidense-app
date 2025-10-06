@@ -1,10 +1,8 @@
 import { Component, computed, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
-import { DatePipe } from '@angular/common';
 
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
   IonCard,
@@ -12,31 +10,25 @@ import {
   IonContent,
   IonDatetime,
   IonHeader,
-  IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonItem,
   IonLabel,
-  IonList,
   IonModal,
   IonRefresher,
   IonRefresherContent,
   IonSearchbar,
   IonSegment,
   IonSegmentButton,
-  IonSelect,
-  IonSelectOption,
   IonSpinner,
-  IonTitle,
   IonToolbar,
   NavController,
   RefresherCustomEvent
 } from '@ionic/angular/standalone';
 
+import { PaginatedResponseResidentOut } from '../../../../openapi/generated/models/paginated-response-resident-out';
+import { ResidentOut } from '../../../../openapi/generated/models/resident-out';
 import { ResidentsService } from '../../../../openapi/generated/services/residents.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
-import { ResidentOut } from '../../../../openapi/generated/models/resident-out';
-import { PaginatedResponseResidentOut } from '../../../../openapi/generated/models/paginated-response-resident-out';
 
 @Component({
   selector: 'app-residents-task-list',
@@ -46,28 +38,20 @@ import { PaginatedResponseResidentOut } from '../../../../openapi/generated/mode
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonRefresher,
     IonRefresherContent,
-    IonList,
     IonButtons,
     IonButton,
     IonSearchbar,
     IonSpinner,
-    IonItem,
     IonLabel,
-    IonAvatar,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonSelect,
-    IonSelectOption,
     IonDatetime,
-    IonIcon,
     IonModal,
     IonCard,
     IonCheckbox,
-    DatePipe,
     IonSegment,
     IonSegmentButton
   ]

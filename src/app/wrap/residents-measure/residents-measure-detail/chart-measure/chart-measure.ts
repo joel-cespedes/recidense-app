@@ -1,20 +1,31 @@
-import { Component, inject, input, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, effect, inject, input, signal } from '@angular/core';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
   IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
   IonSelect,
   IonSelectOption,
+  IonToolbar,
   NavController
 } from '@ionic/angular/standalone';
-import { NgApexchartsModule, ApexChart, ApexDataLabels, ApexStroke, ApexFill, ApexXAxis, ApexYAxis, ApexGrid, ApexTooltip, ApexAxisChartSeries, ApexNonAxisChartSeries } from 'ng-apexcharts';
-import { MeasurementsService } from '../../../../../openapi/generated/services/measurements.service';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexDataLabels,
+  ApexFill,
+  ApexGrid,
+  ApexNonAxisChartSeries,
+  ApexStroke,
+  ApexTooltip,
+  ApexXAxis,
+  ApexYAxis,
+  NgApexchartsModule
+} from 'ng-apexcharts';
 import { MeasurementOut } from '../../../../../openapi/generated/models/measurement-out';
-import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { MeasurementsService } from '../../../../../openapi/generated/services/measurements.service';
 
 @Component({
   selector: 'app-chart-measure',
@@ -24,7 +35,6 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
     CommonModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonButtons,
     IonButton,
@@ -107,7 +117,7 @@ export class ChartMeasure {
 
   constructor() {
     // Obtener resident_id y date del state de navegación
-    const state = (window.history.state as any);
+    const state = window.history.state as any;
     if (state) {
       this.residentId.set(state.resident_id || '');
       this.selectedDate.set(state.date || '');
@@ -123,18 +133,20 @@ export class ChartMeasure {
 
   loadMeasurement(measurementId: string) {
     // Cargar la medición específica
-    this.measurementsService.getMeasurementMeasurementsMeasurementIdGet({
-      measurement_id: measurementId
-    }).subscribe({
-      next: (measurement: MeasurementOut) => {
-        this.measurement.set(measurement);
-        // Cargar el historial de mediciones del mismo residente
-        this.loadMeasurementHistory(measurement);
-      },
-      error: (error: Error) => {
-        console.error('Error loading measurement:', error);
-      }
-    });
+    this.measurementsService
+      .getMeasurementMeasurementsMeasurementIdGet({
+        measurement_id: measurementId
+      })
+      .subscribe({
+        next: (measurement: MeasurementOut) => {
+          this.measurement.set(measurement);
+          // Cargar el historial de mediciones del mismo residente
+          this.loadMeasurementHistory(measurement);
+        },
+        error: (error: Error) => {
+          console.error('Error loading measurement:', error);
+        }
+      });
   }
 
   loadMeasurementHistory(measurement: MeasurementOut) {
@@ -146,29 +158,31 @@ export class ChartMeasure {
       residence_id: measurement.residence_id,
       type: measurement.type,
       size: limit,
-      sort_order: 'desc' as 'desc'
+      sort_order: 'desc' as const
     };
 
     console.log('Loading last N measurements with params:', params);
 
     // Usar el endpoint específico de mediciones por residente
-    this.measurementsService.getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet(params).subscribe({
-      next: (response: any) => {
-        console.log('Response received:', response);
+    this.measurementsService
+      .getMeasurementsByResidentMeasurementsResidentsResidentIdMeasurementsGet(params)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Response received:', response);
 
-        // El backend devuelve array directo
-        const residentMeasurements = response.items || response;
+          // El backend devuelve array directo
+          const residentMeasurements = response.items || response;
 
-        console.log('Loaded last N measurements:', residentMeasurements);
-        this.measurements.set(residentMeasurements);
-        this.configureChart(measurement, residentMeasurements);
-      },
-      error: (error: Error) => {
-        console.error('Error loading measurements:', error);
-        this.measurements.set([measurement]);
-        this.configureChart(measurement, [measurement]);
-      }
-    });
+          console.log('Loaded last N measurements:', residentMeasurements);
+          this.measurements.set(residentMeasurements);
+          this.configureChart(measurement, residentMeasurements);
+        },
+        error: (error: Error) => {
+          console.error('Error loading measurements:', error);
+          this.measurements.set([measurement]);
+          this.configureChart(measurement, [measurement]);
+        }
+      });
   }
 
   onLimitChange(newLimit: number) {
@@ -196,13 +210,17 @@ export class ChartMeasure {
     // Crear categorías del eje X (fecha + hora)
     const categories = sortedMeasurements.map(m => {
       const date = new Date(m.taken_at);
-      return date.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit'
-      }) + ' ' + date.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      return (
+        date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit'
+        }) +
+        ' ' +
+        date.toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      );
     });
 
     console.log('Categories (date + time):', categories);

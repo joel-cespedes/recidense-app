@@ -1,19 +1,19 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController, IonSpinner } from '@ionic/angular/standalone';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
+  IonAvatar,
+  IonButton,
+  IonButtons,
   IonContent,
-  IonList,
+  IonHeader,
   IonItem,
   IonLabel,
-  IonAvatar,
-  IonButtons,
-  IonButton,
-  IonIcon,
-  IonSearchbar
+  IonList,
+  IonSearchbar,
+  IonSpinner,
+  IonTitle,
+  IonToolbar,
+  NavController
 } from '@ionic/angular/standalone';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
@@ -34,7 +34,6 @@ import { ResidenceStateService } from '../../services/residence-state.service';
     IonAvatar,
     IonButtons,
     IonButton,
-    IonIcon,
     IonSearchbar,
     IonSpinner
   ]
@@ -59,11 +58,11 @@ export class Residences implements OnInit {
     this.errorMessage.set(null);
 
     this.residencesService.myResidencesResidencesMineGet().subscribe({
-      next: (data) => {
+      next: data => {
         this.residences.set(data);
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading residences:', error);
         this.errorMessage.set('Error al cargar las residencias');
         this.isLoading.set(false);

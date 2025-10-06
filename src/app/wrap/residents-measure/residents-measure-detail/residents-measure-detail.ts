@@ -1,32 +1,22 @@
-import { Component, inject, input, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
   IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
   IonSpinner,
+  IonToolbar,
   NavController
 } from '@ionic/angular/standalone';
-import { MeasurementsService } from '../../../../openapi/generated/services/measurements.service';
 import { MeasurementOut } from '../../../../openapi/generated/models/measurement-out';
+import { MeasurementsService } from '../../../../openapi/generated/services/measurements.service';
 
 @Component({
   selector: 'app-residents-details',
   templateUrl: './residents-measure-detail.html',
   styleUrls: ['./residents-measure-detail.scss'],
-  imports: [
-    CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButtons,
-    IonButton,
-    IonSpinner
-  ]
+  imports: [CommonModule, IonHeader, IonToolbar, IonContent, IonButtons, IonButton, IonSpinner]
 })
 export class ResidentsDetail {
   resident_id = input.required<string>();

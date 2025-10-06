@@ -1,29 +1,27 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
-  IonButton,
-  IonCard,
-  IonSpinner,
   IonAlert,
-  IonModal,
-  IonRadioGroup,
-  IonRadio,
-  IonList,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonContent,
+  IonHeader,
   IonItem,
-  IonLabel,
+  IonList,
+  IonModal,
+  IonRadio,
+  IonRadioGroup,
+  IonSpinner,
+  IonToolbar,
   NavController,
   ToastController
 } from '@ionic/angular/standalone';
-import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 
+import { VoiceParseResponse } from '../../../../openapi/generated/models/voice-parse-response';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
-import { VoiceParseResponse } from '../../../../openapi/generated/models/voice-parse-response';
 
 @Component({
   selector: 'app-residents-task-voice',
@@ -33,7 +31,6 @@ import { VoiceParseResponse } from '../../../../openapi/generated/models/voice-p
     FormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonButtons,
     IonButton,
@@ -44,11 +41,10 @@ import { VoiceParseResponse } from '../../../../openapi/generated/models/voice-p
     IonRadioGroup,
     IonRadio,
     IonList,
-    IonItem,
-    IonLabel
+    IonItem
   ]
 })
-export class ResidentsTaskVoice {
+export class ResidentsTaskVoice implements OnInit {
   private navCtrl = inject(NavController);
   private tasksService = inject(TasksService);
   private residenceStateService = inject(ResidenceStateService);
@@ -124,7 +120,7 @@ export class ResidentsTaskVoice {
       this.errorMessage.set(null);
 
       // Listener para capturar resultados parciales
-      await SpeechRecognition.addListener('partialResults', (data) => {
+      await SpeechRecognition.addListener('partialResults', data => {
         console.log('partialResults:', data);
         if (data.matches && data.matches.length > 0) {
           this.transcript.set(data.matches[0]);
@@ -208,7 +204,11 @@ export class ResidentsTaskVoice {
           if (response.success) {
             // Match único - mostrar confirmación
             this.showConfirmAlert.set(true);
-          } else if (response.resident_options || response.task_options || response.status_options) {
+          } else if (
+            response.resident_options ||
+            response.task_options ||
+            response.status_options
+          ) {
             // Hay opciones para seleccionar
             this.showOptionsModal.set(true);
           } else {

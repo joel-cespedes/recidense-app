@@ -3,37 +3,30 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
+  IonCard,
   IonContent,
   IonDatetime,
   IonHeader,
-  IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonItem,
   IonLabel,
-  IonList,
   IonModal,
   IonRefresher,
   IonRefresherContent,
   IonSearchbar,
-  IonSelect,
-  IonSelectOption,
   IonSpinner,
-  IonTitle,
   IonToolbar,
-  RefresherCustomEvent,
-  IonCard,
-  NavController
+  NavController,
+  RefresherCustomEvent
 } from '@ionic/angular/standalone';
 
-import { MeasurementsService } from '../../../openapi/generated/services/measurements.service';
-import { ResidenceStateService } from '../../services/residence-state.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MeasurementDailySummary } from '../../../openapi/generated/models/measurement-daily-summary';
 import { PaginatedResponseMeasurementDailySummary } from '../../../openapi/generated/models/paginated-response-measurement-daily-summary';
+import { MeasurementsService } from '../../../openapi/generated/services/measurements.service';
+import { ResidenceStateService } from '../../services/residence-state.service';
 
 @Component({
   selector: 'app-residents',
@@ -43,24 +36,17 @@ import { PaginatedResponseMeasurementDailySummary } from '../../../openapi/gener
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonRefresher,
     IonRefresherContent,
-    IonList,
     IonButtons,
     IonButton,
     IonSearchbar,
     IonSpinner,
-    IonItem,
     IonLabel,
-    IonAvatar,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonSelect,
-    IonSelectOption,
     IonDatetime,
-    IonIcon,
     IonModal,
     IonCard,
     CommonModule,
@@ -110,9 +96,12 @@ export class ResidentsMeasure implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    this.navCtrl.navigateForward(`/wrap/residents-measurements/${summary.resident_id}/${summary.date}`, {
-      animated: true
-    });
+    this.navCtrl.navigateForward(
+      `/wrap/residents-measurements/${summary.resident_id}/${summary.date}`,
+      {
+        animated: true
+      }
+    );
   }
 
   private resetFilters() {

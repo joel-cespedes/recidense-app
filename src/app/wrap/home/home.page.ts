@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { NavController } from '@ionic/angular/standalone';
 import { AuthStateService } from '../../services/auth-state.service';
 import { ResidenceStateService } from '../../services/residence-state.service';
@@ -7,24 +7,8 @@ import {
   IonButton,
   IonButtons,
   IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonModal,
-  IonRefresher,
-  IonRefresherContent,
-  IonTab,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
 
@@ -32,33 +16,7 @@ import {
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonRefresher,
-    IonRefresherContent,
-    IonList,
-    IonModal,
-    IonButtons,
-    IonButton,
-    IonIcon,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonContent,
-    IonIcon,
-    IonTab,
-    IonTabBar,
-    IonTabButton,
-    IonTabs,
-    IonItem,
-    IonLabel,
-    IonList
-  ]
+  imports: [IonHeader, IonToolbar, IonContent, IonButtons, IonButton, IonCard, IonContent]
 })
 export class HomePage {
   private navCtrl = inject(NavController);
@@ -75,6 +33,13 @@ export class HomePage {
   navigateToResidences(event: Event) {
     event.preventDefault();
     this.navCtrl.navigateForward('/wrap/home/select-residences', {
+      animated: true
+    });
+  }
+
+  navigateTo(event: Event, route: string) {
+    event.preventDefault();
+    this.navCtrl.navigateForward(`/wrap/${route}`, {
       animated: true
     });
   }

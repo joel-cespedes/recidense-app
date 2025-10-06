@@ -1,7 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
-import { debounceTime } from 'rxjs';
 import {
   IonButton,
   IonButtons,
@@ -18,17 +17,17 @@ import {
   IonSelect,
   IonSelectOption,
   IonSpinner,
-  IonTitle,
   IonToolbar,
   NavController,
   RefresherCustomEvent
 } from '@ionic/angular/standalone';
+import { debounceTime } from 'rxjs';
 
+import { PaginatedResponseTaskApplicationDailySummary } from '../../../../openapi/generated/models/paginated-response-task-application-daily-summary';
+import { TaskApplicationDailySummary } from '../../../../openapi/generated/models/task-application-daily-summary';
+import { UserAssigner } from '../../../../openapi/generated/models/user-assigner';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
-import { TaskApplicationDailySummary } from '../../../../openapi/generated/models/task-application-daily-summary';
-import { PaginatedResponseTaskApplicationDailySummary } from '../../../../openapi/generated/models/paginated-response-task-application-daily-summary';
-import { UserAssigner } from '../../../../openapi/generated/models/user-assigner';
 
 @Component({
   selector: 'app-residents-task-history',
@@ -38,7 +37,6 @@ import { UserAssigner } from '../../../../openapi/generated/models/user-assigner
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonButtons,
     IonButton,
@@ -126,14 +124,16 @@ export class ResidentsTaskHistory implements OnInit {
     const residenceId = this.residenceId();
     if (!residenceId) return;
 
-    this.tasksService.getUserAssignersTasksUsersAssignersGet({ residence_id: residenceId.toString() }).subscribe({
-      next: (users: UserAssigner[]) => {
-        this.assigners.set(users);
-      },
-      error: (error: Error) => {
-        console.error('Error loading assigners:', error);
-      }
-    });
+    this.tasksService
+      .getUserAssignersTasksUsersAssignersGet({ residence_id: residenceId.toString() })
+      .subscribe({
+        next: (users: UserAssigner[]) => {
+          this.assigners.set(users);
+        },
+        error: (error: Error) => {
+          console.error('Error loading assigners:', error);
+        }
+      });
   }
 
   goBack() {
@@ -189,7 +189,7 @@ export class ResidentsTaskHistory implements OnInit {
     }
   }
 
-  loadSummaries(reset: boolean = false) {
+  loadSummaries(reset = false) {
     const residenceId = this.residenceId();
     if (!residenceId) {
       this.errorMessage.set('No hay residencia seleccionada');

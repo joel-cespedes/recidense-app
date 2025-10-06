@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
 import {
+  IonButton,
+  IonButtons,
+  IonContent,
   IonHeader,
   IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
-  IonButton,
   NavController
 } from '@ionic/angular/standalone';
 
@@ -13,7 +12,7 @@ import {
   selector: 'app-residents-task',
   templateUrl: './residents-task.html',
   styleUrls: ['./residents-task.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton]
+  imports: [IonHeader, IonToolbar, IonContent, IonButtons, IonButton]
 })
 export class ResidentsTask {
   private navCtrl = inject(NavController);

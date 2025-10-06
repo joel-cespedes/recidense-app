@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -14,17 +14,16 @@ import {
   IonSelect,
   IonSelectOption,
   IonSpinner,
-  IonTitle,
   IonToolbar,
   NavController,
   RefresherCustomEvent,
   ToastController
 } from '@ionic/angular/standalone';
 
+import { TaskCategoryOut } from '../../../../openapi/generated/models/task-category-out';
+import { TaskTemplateOut } from '../../../../openapi/generated/models/task-template-out';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { ResidenceStateService } from '../../../services/residence-state.service';
-import { TaskTemplateOut } from '../../../../openapi/generated/models/task-template-out';
-import { TaskCategoryOut } from '../../../../openapi/generated/models/task-category-out';
 
 @Component({
   selector: 'app-residents-task-apply',
@@ -35,7 +34,6 @@ import { TaskCategoryOut } from '../../../../openapi/generated/models/task-categ
     FormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonRefresher,
     IonRefresherContent,
@@ -146,7 +144,14 @@ export class ResidentsTaskApply implements OnInit {
   }
 
   hasStatuses(task: TaskTemplateOut): boolean {
-    return !!(task.status1 || task.status2 || task.status3 || task.status4 || task.status5 || task.status6);
+    return !!(
+      task.status1 ||
+      task.status2 ||
+      task.status3 ||
+      task.status4 ||
+      task.status5 ||
+      task.status6
+    );
   }
 
   isTaskSelected(taskId: string): boolean {
@@ -205,7 +210,7 @@ export class ResidentsTaskApply implements OnInit {
     this.isLoading.set(true);
 
     // Crear mapeo de task_template_id → status_text (solo para tareas con status)
-    const taskStatuses: { [key: string]: string } = {};
+    const taskStatuses: Record<string, string> = {};
     taskTemplateIds.forEach(taskId => {
       const task = this.taskTemplates().find(t => t.id === taskId);
       if (task && this.hasStatuses(task)) {

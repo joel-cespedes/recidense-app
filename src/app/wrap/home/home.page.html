@@ -28,13 +28,13 @@
     <div class="list-cards__title">Acciones</div>
     <div class="list-cards__content">
       <ion-card>
-        <button class="icon-card">
-          <span class="mat-icon">view_day</span>
+        <button class="icon-card" (click)="navigateTo($event, 'residents-measurements')">
+          <span class="mat-icon">stacked_line_chart</span>
           <div class="icon-card-title">Medidas diarias</div>
         </button>
       </ion-card>
       <ion-card>
-        <button class="icon-card">
+        <button class="icon-card" (click)="navigateTo($event, 'residents')">
           <span class="mat-icon">diversity_1</span>
           <div class="icon-card-title">Residentes</div>
         </button>
@@ -47,7 +47,7 @@
       </ion-card>
       <ion-card>
         <button class="icon-card">
-          <span class="mat-icon">stacked_line_chart</span>
+          <span class="mat-icon">view_day</span>
           <div class="icon-card-title">Toma de datos</div>
         </button>
       </ion-card>
