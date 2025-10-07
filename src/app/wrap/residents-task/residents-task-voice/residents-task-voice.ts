@@ -107,6 +107,7 @@ export class ResidentsTaskVoice implements OnInit {
       try {
         SpeechRecognition.stop();
       } catch (e) {
+        console.log('Error stopping recording:', e);
         // Ignorar si no hay nada corriendo
       }
 

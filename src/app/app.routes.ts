@@ -93,6 +93,20 @@ export const routes: Routes = [
               import(
                 './wrap/residents-task/residents-task-history/residents-task-history-detail/residents-task-history-detail'
               ).then(m => m.ResidentsTaskHistoryDetail)
+          },
+          {
+            path: 'chronology/list',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-chronology-list/residents-chronology-list').then(
+                m => m.ResidentsChronologyList
+              )
+          },
+          {
+            path: 'chronology',
+            loadComponent: () =>
+              import('./wrap/residents-task/residents-chronology/residents-chronology').then(
+                m => m.ResidentsChronology
+              )
           }
         ]
       },

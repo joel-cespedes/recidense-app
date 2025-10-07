@@ -35,6 +35,10 @@ export class ResidentsTask {
     this.navCtrl.navigateForward('/wrap/residents-tasks/categories');
   }
 
+  navigateToChronology() {
+    this.navCtrl.navigateForward('/wrap/residents-tasks/chronology/list');
+  }
+
   logout() {
     this.authStateService.logout();
   }

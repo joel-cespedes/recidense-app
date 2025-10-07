@@ -83,6 +83,8 @@ export type { ChangeBedResidentsResidentIdBedPatch$Params } from './fn/residents
 export { changeBedResidentsResidentIdBedPatch } from './fn/residents/change-bed-residents-resident-id-bed-patch';
 export type { GetResidentHistoryResidentsIdHistoryGet$Params } from './fn/residents/get-resident-history-residents-id-history-get';
 export { getResidentHistoryResidentsIdHistoryGet } from './fn/residents/get-resident-history-residents-id-history-get';
+export type { GetResidentChronologyResidentsIdChronologyGet$Params } from './fn/residents/get-resident-chronology-residents-id-chronology-get';
+export { getResidentChronologyResidentsIdChronologyGet } from './fn/residents/get-resident-chronology-residents-id-chronology-get';
 export type { ListTagsTagsGet$Params } from './fn/tags/list-tags-tags-get';
 export { listTagsTagsGet } from './fn/tags/list-tags-tags-get';
 export type { CreateTagTagsPost$Params } from './fn/tags/create-tag-tags-post';

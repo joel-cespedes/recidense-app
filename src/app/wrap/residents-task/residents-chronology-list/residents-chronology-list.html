@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <span class="mat-icon">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="title-section center m-b-16">Seleccionar residente</div>
+
+  <div class="container">
+    <ion-searchbar [formControl]="searchControl" placeholder="Buscar residente..."></ion-searchbar>
+
+    @if (isLoading() && residents().length === 0) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando residentes...</p>
+    </div>
+    } @else if (errorMessage()) {
+    <div class="error-container">
+      <span class="mat-icon">error</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+    } @else { @if (residents().length === 0) {
+    <div class="empty-container">
+      <span class="mat-icon">diversity_1</span>
+      <p>No hay residentes</p>
+    </div>
+    } @else { @for (resident of residents(); track resident.id) {
+
+    <ion-card>
+      <button class="icon-card" (click)="navigateToChronology($event, resident)">
+        <ion-label>
+          <div class="info-resident">
+            <div class="info-resident__name">
+              {{ resident.full_name }}
+            </div>
+            <div class="info-resident__bed">
+              {{ resident.bed_name ? 'Cama: ' + resident.bed_name : 'Sin cama asignada' }}
+              {{ resident.floor_name ? ' / Planta: ' + resident.floor_name : '' }}
+            </div>
+          </div>
+          <div class="content-right">
+            <div class="content-right__icon">
+              <span class="mat-icon">chevron_right</span>
+            </div>
+          </div>
+        </ion-label>
+      </button>
+    </ion-card>
+    }
+
+    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    } }
+  </div>
+</ion-content>
