@@ -2,16 +2,13 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 import {
   IonButton,
   IonButtons,
   IonCard,
-  IonCheckbox,
   IonContent,
   IonHeader,
-  IonItem,
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
@@ -31,13 +28,22 @@ import { environment } from '../../../../environments/environment';
 
 type ChronologyEvent = MeasurementEvent | TaskEvent | BedChangeEvent | StatusChangeEvent;
 
+interface EventDetail {
+  label: string;
+  value: string;
+}
+
+interface EventTitle {
+  label: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-residents-chronology',
   templateUrl: './residents-chronology.html',
   styleUrls: ['./residents-chronology.scss'],
   imports: [
     CommonModule,
-    FormsModule,
     IonHeader,
     IonToolbar,
     IonContent,
@@ -46,9 +52,7 @@ type ChronologyEvent = MeasurementEvent | TaskEvent | BedChangeEvent | StatusCha
     IonButtons,
     IonButton,
     IonSpinner,
-    IonCard,
-    IonCheckbox,
-    IonItem
+    IonCard
   ]
 })
 export class ResidentsChronology implements OnInit {
@@ -64,10 +68,10 @@ export class ResidentsChronology implements OnInit {
   errorMessage = signal<string | null>(null);
 
   // Filter signals
-  includeMeasurements = signal(true);
+  includeMeasurements = signal(false);
   includeTasks = signal(true);
-  includeBedChanges = signal(true);
-  includeStatusChanges = signal(true);
+  includeBedChanges = signal(false);
+  includeStatusChanges = signal(false);
 
   // Computed events with metadata
   eventsWithMetadata = computed(() => {
@@ -77,6 +81,8 @@ export class ResidentsChronology implements OnInit {
       icon: this.calculateEventIcon(event),
       title: this.calculateEventTitle(event),
       timestamp: this.calculateTimestamp(event.timestamp),
+      time: this.calculateTimeOnly(event.timestamp),
+      date: this.calculateDateOnly(event.timestamp),
       details: this.calculateEventDetails(event)
     }));
   });
@@ -122,11 +128,11 @@ export class ResidentsChronology implements OnInit {
     const url = `${environment.apiUrl}/residents/${resident.id}/chronology?${params.toString()}`;
 
     this.http.get<ResidentChronologyResponse>(url).subscribe({
-      next: (response) => {
+      next: response => {
         this.chronologyData.set(response);
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading chronology:', error);
         this.errorMessage.set('Error al cargar la cronología');
         this.isLoading.set(false);
@@ -134,8 +140,19 @@ export class ResidentsChronology implements OnInit {
     });
   }
 
-  onFilterChange() {
-    this.loadChronology();
+  private readonly filterToggles: Record<string, () => void> = {
+    measurements: () => this.includeMeasurements.update(value => !value),
+    tasks: () => this.includeTasks.update(value => !value),
+    bed_changes: () => this.includeBedChanges.update(value => !value),
+    status_changes: () => this.includeStatusChanges.update(value => !value)
+  };
+
+  toggleFilter(filterType: 'measurements' | 'tasks' | 'bed_changes' | 'status_changes') {
+    const toggle = this.filterToggles[filterType];
+    if (toggle) {
+      toggle();
+      this.loadChronology();
+    }
   }
 
   refresh(ev: any) {
@@ -145,92 +162,92 @@ export class ResidentsChronology implements OnInit {
     }, 1000);
   }
 
+  private readonly eventIcons: Record<string, string> = {
+    measurement: 'medical_services',
+    task: 'task_alt',
+    bed_change: 'bed',
+    status_change: 'sync_alt'
+  };
+
+  private readonly measurementTypeLabels: Record<string, string> = {
+    blood_pressure: 'Tensiómetro',
+    pulse_oximeter: 'Oxímetro',
+    scale: 'Báscula',
+    thermometer: 'Termómetro'
+  };
+
+  private readonly eventTitleGetters: Record<string, (event: any) => EventTitle> = {
+    measurement: (event: MeasurementEvent) => {
+      const typeLabel =
+        this.measurementTypeLabels[event.measurement_type] || event.measurement_type;
+      return { label: 'Medición', value: typeLabel };
+    },
+    task: (event: TaskEvent) => ({ label: 'Tarea', value: event.task_name }),
+    bed_change: () => ({ label: 'Cambio de cama', value: '' }),
+    status_change: (event: StatusChangeEvent) => ({
+      label: 'Cambio de estado',
+      value: event.new_status
+    })
+  };
+
+  private readonly eventDetailsGetters: Record<string, (event: any) => EventDetail[]> = {
+    measurement: (event: MeasurementEvent) => {
+      const details: EventDetail[] = [];
+      details.push({ label: 'Fuente', value: event.source });
+      if (event.values) {
+        Object.entries(event.values).forEach(([key, value]) => {
+          details.push({ label: key, value: value as string });
+        });
+      }
+      return details;
+    },
+    task: (event: TaskEvent) => {
+      const details: EventDetail[] = [];
+      details.push({ label: 'Categoría', value: event.task_category });
+      if (event.status) {
+        details.push({ label: 'Estado', value: event.status });
+      }
+      if (event.assigned_by_name) {
+        details.push({ label: 'Asignada por', value: event.assigned_by_name });
+      }
+      return details;
+    },
+    bed_change: (event: BedChangeEvent) => {
+      const details: EventDetail[] = [];
+      details.push({ label: 'Tipo de cambio', value: event.change_type });
+      if (event.previous_location) {
+        details.push({ label: 'De', value: event.previous_location });
+      }
+      if (event.new_location) {
+        details.push({ label: 'A', value: event.new_location });
+      }
+      return details;
+    },
+    status_change: (event: StatusChangeEvent) => {
+      const details: EventDetail[] = [];
+      if (event.previous_status) {
+        details.push({ label: 'Estado anterior', value: event.previous_status });
+      }
+      details.push({ label: 'Nuevo estado', value: event.new_status });
+      return details;
+    }
+  };
+
   private calculateEventIcon(event: ChronologyEvent): string {
     const eventType = (event as any).event_type;
-    switch (eventType) {
-      case 'measurement':
-        return 'medical_services';
-      case 'task':
-        return 'task_alt';
-      case 'bed_change':
-        return 'bed';
-      case 'status_change':
-        return 'sync_alt';
-      default:
-        return 'event';
-    }
+    return this.eventIcons[eventType] || 'event';
   }
 
-  private calculateEventTitle(event: ChronologyEvent): string {
+  private calculateEventTitle(event: ChronologyEvent): EventTitle {
     const eventType = (event as any).event_type;
-    switch (eventType) {
-      case 'measurement':
-        const mEvent = event as MeasurementEvent;
-        return `Medición: ${mEvent.measurement_type}`;
-      case 'task':
-        const tEvent = event as TaskEvent;
-        return `Tarea: ${tEvent.task_name}`;
-      case 'bed_change':
-        return 'Cambio de cama';
-      case 'status_change':
-        const sEvent = event as StatusChangeEvent;
-        return `Cambio de estado: ${sEvent.new_status}`;
-      default:
-        return 'Evento';
-    }
+    const getter = this.eventTitleGetters[eventType];
+    return getter ? getter(event) : { label: 'Evento', value: '' };
   }
 
-  private calculateEventDetails(event: ChronologyEvent): string[] {
+  private calculateEventDetails(event: ChronologyEvent): EventDetail[] {
     const eventType = (event as any).event_type;
-    const details: string[] = [];
-
-    switch (eventType) {
-      case 'measurement':
-        const mEvent = event as MeasurementEvent;
-        if (mEvent.device_name) {
-          details.push(`Dispositivo: ${mEvent.device_name}`);
-        }
-        details.push(`Fuente: ${mEvent.source}`);
-        if (mEvent.values) {
-          Object.entries(mEvent.values).forEach(([key, value]) => {
-            details.push(`${key}: ${value}`);
-          });
-        }
-        break;
-      case 'task':
-        const tEvent = event as TaskEvent;
-        details.push(`Categoría: ${tEvent.task_category}`);
-        if (tEvent.status) {
-          details.push(`Estado: ${tEvent.status}`);
-        }
-        if (tEvent.assigned_by_name) {
-          details.push(`Asignada por: ${tEvent.assigned_by_name}`);
-        }
-        break;
-      case 'bed_change':
-        const bEvent = event as BedChangeEvent;
-        details.push(`Tipo de cambio: ${bEvent.change_type}`);
-        if (bEvent.previous_location) {
-          details.push(`De: ${bEvent.previous_location}`);
-        }
-        if (bEvent.new_location) {
-          details.push(`A: ${bEvent.new_location}`);
-        }
-        break;
-      case 'status_change':
-        const sEvent = event as StatusChangeEvent;
-        if (sEvent.previous_status) {
-          details.push(`Estado anterior: ${sEvent.previous_status}`);
-        }
-        details.push(`Nuevo estado: ${sEvent.new_status}`);
-        break;
-    }
-
-    if (event.recorded_by_name) {
-      details.push(`Registrado por: ${event.recorded_by_name}`);
-    }
-
-    return details;
+    const getter = this.eventDetailsGetters[eventType];
+    return getter ? getter(event) : [];
   }
 
   private calculateTimestamp(timestamp: string): string {
@@ -242,6 +259,22 @@ export class ResidentsChronology implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  private calculateTimeOnly(timestamp: string): string {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  private calculateDateOnly(timestamp: string): string {
+    const date = new Date(timestamp);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 
   goBack() {

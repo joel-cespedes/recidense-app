@@ -19,59 +19,53 @@
 
   <div class="container">
     <!-- Filters Section -->
-    <ion-card class="filters-card">
-      <div class="filters-title">Filtros</div>
-      <div class="filters-grid">
-        <ion-item lines="none">
-          <ion-checkbox [(ngModel)]="includeMeasurements" (ionChange)="onFilterChange()">
-            Mediciones
-          </ion-checkbox>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-checkbox [(ngModel)]="includeTasks" (ionChange)="onFilterChange()">
-            Tareas
-          </ion-checkbox>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-checkbox [(ngModel)]="includeBedChanges" (ionChange)="onFilterChange()">
-            Cambios de cama
-          </ion-checkbox>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-checkbox [(ngModel)]="includeStatusChanges" (ionChange)="onFilterChange()">
-            Cambios de estado
-          </ion-checkbox>
-        </ion-item>
-      </div>
-    </ion-card>
+    <div class="title-section center m-b-16">Filtros</div>
+    <div class="btns-raunded m-b-32">
+      <button
+        class="rounded"
+        [class.active]="includeMeasurements()"
+        (click)="toggleFilter('measurements')">
+        <div class="rounded__label">Tomas</div>
+        <div class="rounded__number">
+          <span class="mat-icon">
+            {{ includeMeasurements() ? 'check_box' : 'check_box_outline_blank' }}
+          </span>
+        </div>
+      </button>
 
-    <!-- Summary Stats -->
-    @if (chronologyData()) {
-    <ion-card class="stats-card">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-value">{{ chronologyData()!.total_events }}</div>
-          <div class="stat-label">Total</div>
+      <button class="rounded" [class.active]="includeTasks()" (click)="toggleFilter('tasks')">
+        <div class="rounded__label">Tareas</div>
+        <div class="rounded__number">
+          <span class="mat-icon">
+            {{ includeTasks() ? 'check_box' : 'check_box_outline_blank' }}
+          </span>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ chronologyData()!.total_measurements }}</div>
-          <div class="stat-label">Mediciones</div>
+      </button>
+
+      <button
+        class="rounded"
+        [class.active]="includeBedChanges()"
+        (click)="toggleFilter('bed_changes')">
+        <div class="rounded__label">Cama</div>
+        <div class="rounded__number">
+          <span class="mat-icon">
+            {{ includeBedChanges() ? 'check_box' : 'check_box_outline_blank' }}
+          </span>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ chronologyData()!.total_tasks }}</div>
-          <div class="stat-label">Tareas</div>
+      </button>
+
+      <button
+        class="rounded"
+        [class.active]="includeStatusChanges()"
+        (click)="toggleFilter('status_changes')">
+        <div class="rounded__label">Estados</div>
+        <div class="rounded__number">
+          <span class="mat-icon">
+            {{ includeStatusChanges() ? 'check_box' : 'check_box_outline_blank' }}
+          </span>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ chronologyData()!.total_bed_changes }}</div>
-          <div class="stat-label">Cambios cama</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ chronologyData()!.total_status_changes }}</div>
-          <div class="stat-label">Cambios estado</div>
-        </div>
-      </div>
-    </ion-card>
-    }
+      </button>
+    </div>
 
     @if (isLoading()) {
     <div class="loading-container">
@@ -94,19 +88,23 @@
       @for (event of eventsWithMetadata(); track $index) {
       <div class="timeline-item">
         <div class="timeline-marker">
-          <div class="timeline-icon">
-            <span class="mat-icon">{{ event.icon }}</span>
-          </div>
+          <div class="timeline-time">{{ event.time }}</div>
         </div>
         <div class="timeline-content">
           <ion-card>
             <div class="event-header">
-              <div class="event-title">{{ event.title }}</div>
-              <div class="event-time">{{ event.timestamp }}</div>
+              <div class="event-title">
+                <strong>{{ event.title.label }}</strong
+                >@if (event.title.value) {<span>: {{ event.title.value }}</span
+                >}
+              </div>
+              <div class="event-time">{{ event.date }}</div>
             </div>
             <div class="event-details">
               @for (detail of event.details; track $index) {
-              <div class="detail-item">{{ detail }}</div>
+              <div class="detail-item">
+                <strong>{{ detail.label }}:</strong> {{ detail.value }}
+              </div>
               }
             </div>
           </ion-card>
