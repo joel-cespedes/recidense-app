@@ -1,11 +1,13 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
+import { AuthStateService } from '../services/auth-state.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('access_token');
   const router = inject(Router);
+  const authStateService = inject(AuthStateService);
 
   if (!token || req.url.includes('/auth/login')) {
     return next(req);
@@ -18,18 +20,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   });
 
   return next(clonedRequest).pipe(
-    tap({
-      error: error => {
-        if (error.status === 401) {
-          // Limpiar tokens y datos de usuario
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('user_info');
-          localStorage.removeItem('selected_residence');
+    catchError(error => {
+      if (error.status === 401) {
+        // Limpiar tokens y estado
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user_info');
+        localStorage.removeItem('selected_residence');
 
-          // Redirigir al login
-          router.navigate(['/login']);
-        }
+        // Limpiar estado de autenticación
+        authStateService.clearAuth();
+
+        // Redirigir al login
+        router.navigate(['/login']);
       }
+
+      return throwError(() => error);
     })
   );
 };
