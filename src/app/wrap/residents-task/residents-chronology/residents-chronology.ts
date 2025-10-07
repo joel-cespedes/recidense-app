@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -69,6 +69,18 @@ export class ResidentsChronology implements OnInit {
   includeBedChanges = signal(true);
   includeStatusChanges = signal(true);
 
+  // Computed events with metadata
+  eventsWithMetadata = computed(() => {
+    const events = this.chronologyData()?.events || [];
+    return events.map(event => ({
+      ...event,
+      icon: this.calculateEventIcon(event),
+      title: this.calculateEventTitle(event),
+      timestamp: this.calculateTimestamp(event.timestamp),
+      details: this.calculateEventDetails(event)
+    }));
+  });
+
   ngOnInit() {
     // Get resident from router state
     const navigation = this.router.getCurrentNavigation();
@@ -103,7 +115,7 @@ export class ResidentsChronology implements OnInit {
       include_tasks: this.includeTasks().toString(),
       include_bed_changes: this.includeBedChanges().toString(),
       include_status_changes: this.includeStatusChanges().toString(),
-      limit: '100',
+      limit: '10',
       residence_id: residenceId.toString()
     });
 
@@ -133,7 +145,7 @@ export class ResidentsChronology implements OnInit {
     }, 1000);
   }
 
-  getEventIcon(event: ChronologyEvent): string {
+  private calculateEventIcon(event: ChronologyEvent): string {
     const eventType = (event as any).event_type;
     switch (eventType) {
       case 'measurement':
@@ -149,7 +161,7 @@ export class ResidentsChronology implements OnInit {
     }
   }
 
-  getEventTitle(event: ChronologyEvent): string {
+  private calculateEventTitle(event: ChronologyEvent): string {
     const eventType = (event as any).event_type;
     switch (eventType) {
       case 'measurement':
@@ -168,7 +180,7 @@ export class ResidentsChronology implements OnInit {
     }
   }
 
-  getEventDetails(event: ChronologyEvent): string[] {
+  private calculateEventDetails(event: ChronologyEvent): string[] {
     const eventType = (event as any).event_type;
     const details: string[] = [];
 
@@ -221,7 +233,7 @@ export class ResidentsChronology implements OnInit {
     return details;
   }
 
-  formatTimestamp(timestamp: string): string {
+  private calculateTimestamp(timestamp: string): string {
     const date = new Date(timestamp);
     return date.toLocaleString('es-ES', {
       year: 'numeric',
